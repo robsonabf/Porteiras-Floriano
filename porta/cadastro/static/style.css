@@ -273,8 +273,20 @@ li {
     background-position: center top;
     background-size: auto auto;
     background-repeat: no-repeat;
+    background-image: url('img/1.png');
 }
-
+.bg-img2 {
+    background-position: center center;
+    background-size: auto auto;
+    background-repeat: no-repeat;
+}
+/* Media Queries para telas pequenas, como celulares */
+@media (max-width: 768px) {
+    .bg-img {
+        background-position: center top; /* Ajuste fino da posição para dispositivos pequenos */
+        background-image: url('img/1-2.png');
+    }
+}
 .bg-overlay {
     position: relative;
     z-index: 1;
