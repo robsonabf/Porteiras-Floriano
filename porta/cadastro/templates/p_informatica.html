@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    <!-- Title -->
+    <title>PORTEIRAS</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="{%static 'img/core-img/ifpi.png'%}">
+
+    <!-- Core Stylesheet -->
+    <link rel="stylesheet" href="{%static 'style.css'%}">
+
+    <!-- Responsive CSS -->
+    <link rel="stylesheet" href="{%static 'css/responsive/responsive.css'%}">
+
+</head>
+
+<body>
+    <!-- Preloader Start -->
+    <div id="preloader">
+        <div class="loader">
+            <span class="inner1"></span>
+            <span class="inner2"></span>
+            <span class="inner3"></span>
+        </div>
+    </div>
+
+    <!-- Search Form Area -->
+    <div class="fancy-search-form d-flex align-items-center">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <!-- Close Btn -->
+                    <div class="search-close-btn" id="closeBtn">
+                        <i class="ti-close" aria-hidden="true"></i>
+                    </div>
+                    <!-- Form -->
+                    <form action="#" method="get">
+                        <input type="search" name="fancySearch" id="search" placeholder="Oque deseja saber?">
+                        <input type="submit" class="d-none" value="submit">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ***** Header Area Start ***** -->
+    <header class="header_area" id="header">
+        <div class="container-fluid h-100">
+            <div class="row h-100">
+                <div class="col-12 h-100">
+                <nav class="h-100 navbar navbar-expand-lg align-items-center">
+                            <a class="navbar-brand" href="index.html">Portifólio Tecnológico de Oeiras</a>
+                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#fancyNav" aria-controls="fancyNav" aria-expanded="false" aria-label="Toggle navigation"><span class="ti-menu"></span></button>
+                            <div class="collapse navbar-collapse" id="fancyNav">
+                            <ul class="navbar-nav ml-auto">
+                                <li class="nav-item active">
+                                    <a class="nav-link" href="###">Início <span class="sr-only">(current)</span></a>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tecnologias</a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" href="projetos.html">Eixo Informática e Comunicação</a>
+                                        <a class="dropdown-item" id="agri" >Eixo Recursos Naturais</a>
+                                        <a class="dropdown-item" id="adm" >Eixo Gestão e Negócios</a>
+                                        <a class="dropdown-item" id="fis" >Licenciatura em Física</a>
+                                    </div>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="contato.html">Contate-nos</a>
+                                </li>
+                                <li class="nav-item">
+                                    <h1 id="Área do Inventor"><a class="nav-link" href="#">Área do Administrador</a></h1>
+                                    <script type="text/javascript">
+                                        var exibirMensagem=function()
+                                        {
+                                            alert("EM BREVE...");
+                                        }
+                                        document.getElementById("Área do Inventor").onclick = exibirMensagem;
+                                        document.getElementById("adm").onclick = exibirMensagem;
+                                        document.getElementById("agri").onclick = exibirMensagem;
+                                        document.getElementById("fis").onclick = exibirMensagem;
+                                        </script>
+                                </li>
+                            </ul>     
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- ***** Header Area End ***** -->
+    
+    <section class="fancy-blog-area section-padding-100-70">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section-heading text-center">
+                        <h2>Projetos do Eixo Informática e Comunicação</h2>
+                        <p>Nós buscamos soluções para problemas da comunidade. Através da ciência, podemos
+                        mudar a vida das pessoas.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Single Blog -->
+                <div class="col-12 col-md-4">
+                    <div class="single-blog-area wow fadeInUp" data-wow-delay="0.5s">
+                        <img src="{%static 'img/suasaude.png'%}" alt="">
+                        <div class="blog-content">
+                            <h5><a href="https://suasaudeif.000webhostapp.com">Sua Saúde</a></h5>
+                            <p>Este site foi desenvolvido por alunos do curso Técnico em Informática do Instituto Federal de Educação, Ciência e Tecnologia- IFPI campus Oeiras. O IFPI Sua Saúde é um site de fácil acesso e manuseio voltado a área da saúde do campus, contendo informações tanto dos profissionais que atuam nessa área como informações do campus, conta também com áreas onde os alunos podem solicitar consultas e ver questões em torno do mesmo. Contamos ainda com uma área do profissional que dará maior flexibilidade e praticidade ao acesso as consultas. Nosso site tem como objetivo uma maior facilidade do agendamento de consultas, além de melhorar e facilitar a comunicação de aluno e profissional.</p>
+                            <a href="https://suasaudeif.000webhostapp.com">Saiba mais</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Single Blog -->
+                <div class="col-12 col-md-4">
+                    <div class="single-blog-area wow fadeInUp" data-wow-delay="0.5s">
+                        <img src="{%static 'img/mural.png'%}" alt="">
+                        <div class="blog-content">
+                            <h5><a href="http://mural-ifpi-oeiras.herokuapp.com">Mural IFPI</a></h5>
+                            <p>Este site foi desenvolvido por alunos do curso Técnico em Informática do Campus Oeiras, o intuito principal do site é levar informações a comunidade acadêmica da instituição, também ao público de fora que deseja ingressar na instituição. O site também conta com um sistema de reserva de transportes e/ou salas do Campus, sendo que o sistema é restrito somente para servidores da própria instituição.</p>
+                            <a href="http://mural-ifpi-oeiras.herokuapp.com">Saiba Mais</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Single Blog -->
+                <div class="col-12 col-md-4">
+                    <div class="single-blog-area wow fadeInUp" data-wow-delay="0.5s">
+                        <img src="{%static 'img/convida.png'%}" alt="">
+                        <div class="blog-content">
+                            <h5><a href="http://ifpi-oeiras-convida.herokuapp.com">IFPI Oeiras - Convida</a></h5>
+                            <p>Este site foi desenvolvido por alguns alunos do curso técnico em informática. No site você encontra uma série de informações sobre o campus Oeiras, das mais diversas. É destinado a todas as pessoas interessadas a ingressar na Instituição.</p>
+                            <a href="http://ifpi-oeiras-convida.herokuapp.com">Saiba Mais</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="single-blog-area wow fadeInUp" data-wow-delay="0.5s">
+                        <img src="{%static 'img/lco.png'%}" alt="">
+                        <div class="blog-content">
+                            <h5><a href="https://lcoeiras.000webhostapp.com">LCO - Leis Compiladas de Oeiras</a></h5>
+                            <p>Este site foi desenvolvido para facilitar o acesso dos usuários a leis atualizadas da cidade de Oeiras - PI.</p>
+                            <a href="https://lcoeiras.000webhostapp.com">Saiba Mais</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="single-blog-area wow fadeInUp" data-wow-delay="0.5s">
+                        <img src="{%static 'img/agifpi.png'%}" alt="">
+                        <div class="blog-content">
+                            <h5><a href="http://agifpii.000webhostapp.com/">AGIFPI - SISTEMA DE GESTÃO EMPRESARIAL</a></h5>
+                            <p>Uma grande vantagem de se utilizar esse site é principalmente avaliar de modo aproximado qual a qualidade de seu profissionalismo, com esse teste você pode:
+
+Ter uma boa nota no questionário e perguntas;
+Ver em quais pontos você foi melhor e em quais pontos você irá precisar melhorar para ver se você tem os requisitos para gerir sua empresa.
+Descobrir seus pontos fracos e encorajar-se para realisar pesquisas, e assim melhorar os pontos fracos.</p>
+                            <a href="http://agifpii.000webhostapp.com/">Saiba Mais</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="single-blog-area wow fadeInUp" data-wow-delay="0.5s">
+                        <img src="{%static 'img/porteiras.png'%}" alt="">
+                        <div class="blog-content">
+                            <h5><a href="#">PORTEIRAS</a></h5>
+                            <p>O Site PORTEIRAS foi desenvolvido e pensado para facilitar o trânsito entre as instituições, os inventores e as empresas. Permite expor as tecnologias em um ambiente centralizado e com a confiança de podermos negociar as tecnologias com o aporte profissional que o campus possui. </p>
+                            <a href="#">Saiba Mais</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="single-blog-area wow fadeInUp" data-wow-delay="0.5s">
+                        <img src="{%static 'img/educaestagio.png'%}" alt="">
+                        <div class="blog-content">
+                            <h5><a href="#">EDUCAESTAGIO</a></h5>
+                            <p>O Site EDUCAESTAGIO possui a missão de facilitar a busca por vagas pelos estudantes. Assim como busca facilitar a divulgação de vagas de estágio por empresas e instituições que possuem corpo discente capacitado para realizar estágio profissional. </p>
+                            <a href="#">Saiba Mais</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="single-blog-area wow fadeInUp" data-wow-delay="0.5s">
+                        <img src="{%static 'img/SEMINFOEIR.png'%}" alt="">
+                        <div class="blog-content">
+                            <h5><a href="#">III SEMINFOEIR</a></h5>
+                            <p>O Site da III SEMANA DE INFORMÁTICA DO CAMPUS OEIRAS é um site para eventos que pode ser reutilizado. No protótipo base, estamos realizando o site para gerir e divulgar o nosso evento anual. </p>
+                            <a href="#">Saiba Mais</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="single-blog-area wow fadeInUp" data-wow-delay="0.5s">
+                        <img src="{%static 'img/agrox.jpg'%}" alt="">
+                        <div class="blog-content">
+                            <h5><a href="#">AGROX</a></h5>
+                            <p>O aplicativo AgroX é um software comercial para E-Commerce da agricultura familiar. A solução busca aproximar vendedores de compradores da agricultura familiar da região de Oeiras-PI. </p>
+                            <a href="#">Saiba Mais</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="single-blog-area wow fadeInUp" data-wow-delay="0.5s">
+                        <img src="{%static 'img/alpha.png'%}" alt="">
+                        <div class="blog-content">
+                            <h5><a href="#">ALPHA</a></h5>
+                            <p>A ALPHA oferece serviços de divulgação de academias e profissionais da área, além de ofertar a venda de produtos. A ALPHA cuida da gestão básica das academias e dos alunos, encurtando o caminho burocrático. </p>
+                            <a href="#">Saiba Mais</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="single-blog-area wow fadeInUp" data-wow-delay="0.5s">
+                        <img src="{%static 'img/apostation.png'%}" alt="">
+                        <div class="blog-content">
+                            <h5><a href="#">APOSTATION</a></h5>
+                            <p>A plataforma APOSTATION oferece serviços de jogos para o usuário realizar atividades sobre os jogos de futebol da região e de campeonatos específicos. </p>
+                            <a href="#">Saiba Mais</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ***** Blog Area End ***** -->
+        <!-- Footer Copywrite -->
+        <footer>
+        <div class="footer-copywrite-area">
+            <div class="container h-100">
+                <div class="row h-100">
+                    <div class="col-12 h-100">
+                        <div class="copywrite-content h-100 d-flex align-items-center justify-content-between">
+                            <!-- Copywrite Text -->
+                            <div class="copywrite-text">
+                                <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib and edited by students of IFPI - Oeiras</a>
+<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- ***** Footer Area End ***** -->
+
+    <!-- jQuery-2.2.4 js -->
+    <script src="{%static 'js/jquery/jquery-2.2.4.min.js'%}"></script>
+    <!-- Popper js -->
+    <script src="{%static 'js/bootstrap/popper.min.js'%}"></script>
+    <!-- Bootstrap-4 js -->
+    <script src="{%static 'js/bootstrap/bootstrap.min.js'%}"></script>
+    <!-- All Plugins js -->
+    <script src="{%static 'js/others/plugins.js'%}"></script>
+    <!-- Active JS -->
+    <script src="{%static 'js/active.js'%}"></script>
+</body>
+</html>
