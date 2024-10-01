@@ -1,98 +1,6 @@
-
-<!DOCTYPE html>
-<html lang="pt-br">
-
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <meta name="description" content="">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-
-    <!-- Title -->
-    <title>PORTEIRAS</title>
-
-    <!-- Favicon -->
-    <link rel="icon" href="{%static 'img/core-img/icone.png'%}">
-
-    <!-- Core Stylesheet -->
-    <link rel="stylesheet" href="{%static 'style.css'%}">
-
-    <!-- Responsive CSS -->
-    <link rel="stylesheet" href="{%static 'css/responsive/responsive.css'%}">
-
-</head>
-
-<body>
-    <!-- Preloader Start -->
-    <div id="preloader">
-        <div class="loader">
-            <span class="inner1"></span>
-            <span class="inner2"></span>
-            <span class="inner3"></span>
-        </div>
-    </div>
-
-    <!-- Search Form Area -->
-    <div class="fancy-search-form d-flex align-items-center">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12">
-                    <!-- Close Btn -->
-                    <div class="search-close-btn" id="closeBtn">
-                        <i class="ti-close" aria-hidden="true"></i>
-                    </div>
-                    <!-- Form -->
-                    <form action="#" method="get">
-                        <input type="search" name="fancySearch" id="search" placeholder="Oque deseja saber?">
-                        <input type="submit" class="d-none" value="submit">
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ***** Header Area Start ***** -->
-    <header class="header_area" id="header">
-        <div class="container-fluid h-100">
-            <div class="row h-100">
-                <div class="col-12 h-100">
-                <nav class="h-100 navbar navbar-expand-lg align-items-center">
-                            <a class="navbar-brand" href="###">Portfólio Tecnológico de Ideias e Tecnologias </a>
-                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#fancyNav" aria-controls="fancyNav" aria-expanded="false" aria-label="Toggle navigation"><span class="ti-menu"></span></button>
-                            <div class="collapse navbar-collapse" id="fancyNav">
-                            <ul class="navbar-nav ml-auto">
-                                <li class="nav-item active">
-                                    <a class="nav-link" href="index.html">Início <span class="sr-only">(current)</span></a>
-                                </li>
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tecnologias</a>
-                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="informatica">Eixo Informática e Comunicação</a>
-                                        <a class="dropdown-item" id="agri" >Eixo Ciências Exatas e da Terra</a>
-                                        <a class="dropdown-item" id="adm" >Eixo Engenharias</a>
-                                        <a class="dropdown-item" id="fis" >Eixo Ciências Biológicas</a>
-                                    </div>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="contate">Contate-nos</a>
-                                </li>
-                                <li class="nav-item">
-                                    <h1 id="Área do Inventor"><a class="nav-link" href="{% url 'adm' %}">Área do Administrador</a></h1>
-                                    <script type="text/javascript"></script>
-                                    </li>
-                            </ul>     
-                            </div>
-                    </nav>
-                </div>
-            </div>
-        </div>
-
- 
-    </header>
-    <!-- ***** Header Area End ***** -->
-
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
     <!-- ***** Hero Area Start ***** -->
     <div class="fancy-hero-area bg-img bg-overlay">
         <div class="container h-100">
@@ -100,9 +8,9 @@
                 <div class="col-12">
                     <div class="fancy-hero-content text-center">
                         <!-- Video Overview -->
-                        <h2>Conheça o que o IFPI - Campus Floriano tem a oferecer!</h2>
+                        <h2>Abrindo caminhos para inovação e parcerias! Busque, compartilhe e invista no que acredita.</h2>
                         <div class="video-overview">
-                            <a href="{%static ''%}" class="video--play--btn"><i class="fa fa-play" aria-hidden="true"></i>Conheça o IFPI</a>
+                            <a href="{%static ''%}" class="video--play--btn"><i class="fa fa-play" aria-hidden="true"></i>Conheça o Porteiras</a>
                         </div>
                         <a href="#sobre" class="btn fancy-btn fancy-active">Sobre nós</a>
                     </div>
@@ -116,31 +24,32 @@
     <div class="fancy-top-features-area bg-gray">
         <div class="container">
             <div class="row">
-                <div class="col-12">
-                    <div class="fancy-top-features-content">
-                        <div class="row no-gutters">
-                            <div class="col-12 col-md-4">
-                                <div class="single-top-feature">
-                                    <h5><i class="fa fa-thumbs-o-up" aria-hidden="true"></i>Ensino</h5>
-                                    <p>O Campos Oeiras oferece uma ótima qualidade de aprendizagem, tanto no ensino técnico como no superior!</p>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-4">
-                                <div class="single-top-feature">
-                                    <h5><i class="fa fa-rocket" aria-hidden="true"></i>Pesquisa</h5>
-                                    <p>O Portfólio Tecnológico é disponível para a utilização de qualquer usuário, em que as ferramentas desenvolvidas nas pesquisas podem ser visualizadas no site. Nele, será possível divulgar os projetos produzidos por desenvolvedores de Oeiras. </p>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-4">
-                                <div class="single-top-feature">
-                                    <h5><i class="fa fa-diamond" aria-hidden="true"></i>Extensão</h5>
-                                    <p>O campus possui o relacionamento direto com a comunidade através dos projetos de extensão desenvolvidos.</p>
-                                </div>
+            <div class="col-12">
+                <div class="fancy-top-features-content">
+                    <div class="row no-gutters">
+                        <div class="col-12 col-md-4">
+                            <div class="single-top-feature">
+                                <h5><i class="fa fa-thumbs-o-up" aria-hidden="true"></i>Colaboração</h5>
+                                <p>O Porteiras facilita o encontro entre inovadores, pesquisadores e instituições, criando uma rede colaborativa de desenvolvimento e aprendizado contínuo.</p>
                             </div>
                         </div>
+                        <div class="col-12 col-md-4">
+                            <div class="single-top-feature">
+                                <h5><i class="fa fa-rocket" aria-hidden="true"></i>Inovação</h5>
+                        <p>Com foco em inovação, o Porteiras oferece uma vitrine tecnológica onde projetos e tecnologias emergentes ganham visibilidade e conectam-se com potenciais parceiros e investidores.</p>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="single-top-feature">
+                        <h5><i class="fa fa-diamond" aria-hidden="true"></i>Impacto</h5>
+                        <p>Por meio do Porteiras, tecnologias em diversas fases são impulsionadas, gerando impacto direto nas comunidades e na economia local, através de soluções práticas e sustentáveis.</p>
+                    </div>
+                </div>
                     </div>
                 </div>
             </div>
+        </div>
+
         </div>
     </div>
     <!-- ***** Top Feature Area End ***** -->
@@ -152,9 +61,8 @@
                 <div class="col-12 col-lg-6">
                     <div class="about-us-text">
                         <h2>Inovação, pesquisa e desenvolvimento</h2>
-                        <p>O campus Oeiras possui um forte laço com o desenvolvimento de soluções
-                        para a melhoria das condições de vida da comunidade. Buscamos inserir na comunidade o sentido da ciência e do conhecimento como forma de mudar a nossa sociedade e nossa forma de interagir com o mundo.</p>
-                        <p>Clique e veja nossas ações. </p>
+                        <p>O Porteiras tem como missão fomentar a inovação e o desenvolvimento de soluções que impactem positivamente a comunidade. Nosso objetivo é conectar inventores, instituições e empresas, promovendo a ciência e o conhecimento como ferramentas transformadoras para o crescimento regional e a melhoria das condições de vida. Acreditamos que a colaboração e a pesquisa podem mudar nossa sociedade e a forma como interagimos com o mundo.</p>
+                        <p>Clique e veja ações de sucesso no Brasil. </p>
                         <a href="galeria" class="btn fancy-btn fancy-dark">Galeria de Fotos</a>
                     </div>
                 </div>
@@ -170,104 +78,99 @@
     <!-- ***** About Us Area End ***** -->        
 
     <!-- ***** Service Area Start ***** -->
-    <section class="fancy-services-area bg-img2 bg-overlay section-padding-100-70" style="background-image: url({%static 'img/bg-img/hero-2.jpg'%})" id="sobre">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="section-heading heading-white text-center">
-                        <h2>Nosssos Serviços</h2>
-                        <p>Oferecemos a oportunidade de relacionar as tecnologias presentes na região de Oeiras - PI, com objetivo de divulgar técnicas e essas poderem compor os arranjos sociais e produtivos da comunidade. Temos como meta, aproximar as empresas/instituições dos inventores, e das instituições promotoras de tecnologias, e assim, podermos alavancar nossa região com a melhoria que esse processo possa acarretar.</p>
+    <section class="fancy-services-area bg-img2 bg-overlay section-padding-100-70" style="background-image: url({% static 'img/bg-img/hero-2.jpg' %})" id="sobre">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="section-heading heading-white text-center">
+                    <h2>Nossos Serviços</h2>
+                    <p>O Porteiras é uma plataforma inovadora que conecta inventores, instituições e empresas, com o objetivo de promover tecnologias regionais e incentivar parcerias estratégicas. Acreditamos no poder da colaboração para impulsionar o desenvolvimento tecnológico e o crescimento econômico local, melhorando a comunidade por meio da inovação.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Single Service -->
+            <div class="col-12 col-md-4">
+                <div class="single-service-area text-center wow fadeInUp" data-wow-delay="0.5s">
+                    <i class="ti-ruler-pencil"></i>
+                    <h5>Propriedade Intelectual</h5>
+                    <p>Através da proteção de propriedade intelectual, o Porteiras garante que as inovações da nossa comunidade possam ser exploradas de forma estratégica e segura, permitindo o crescimento sustentável das ideias.</p>
+                </div>
+            </div>
+            <!-- Single Service -->
+            <div class="col-12 col-md-4">
+                <div class="single-service-area text-center wow fadeInUp" data-wow-delay="1s">
+                    <i class="ti-desktop"></i>
+                    <h5>Inventores</h5>
+                    <p>Os inventores são o coração do Porteiras. Nossa missão é apoiar o desenvolvimento de ideias e transformá-las em produtos viáveis por meio de parcerias e acesso a recursos tecnológicos.</p>
+                </div>
+            </div>
+            <!-- Single Service -->
+            <div class="col-12 col-md-4">
+                <div class="single-service-area text-center wow fadeInUp" data-wow-delay="1.5s">
+                    <i class="ti-announcement"></i>
+                    <h5>Empresas/Instituições</h5>
+                    <p>O Porteiras busca conectar empresas e instituições a tecnologias emergentes, promovendo colaborações que impulsionam o desenvolvimento e criam novas oportunidades de mercado.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br></br><br></br>
+    <div class="cta-content text-center">
+        <h2>Tem uma tecnologia ou está em busca de uma solução inovadora?</h2>
+        <p>Entre em contato conosco para explorar parcerias e oportunidades. Como podemos colaborar com você?</p>
+        <a href="contate" class="btn fancy-btn">Contate-nos</a>
+    </div>
+    <br></br>
+</section>
+
+<section class="fancy-blog-area section-padding-100-70">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="section-heading text-center">
+                    <h2>Exemplos de Projetos</h2>
+                    <p>No Porteiras, trabalhamos para resolver os desafios da nossa comunidade através da ciência e inovação, transformando ideias em soluções práticas e impactantes.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Single Blog -->
+            <div class="col-12 col-md-4">
+                <div class="single-blog-area wow fadeInUp" data-wow-delay="0.5s">
+                    <img src="{% static 'img/porteiras.png' %}" alt="">
+                    <div class="blog-content">
+                        <h5>PORTEIRAS</h5>
+                        <p>O Porteiras foi criado para facilitar a conexão entre inventores, instituições e empresas, promovendo o crescimento de tecnologias e inovações na região.</p>
                     </div>
                 </div>
             </div>
-
-            <div class="row">
-                <!-- Single Service -->
-                <div class="col-12 col-md-4">
-                    <div class="single-service-area text-center wow fadeInUp" data-wow-delay="0.5s">
-                        <i class="ti-ruler-pencil"></i>
-                        <h5>Propriedade Intelectual</h5>
-                        <p>Com o auxílio da propriedade intelectual, nós podemos fortalecer a exploração do que temos de mais importante, nosso poder inventivo. De maneira que essa exploração seja controlada e prospera.</p>
-                    </div>
-                </div>
-                <!-- Single Service -->
-                <div class="col-12 col-md-4">
-                    <div class="single-service-area text-center wow fadeInUp" data-wow-delay="1s">
-                        <i class="ti-desktop"></i>
-                        <h5>Inventores</h5>
-                        <p>O inventor é um dos focos da nossa missão, visto que com parcerias, as ideias e projetos podem se tornar produtos.</p>
-                    </div>
-                </div>
-                <!-- Single Service -->
-                <div class="col-12 col-md-4">
-                    <div class="single-service-area text-center wow fadeInUp" data-wow-delay="1.5s">
-                        <i class="ti-announcement"></i>
-                        <h5>Empresas/Instituições</h5>
-                        <p>Buscamos parcerias com empresas, instituições públicas federais, estaduais e municipais, com o objetivo de firmarmos parcerias para alavancar nossas tecnologias.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div><br></br><br></br>
-        <div class="cta-content text-center">
-            <h2>Possui uma tecnologia ou em busca de uma das nossas soluções?</h2>
-            <p>Entre em contato conosco para parcerias. Em que podemos ajudá-lo?</p>
-            <a href="contate" class="btn fancy-btn">Contate-nos</a>
-            </div><br></br>
-    </section>
-    <!-- ***** Service Area End ***** -->
-
-   
-    <!-- ***** CTA Area Start ***** -->
-
-    <!-- ***** CTA Area End ***** -->
-
-    <!-- ***** Blog Area Start ***** -->
-    <section class="fancy-blog-area section-padding-100-70">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="section-heading text-center">
-                        <h2>Exemplos de Projetos</h2>
-                        <p>Nós buscamos soluções para problemas da comunidade. Através da ciência, podemos mudar a vida das pessoas.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <!-- Single Blog -->
-                <div class="col-12 col-md-4">
-                    <div class="single-blog-area wow fadeInUp" data-wow-delay="0.5s">
-                        <img src="{%static 'img/porteiras.png'%}" alt="">
-                        <div class="blog-content">
-                            <h5>PORTEIRAS</h5>
-                            <p>O Site PORTEIRAS foi desenvolvido e pensado para facilitar o trânsito entre as instituições, os inventores e as empresas..</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- Single Blog -->
-                <div class="col-12 col-md-4">
-                    <div class="single-blog-area wow fadeInUp" data-wow-delay="1s">
-                        <img src="{%static 'img/alpha.png'%}" alt="">
-                        <div class="blog-content">
-                            <h5>BEM VINDO A ALPHA</h5>
+            <!-- Single Blog -->
+            <div class="col-12 col-md-4">
+                <div class="single-blog-area wow fadeInUp" data-wow-delay="1s">
+                    <img src="{% static 'img/alpha.png' %}" alt="">
+                    <div class="blog-content">
+                        <h5>ALPHA</h5>
                             <p>Divulgação de academias e profissionais da área, contendo ofertas a venda de produtos.</p>
-                        </div>
                     </div>
                 </div>
-                <!-- Single Blog -->
-                <div class="col-12 col-md-4">
-                    <div class="single-blog-area wow fadeInUp" data-wow-delay="1.5s">
-                        <img src="{%static 'img/apostation.png'%}"alt="">
-                        <div class="blog-content">
-                            <h5>APOSTATION</h5>
-                            <p>Conheça a mais nova plataforma de apostas de Oeiras Piauí.</p>
-                        </div>
+            </div>
+            <!-- Single Blog -->
+            <div class="col-12 col-md-4">
+                <div class="single-blog-area wow fadeInUp" data-wow-delay="1.5s">
+                    <img src="{% static 'img/apostation.png' %}" alt="">
+                    <div class="blog-content">
+                        <h5>APOSTATION</h5>
+                        <p>Conheça a plataforma de apostas inovadora, que conecta usuários a novas formas de entretenimento e interação.</p>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
+
     <!-- ***** Blog Area End ***** -->
     <div class="site-section" id="Desenvolvedores">
             <div class="container">
@@ -278,135 +181,32 @@
                    <div class="row large-gutters">
                 <div class="col-md-4 person col-lg-2 mb-2 mb-lg-0">
                   <img src="{%static 'img/img-ds/ds1.jpg'%}" alt="Image" class="img-fluid mb-5">
-                  <h3>Rodrigo Sousa</h3>
-                  <p class="mb-4 opacity-7">Programador</p>
+                  <h3>Hudson Madeira</h3>
+                  <p class="mb-4 opacity-7">Desenvolvedor</p>
                   <div class="footer-social-widegt d-flex align-items-center">                                 
-                   <a href="https://www.facebook.com/profile.php?id=100009331447390">
-                    <i class="ti-facebook"></i>
-                        </a>
-                        <a href="https://www.instagram.com/rodrigosousa.tec?r=nametag">
+                        <a href="https://www.instagram.com/">
                         <i class="fa fa-instagram"></i>
-                        </a>
-                        <a href="###">
-                        <i class="fa fa-google"></i>
                         </a>
                    </div>
                 </div>
 
                 <div class="col-md-4 person col-lg-2 mb-2 mb-lg-0">
-                  <img src="{%static 'img/img-ds/ds2.jpg'%}" alt="Image" class="img-fluid mb-5">
-                  <h3>Marcilane Ferreira</h3>
-                  <p class="mb-4 opacity-7">Marketing</p>
+                  <img src="{%static 'img/img-ds/robson.jpg'%}" alt="Image" class="img-fluid mb-5">
+                  <h3>Robson Freitas</h3>
+                  <p class="mb-4 opacity-7">Desenvolvedor</p>
                    <div class="footer-social-widegt d-flex align-items-center">                         
-                   <a href="###">
-                    <i class="ti-facebook"></i>
-                        </a>
-                        <a href="###">
+                        <a href="https://www.instagram.com/robsonabf/">
                         <i class="fa fa-instagram"></i>
                         </a>
-                        <a href="###">
-                        <i class="fa fa-google"></i>
-                        </a>
+
                    </div>
                 </div>
 
-                <div class="col-md-4 person col-lg-2 mb-2 mb-lg-0">
-                  <img src="{%static 'img/img-ds/ds3.jpg'%}" alt="Image" class="img-fluid mb-5">
-                  <h3>Denise Almeida</h3>
-                  <p class="mb-4 opacity-7">Marketing</p>
-                      <div class="footer-social-widegt d-flex align-items-center">                         
-                       <a href="###">
-                        <i class="ti-facebook"></i>
-                            </a>
-                            <a href="###">
-                            <i class="fa fa-instagram"></i>
-                            </a>
-                            <a href="###">
-                            <i class="fa fa-google"></i>
-                            </a>
-                       </div>
-                </div>
 
-                <div class="col-md-4 person col-lg-2 mb-2 mb-lg-0">
-                  <img src="{%static 'img/img-ds/ds4.jpg'%}" alt="Image" class="img-fluid mb-5">
-                  <h3>Rivaldo Oliveira</h3>
-                  <p class="mb-4 opacity-7">Marketing</p>
-                    <div class="footer-social-widegt d-flex align-items-center">                         
-                       <a href="###">
-                        <i class="ti-facebook"></i>
-                        </a>
-                        <a href="###">
-                        <i class="fa fa-instagram"></i>
-                        </a>
-                        <a href="###">
-                        <i class="fa fa-google"></i>
-                        </a>
-                   </div>
-                </div>
                 </div>
                 </div>
               </div>
             </div>
           </div>
           <br>
-
-    <!-- ***** Footer Area Start ***** -->
-                    <footer class="fancy-footer-area fancy-bg-dark">
-                        <div class="footer-content section-padding-50   -50">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-12 col-sm-6 col-lg-4">
-                                        <div class="single-footer-widget">
-                                            <div class="footer-social-widegt d-flex align-items-center">                                  
-                                                    <a href="https://pt-br.facebook.com/ifpicampusoeiras/">
-                                                    <i class="ti-facebook"></i>
-                                                    </a>
-                                                    <a href="https://twitter.com/ifpi_oeiras">
-                                                    <i class="ti-twitter-alt"></i>
-                                                    </a>
-                                                    <a href="https://www.instagram.com/ifpioeiras/">
-                                                    <i class="fa fa-instagram"></i>
-                                                	</a>
-                                                    <a href="https://www.ifpi.edu.br/oeiras">
-                                                    <i class="fa fa-google"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-        <!-- Footer Copywrite -->
-        <div class="footer-copywrite-area">
-            <div class="container h-100">
-                <div class="row h-100">
-                    <div class="col-12 h-100">
-                        <div class="copywrite-content h-100 d-flex align-items-center justify-content-between">
-                            <!-- Copywrite Text -->
-                            <div class="copywrite-text">
-                                <p>Endereço ( Estr. p/ Wall Ferraz, s/n - Uberaba II, Oeiras - PI, 64500-000 )</p>
-                                <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                                    Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib and edited by students of IFPI - Oeiras</a>
-                                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
-                            </div>
-                            
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
-    </footer>
-    <!-- ***** Footer Area End ***** -->
-
-    <!-- jQuery-2.2.4 js -->
-    <script src="{%static 'js/jquery/jquery-2.2.4.min.js'%}"></script>
-    <!-- Popper js -->
-    <script src="{%static 'js/bootstrap/popper.min.js'%}"></script>
-    <!-- Bootstrap-4 js -->
-    <script src="{%static 'js/bootstrap/bootstrap.min.js'%}"></script>
-    <!-- All Plugins js -->
-    <script src="{%static 'js/others/plugins.js'%}"></script>
-    <!-- Active JS -->
-    <script src="{%static 'js/active.js'%}"></script>
-</body>
-</html>
+{% endblock %}

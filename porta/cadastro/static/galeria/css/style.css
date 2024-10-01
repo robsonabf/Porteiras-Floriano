@@ -757,7 +757,11 @@ h1, h2, h3, h4, h5,
   width: 100%;
   position: relative; }
   .swiper-slide.cover {
-    background-size: cover; }
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    }
 
 .gallery-top {
   height: 80%;

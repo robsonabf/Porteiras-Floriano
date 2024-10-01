@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -11,16 +10,16 @@
     <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
     <!-- Title -->
-    <title>PORTEIRAS</title>
-
+    <title>{% block title %}Porteiras{% endblock %}</title>
     <!-- Favicon -->
-    <link rel="icon" href="{%static 'img/core-img/ifpi.png'%}">
+    <link rel="icon" href="{%static 'img/core-img/icone.png'%}">
 
     <!-- Core Stylesheet -->
     <link rel="stylesheet" href="{%static 'style.css'%}">
 
     <!-- Responsive CSS -->
     <link rel="stylesheet" href="{%static 'css/responsive/responsive.css'%}">
+    {% block extra_head %}{% endblock %}
 
 </head>
 
@@ -55,43 +54,112 @@
 
     <!-- ***** Header Area Start ***** -->
     <header class="header_area" id="header">
-        <div class="container-fluid h-100">
-            <div class="row h-100">
-                <div class="col-12 h-100">
+    <div class="container-fluid h-100">
+        <div class="row h-100">
+            <div class="col-12 h-100">
                 <nav class="h-100 navbar navbar-expand-lg align-items-center">
-                            <a class="navbar-brand" href="###">Portifólio Tecnológico de Oeiras</a>
-                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#fancyNav" aria-controls="fancyNav" aria-expanded="false" aria-label="Toggle navigation"><span class="ti-menu"></span></button>
-                            <div class="collapse navbar-collapse" id="fancyNav">
-                            <ul class="navbar-nav ml-auto">
-                                <li class="nav-item active">
-                                    <a class="nav-link" href="index.html">Início <span class="sr-only">(current)</span></a>
+                    <a class="navbar-brand" href="{% url 'home' %}">Portfólio Tecnológico de Ideias e Parcerias</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#fancyNav" aria-controls="fancyNav" aria-expanded="false" aria-label="Toggle navigation"><span class="ti-menu"></span></button>
+                    <div class="collapse navbar-collapse" id="fancyNav">
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item active">
+                                <a class="nav-link" href="{% url 'home' %}">Início<span class="sr-only">(current)</span></a>
+                            </li>
+
+                            {% if user.is_authenticated %}
+                                <!-- Links visíveis para todos os usuários logados -->
+                                <!-- Exibir nome e perfil do usuário -->
+                                <li class="nav-item">
+                                    <span class="nav-link">Olá, {{ user.username }} ({{ user.userprofile.user_type|capfirst }})</span>
                                 </li>
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tecnologias</a>
-                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="informatica">Eixo Informática e Comunicação</a>
-                                        <a class="dropdown-item" id="agri" >Eixo Recursos Naturais</a>
-                                        <a class="dropdown-item" id="adm" >Eixo Gestão e Negócios</a>
-                                        <a class="dropdown-item" id="fis" >Licenciatura em Física</a>
-                                    </div>
+                                <!-- Exibir foto do usuário -->
+                                <li class="nav-item">
+                                    {% if user.userprofile.avatar %}
+                                        <!-- Exibe a foto do usuário -->
+                                        <img src="{{ user.userprofile.avatar.url }}" alt="Foto de {{ user.username }}" class="rounded-circle" width="40" height="40">
+                                    {% else %}
+                                        <!-- Se não houver foto, mostra um ícone padrão -->
+                                    <img src="{% static 'img/avatar.png' %}" alt="Sem foto" class="rounded-circle" width="40" height="40">
+                                    {% endif %}
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="contate">Contate-nos</a>
+                                    <a class="nav-link" href="{% url 'project-list' %}">Meus Projetos</a>
                                 </li>
                                 <li class="nav-item">
-                                    <h1 id="Área do Inventor"><a class="nav-link" href="">Área do Administrador</a></h1>
-                                    <script type="text/javascript"></script>
+                                    <a class="nav-link" href="{% url 'edit_profile' %}">Editar Perfil</a>
+                                </li>
+                                {% if user.userprofile.user_type == 'pesquisador' %}
+                                    <!-- Menu para Pesquisadores -->
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'project-create' %}">Criar Projeto</a>
                                     </li>
-                            </ul>
-                    </nav>
-                </div>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{ url 'partner-search' }">Buscar Parcerias</a>
+                                    </li>
+                                {% elif user.userprofile.user_type == 'estudante' %}
+                                    <!-- Menu para Estudantes -->
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{ url 'project-participate' }">Participar de Projetos</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{ url 'mentorship' }">Mentoria</a>
+                                    </li>
+                                {% elif user.userprofile.user_type == 'empresa' %}
+                                    <!-- Menu para Empresas e Investidores -->
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="'{ url 'project-search' }'">Buscar Projetos</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{ url 'evaluation' }">Avaliar Potencial</a>
+                                    </li>
+                                {% elif user.userprofile.user_type == 'instituicao' %}
+                                    <!-- Menu para Instituições de Ensino e Pesquisa -->
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{ url 'institution-portfolio' %}">Gestão de Portfólios</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{ url 'vitrine-tecnologica' %}">Vitrine Tecnológica</a>
+                                    </li>
+                                {% endif %}
+
+                                <!-- Link de Logout para todos os usuários logados -->
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                                </li>
+
+                            {% else %}
+                                <!-- Links visíveis para usuários não logados -->
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'register_researcher' %}">Registro de Pesquisador</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'register_student' %}">Registro de Estudante</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'register_company_investor' %}">Registro de Empresa</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'register_institution' %}">Registro de Instituição</a>
+                                </li>
+                            {% endif %}
+
+                            <!-- Link de Contato visível para todos -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'contact' %}">Contate-nos</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
             </div>
         </div>
-
-
-    </header>
+    </div>
+</header>
     <!-- ***** Header Area End ***** -->
-{% block content %}{% endblock %}
+{% block content %}
+    {% endblock %}
 
     <!-- ***** Footer Area Start ***** -->
                     <footer class="fancy-footer-area fancy-bg-dark">
@@ -101,17 +169,19 @@
                                     <div class="col-12 col-sm-6 col-lg-4">
                                         <div class="single-footer-widget">
                                             <div class="footer-social-widegt d-flex align-items-center">
-                                                    <a href="https://pt-br.facebook.com/ifpicampusoeiras/">
+                                                    <a href="https://www.facebook.com/ifpiaui/">
                                                     <i class="ti-facebook"></i>
                                                     </a>
-                                                    <a href="https://twitter.com/ifpi_oeiras">
-                                                    <i class="ti-twitter-alt"></i>
+                                                    <a href="https://twitter.com/ifpiaui">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-twitter-x" viewBox="0 0 16 16">
+  <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865z"/>
+</svg>
                                                     </a>
-                                                    <a href="https://www.instagram.com/ifpioeiras/">
+                                                    <a href="https://www.instagram.com/ifpiaui/">
                                                     <i class="fa fa-instagram"></i>
                                                 	</a>
-                                                    <a href="https://www.ifpi.edu.br/oeiras">
-                                                    <i class="fa fa-google"></i>
+                                                    <a href="https://www.ifpi.edu.br/">
+                                                    <i class="fa fa-link"></i>
                                                 </a>
                                             </div>
                                         </div>
@@ -124,9 +194,9 @@
                         <div class="copywrite-content h-100 d-flex align-items-center justify-content-between">
                             <!-- Copywrite Text -->
                             <div class="copywrite-text">
-                                <p>Endereço ( Estr. p/ Wall Ferraz, s/n - Uberaba II, Oeiras - PI, 64500-000 )</p>
+                                <p>Endereço ( R. Francisco Urquiza Machado, 462 - Meladão, Floriano - PI, 64800-000 )</p>
                                 <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                                    Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib and edited by students of IFPI - Oeiras</a>
+                                    Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib and edited by students and teachers of IFPI</a>
                                     <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
                             </div>
 

@@ -1,38 +1,25 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-  <head>
-    {% load static %}
-    <title>Galeria &mdash; IFPI Projetos </title>
-    <!-- Favicon -->
-    <link rel="icon" href="{%static 'img/core-img/ifpi.png'%}">
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+{% extends 'base.html' %}
 
+{% block title %}Galeria de Imagens{% endblock %}
+{% load static %}
+{% block extra_head %}
     <link href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700,900" rel="stylesheet">
     <link rel="stylesheet" href="{%static 'galeria/fonts/icomoon/style.css'%}">
-
     <link rel="stylesheet" href="{%static 'galeria/css/bootstrap.min.css'%}">
     <link rel="stylesheet" href="{%static 'galeria/css/magnific-popup.css'%}">
     <link rel="stylesheet" href="{%static 'galeria/css/jquery-ui.css'%}">
     <link rel="stylesheet" href="{%static 'galeria/css/owl.carousel.min.css'%}">
     <link rel="stylesheet" href="{%static 'galeria/css/owl.theme.default.min.css'%}">
-
     <link rel="stylesheet" href="{%static 'galeria/css/bootstrap-datepicker.css'%}">
-
     <link rel="stylesheet" href="{%static 'galeria/fonts/flaticon/font/flaticon.css'%}">
-
-    <link rel="stylesheet" href="css/aos.css">
+    <link rel="stylesheet" href="{%static 'galeria/css/aos.css'%}">
     <link rel="stylesheet" href="{%static 'galeria/css/jquery.scrollbar.css'%}">
     <link rel="stylesheet" href="{%static 'galeria/css/fancybox.min.css'%}">
     <link rel="stylesheet" href="{%static 'galeria/css/swiper.min.css'%}">
-
     <link rel="stylesheet" href="{%static 'galeria/css/style.css'%}">
-    
-  </head>
-  <body>
-  
-
-  <div class="site-wrap">
+{% endblock %}
+{% block content %}
+<div class="site-wrap">
 
   <div class="site-mobile-menu">
     <div class="site-mobile-menu-header">
@@ -43,23 +30,19 @@
     <div class="site-mobile-menu-body"></div>
   </div>
 
-  <header class="header-bar d-flex d-lg-flex align-items-center" data-aos="fade-down">
-    <div class="site-logo">
-      <a href="../index.html">Ir para o Porteiras</a>
-    </div>
-  </header> 
-  
-
-  <div class="swiper-container gallery-top">
+<div class="swiper-container gallery-top">
 <div class="swiper-wrapper">
 <div class="swiper-slide cover" style="background-image: url({%static 'galeria/images/1.jpg'%});">
   <a href="{%static 'galeria/images/1.jpg'%}" data-fancybox="gallery" class="zoom"><span class="icon-search"></span></a>
   <div class="img-info">
     <span class="btn-toggle-expand"><span class="icon-call_made"></span></span>
     <div class="img-info-content">
-      <h2>Image Title Here</h2>
+      <h2>NuBank</h2>
       <div class="scrollbar-inner style-scrollbar-sm js-scrollbar-container">
-        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum, ipsam, illo dolorum laboriosam voluptatum laudantium. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur facilis architecto deserunt doloribus, nisi placeat quas ratione perferendis? Placeat aliquid assumenda, odio numquam vero eveniet fugit blanditiis dolorum laudantium voluptatibus!</p>
+        <p class="mb-0">Única mulher entre os 16 fundadores das startups unicórnios brasileiras, Cristina Junqueira
+          estudou Engenharia de Produção na Escola Politécnica (Poli) da USP.
+          A Nubank atua na área de serviços financeiros. Oferece cartão de crédito sem tarifas e atendimento
+          desburocratizado, totalmente via aplicativo. Fonte: https://jornal.usp.br/universidade/usp-formou-10-dos-16-fundadores-de-unicornios-do-brasil</p>
       </div>
     </div>
   </div>
@@ -70,8 +53,11 @@
   <div class="img-info">
     <span class="btn-toggle-expand"><span class="icon-call_made"></span></span>
     <div class="img-info-content">
-      <h2>Image Title Here 2</h2>
-      <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum, ipsam, illo dolorum laboriosam voluptatum laudantium.</p>
+      <h2>GymPass</h2>
+      <p class="mb-0">Dois dos três fundadores – Cesar Carvalho e João Thayro – estudaram na Faculdade de Economia, Administração e Contabilidade (FEA) da USP.
+A partir de uma mensalidade ou de pagamento de diárias, o Gympass dá acesso a diversas academias – dessa forma a
+        pessoa pode se exercitar onde quiser sem ter que se matricular em dois lugares.
+      Fonte: https://jornal.usp.br/universidade/usp-formou-10-dos-16-fundadores-de-unicornios-do-brasil</p>
     </div>
   </div>
 </div>
@@ -81,8 +67,11 @@
   <div class="img-info">
     <span class="btn-toggle-expand"><span class="icon-call_made"></span></span>
     <div class="img-info-content">
-      <h2>Image Title Here 3</h2>
-      <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum, ipsam, illo dolorum laboriosam voluptatum laudantium.</p>
+      <h2>IFood</h2>
+      <p class="mb-0">Todos os fundadores estudaram na USP: Eduardo Baer e Felipe Ramos Fioravante fizeram
+        Administração na FEA. Patrick Sigrist foi aluno da Escola Superior de Agricultura Luiz de Queiroz (Esalq) e
+        Guilherme Bonifácio estudou Economia na FEA.
+A empresa é um marketplace on-line de entrega de comidas. Fonte: https://jornal.usp.br/universidade/usp-formou-10-dos-16-fundadores-de-unicornios-do-brasil</p>
     </div>
   </div>
 </div>
@@ -92,186 +81,12 @@
   <div class="img-info">
     <span class="btn-toggle-expand"><span class="icon-call_made"></span></span>
     <div class="img-info-content">
-      <h2>Image Title Here 4</h2>
-      <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum, ipsam, illo dolorum laboriosam voluptatum laudantium.</p>
-    </div>
-  </div>
-</div>
-
-<div class="swiper-slide cover" style="background-image: url({%static 'galeria/images/5.jpg'%});">
-  <a href="{%static 'galeria/images/5.jpg'%}" data-fancybox="gallery" class="zoom"><span class="icon-search"></span></a>
-  <div class="img-info">
-    <span class="btn-toggle-expand"><span class="icon-call_made"></span></span>
-    <div class="img-info-content">
-      <h2>Image Title Here 5</h2>
-      <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum, ipsam, illo dolorum laboriosam voluptatum laudantium.</p>
-    </div>
-  </div>
-</div>
-
-<div class="swiper-slide cover" style="background-image: url({%static 'galeria/images/6.jpg'%});">
-  <a href="{%static 'galeria/images/6.jpg'%}" data-fancybox="gallery" class="zoom"><span class="icon-search"></span></a>
-  <div class="img-info">
-    <span class="btn-toggle-expand"><span class="icon-call_made"></span></span>
-    <div class="img-info-content">
-      <h2>Image Title Here 6</h2>
-      <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum, ipsam, illo dolorum laboriosam voluptatum laudantium.</p>
-    </div>
-  </div>
-</div>
-
-<div class="swiper-slide cover" style="background-image: url({%static 'galeria/images/7.jpg'%});">
-  <a href="{%static 'galeria/images/7.jpg'%}" data-fancybox="gallery" class="zoom"><span class="icon-search"></span></a>
-  <div class="img-info">
-    <span class="btn-toggle-expand"><span class="icon-call_made"></span></span>
-    <div class="img-info-content">
-      <h2>Image Title Here 7</h2>
-      <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum, ipsam, illo dolorum laboriosam voluptatum laudantium.</p>
-    </div>
-  </div>
-</div>
-
-<div class="swiper-slide cover" style="background-image: url({%static 'galeria/images/8.jpg'%});">
-  <a href="{%static 'galeria/images/8.jpg'%}" data-fancybox="gallery" class="zoom"><span class="icon-search"></span></a>
-  <div class="img-info">
-    <span class="btn-toggle-expand"><span class="icon-call_made"></span></span>
-    <div class="img-info-content">
-      <h2>Image Title Here 8</h2>
-      <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum, ipsam, illo dolorum laboriosam voluptatum laudantium.</p>
-    </div>
-  </div>
-</div>
-
-<div class="swiper-slide cover" style="background-image: url({%static 'galeria/images/9.jpg'%});">
-  <a href="{%static 'galeria/images/9.jpg'%}" data-fancybox="gallery" class="zoom"><span class="icon-search"></span></a>
-  <div class="img-info">
-    <span class="btn-toggle-expand"><span class="icon-call_made"></span></span>
-    <div class="img-info-content">
-      <h2>Image Title Here 9</h2>
-      <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum, ipsam, illo dolorum laboriosam voluptatum laudantium.</p>
-    </div>
-  </div>
-</div>
-
-<div class="swiper-slide cover" style="background-image: url({%static 'galeria/images/10.jpg'%});">
-  <a href="{%static 'galeria/images/10.jpg'%}" data-fancybox="gallery" class="zoom"><span class="icon-search"></span></a>
-  <div class="img-info">
-    <span class="btn-toggle-expand"><span class="icon-call_made"></span></span>
-    <div class="img-info-content">
-      <h2>Image Title Here 10</h2>
-      <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum, ipsam, illo dolorum laboriosam voluptatum laudantium.</p>
-    </div>
-  </div>
-</div>
-
-<div class="swiper-slide cover" style="background-image: url({%static 'galeria/images/1.jpg'%});">
-  <a href="{%static 'galeria/images/1.jpg'%}" data-fancybox="gallery" class="zoom"><span class="icon-search"></span></a>
-  <div class="img-info">
-    <span class="btn-toggle-expand"><span class="icon-call_made"></span></span>
-    <div class="img-info-content">
-      <h2>Image Title Here</h2>
-      <div class="scrollbar-inner style-scrollbar-sm js-scrollbar-container">
-        <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum, ipsam, illo dolorum laboriosam voluptatum laudantium. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur facilis architecto deserunt doloribus, nisi placeat quas ratione perferendis? Placeat aliquid assumenda, odio numquam vero eveniet fugit blanditiis dolorum laudantium voluptatibus!</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="swiper-slide cover" style="background-image: url({%static 'galeria/images/2.jpg'%});">
-  <a href="{%static 'galeria/images/2.jpg'%}" data-fancybox="gallery" class="zoom"><span class="icon-search"></span></a>
-  <div class="img-info">
-    <span class="btn-toggle-expand"><span class="icon-call_made"></span></span>
-    <div class="img-info-content">
-      <h2>Image Title Here 2</h2>
-      <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum, ipsam, illo dolorum laboriosam voluptatum laudantium.</p>
-    </div>
-  </div>
-</div>
-
-<div class="swiper-slide cover" style="background-image: url({%static 'galeria/images/3.jpg'%});">
-  <a href="{%static 'galeria/images/3.jpg'%}" data-fancybox="gallery" class="zoom"><span class="icon-search"></span></a>
-  <div class="img-info">
-    <span class="btn-toggle-expand"><span class="icon-call_made"></span></span>
-    <div class="img-info-content">
-      <h2>Image Title Here 3</h2>
-      <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum, ipsam, illo dolorum laboriosam voluptatum laudantium.</p>
-    </div>
-  </div>
-</div>
-
-<div class="swiper-slide cover" style="background-image: url({%static 'galeria/images/4.jpg'%});">
-  <a href="{%static 'galeria/images/4.jpg'%}" data-fancybox="gallery" class="zoom"><span class="icon-search"></span></a>
-  <div class="img-info">
-    <span class="btn-toggle-expand"><span class="icon-call_made"></span></span>
-    <div class="img-info-content">
-      <h2>Image Title Here 4</h2>
-      <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum, ipsam, illo dolorum laboriosam voluptatum laudantium.</p>
-    </div>
-  </div>
-</div>
-
-<div class="swiper-slide cover" style="background-image: url({%static 'galeria/images/5.jpg'%});">
-  <a href="{%static 'galeria/images/5.jpg'%}" data-fancybox="gallery" class="zoom"><span class="icon-search"></span></a>
-  <div class="img-info">
-    <span class="btn-toggle-expand"><span class="icon-call_made"></span></span>
-    <div class="img-info-content">
-      <h2>Image Title Here 5</h2>
-      <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum, ipsam, illo dolorum laboriosam voluptatum laudantium.</p>
-    </div>
-  </div>
-</div>
-
-<div class="swiper-slide cover" style="background-image: url({%static 'galeria/images/6.jpg'%});">
-  <a href="{%static 'galeria/images/6.jpg'%}" data-fancybox="gallery" class="zoom"><span class="icon-search"></span></a>
-  <div class="img-info">
-    <span class="btn-toggle-expand"><span class="icon-call_made"></span></span>
-    <div class="img-info-content">
-      <h2>Image Title Here 6</h2>
-      <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum, ipsam, illo dolorum laboriosam voluptatum laudantium.</p>
-    </div>
-  </div>
-</div>
-
-<div class="swiper-slide cover" style="background-image: url({%static 'galeria/images/7.jpg'%});">
-  <a href="{%static 'galeria/images/7.jpg'%}" data-fancybox="gallery" class="zoom"><span class="icon-search"></span></a>
-  <div class="img-info">
-    <span class="btn-toggle-expand"><span class="icon-call_made"></span></span>
-    <div class="img-info-content">
-      <h2>Image Title Here 7</h2>
-      <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum, ipsam, illo dolorum laboriosam voluptatum laudantium.</p>
-    </div>
-  </div>
-</div>
-
-<div class="swiper-slide cover" style="background-image: url({%static 'galeria/images/8.jpg'%});">
-  <a href="{%static 'galeria/images/8.jpg'%}" data-fancybox="gallery" class="zoom"><span class="icon-search"></span></a>
-  <div class="img-info">
-    <span class="btn-toggle-expand"><span class="icon-call_made"></span></span>
-    <div class="img-info-content">
-      <h2>Image Title Here 8</h2>
-      <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum, ipsam, illo dolorum laboriosam voluptatum laudantium.</p>
-    </div>
-  </div>
-</div>
-
-<div class="swiper-slide cover" style="background-image: url({%static 'galeria/images/9.jpg'%});">
-  <a href="{%static 'galeria/images/9.jpg'%}" data-fancybox="gallery" class="zoom"><span class="icon-search"></span></a>
-  <div class="img-info">
-    <span class="btn-toggle-expand"><span class="icon-call_made"></span></span>
-    <div class="img-info-content">
-      <h2>Image Title Here 9</h2>
-      <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum, ipsam, illo dolorum laboriosam voluptatum laudantium.</p>
-    </div>
-  </div>
-</div>
-
-<div class="swiper-slide cover" style="background-image: url({%static 'galeria/images/10.jpg'%});">
-  <a href="{%static 'galeria/images/10.jpg'%}" data-fancybox="gallery" class="zoom"><span class="icon-search"></span></a>
-  <div class="img-info">
-    <span class="btn-toggle-expand"><span class="icon-call_made"></span></span>
-    <div class="img-info-content">
-      <h2>Image Title Here 10</h2>
-      <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum, ipsam, illo dolorum laboriosam voluptatum laudantium.</p>
+      <h2>99</h2>
+      <p class="mb-0">Os três fundadores – Ariel Lambrecht, Renato Freitas e Paulo Veras – estudaram Engenharia
+        Mecatrônica na Poli-USP.
+Foi o primeiro unicórnio brasileiro. A 99 foi adquirida por uma empresa chinesa. O aplicativo de
+        transporte oferece diversas categorias de serviço e está presente em mais de mil cidades.
+        Fonte: https://jornal.usp.br/universidade/usp-formou-10-dos-16-fundadores-de-unicornios-do-brasil</p>
     </div>
   </div>
 </div>
@@ -287,22 +102,6 @@
 <div class="swiper-slide cover" style="background-image:url({%static 'galeria/images/2.jpg'%})"></div>
 <div class="swiper-slide cover" style="background-image:url({%static 'galeria/images/3.jpg'%})"></div>
 <div class="swiper-slide cover" style="background-image:url({%static 'galeria/images/4.jpg'%})"></div>
-<div class="swiper-slide cover" style="background-image:url({%static 'galeria/images/5.jpg'%})"></div>
-<div class="swiper-slide cover" style="background-image:url({%static 'galeria/images/6.jpg'%})"></div>
-<div class="swiper-slide cover" style="background-image:url({%static 'galeria/images/7.jpg'%})"></div>
-<div class="swiper-slide cover" style="background-image:url({%static 'galeria/images/8.jpg'%})"></div>
-<div class="swiper-slide cover" style="background-image:url({%static 'galeria/images/9.jpg'%})"></div>
-<div class="swiper-slide cover" style="background-image:url({%static 'galeria/images/10.jpg'%})"></div>
-<div class="swiper-slide cover" style="background-image:url({%static 'galeria/images/1.jpg'%})"></div>
-<div class="swiper-slide cover" style="background-image:url({%static 'galeria/images/2.jpg'%})"></div>
-<div class="swiper-slide cover" style="background-image:url({%static 'galeria/images/3.jpg'%})"></div>
-<div class="swiper-slide cover" style="background-image:url({%static 'galeria/images/4.jpg'%})"></div>
-<div class="swiper-slide cover" style="background-image:url({%static 'galeria/images/5.jpg'%})"></div>
-<div class="swiper-slide cover" style="background-image:url({%static 'galeria/images/6.jpg'%})"></div>
-<div class="swiper-slide cover" style="background-image:url({%static 'galeria/images/7.jpg'%})"></div>
-<div class="swiper-slide cover" style="background-image:url({%static 'galeria/images/8.jpg'%})"></div>
-<div class="swiper-slide cover" style="background-image:url({%static 'galeria/images/9.jpg'%})"></div>
-<div class="swiper-slide cover" style="background-image:url({%static 'galeria/images/10.jpg'%})"></div>
 </div>
 </div>
 
@@ -324,8 +123,4 @@
   <script src="{%static 'galeria/js/swiper.min.js'%}"></script>
   <script src="{%static 'galeria/js/jquery.scrollbar.js'%}"></script>
   <script src="{%static 'galeria/js/main.js'%}"></script>
-
-
-    
-  </body>
-</html>
+{% endblock %}

@@ -269,6 +269,13 @@ li {
     background-color: #131627!important;
 }
 
+.fancy-bg-white {
+    background: linear-gradient(135deg, #ffffff, #f0f0f0);
+    padding: 50px; /* Espaçamento interno */
+    border-radius: 15px; /* Arredondar o container */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra leve */
+}
+
 .bg-img {
     background-position: center top;
     background-size: auto auto;
@@ -310,8 +317,7 @@ li {
     text-transform: uppercase;
     line-height: 44px;
     padding: 0 15px;
-    width: 160px;
-    height: 46px;
+    width: 220px;
     border-left: 2px solid #7450fe;
     border-right: 2px solid #21d397;
     box-sizing: border-box;
@@ -324,6 +330,7 @@ li {
     transition-duration: 1000ms;
     position: relative;
     z-index: 1;
+    height: auto;
 }
 
 .fancy-btn:after {

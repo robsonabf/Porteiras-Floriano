@@ -1,19 +1,19 @@
 {% extends 'base.html' %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Criar Projeto{% endblock %}
 
 {% block content %}
 <div class="fancy-bg-dark section-padding-100">
 <div class="container fancy-bg-white">
             <div class="row">
                 <div class="col-12 col-md-6">
-<h2>Login</h2>
+<h2>Criar Novo Projeto</h2>
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn fancy-btn fancy-dark bg-transparent">Entrar</button>
+    <button type="submit" class="btn fancy-btn fancy-dark bg-transparent">Salvar Projeto</button>
 </form>
-                </div>
+                    </div>
             </div>
 </div>
 </div>
