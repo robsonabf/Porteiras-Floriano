@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ form.instance.pk|default:"Novo Projeto" }}{% endblock %}
+
+{% block content %}
+<div class="fancy-bg-dark section-padding-100">
+    <div class="container fancy-bg-white">
+        <h2>{{ form.instance.pk|default:"Novo Projeto" }}</h2>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button type="submit" class="btn btn-success mt-2">
+                {% if form.instance.pk %}
+                    Atualizar Projeto
+                {% else %}
+                    Criar Projeto
+                {% endif %}
+            </button>
+
+            <a href="{% url 'project-list' %}" class="btn btn-secondary mt-2">Cancelar</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

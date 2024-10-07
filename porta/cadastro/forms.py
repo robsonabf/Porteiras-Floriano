@@ -20,11 +20,29 @@ class InscricaoForm(forms.ModelForm):
 class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project
-        fields = ['title', 'description', 'category', 'status', 'institution', 'start_date', 'end_date', 'funding_required']
+        fields = [
+            'title',
+            'description',
+            'category',
+            'status',
+            'institution',
+            'start_date',
+            'end_date',
+            'funding_required',
+            'location_state',
+            'location_city',
+            'needs',
+            'stage',
+            'keywords',
+        ]
+
         widgets = {
             'start_date': forms.DateInput(attrs={'type': 'date'}),
             'end_date': forms.DateInput(attrs={'type': 'date'}),
+            'needs': forms.CheckboxSelectMultiple(),
+            'keywords': forms.TextInput(attrs={'placeholder': 'Palavras-chave separadas por vírgulas'}),
         }
+
         labels = {
             'title': 'Título do Projeto',
             'description': 'Descrição',
@@ -34,13 +52,24 @@ class ProjectForm(forms.ModelForm):
             'start_date': 'Data de Início',
             'end_date': 'Data de Término',
             'funding_required': 'Financiamento Necessário',
+            'location_region': 'Região do Projeto',
+            'location_state': 'Estado do Projeto',
+            'location_city': 'Município do Projeto',
+            'needs': 'Necessidades',
+            'stage': 'Fase de Desenvolvimento',
+            'keywords': 'Palavras-chave para Busca',
         }
+
+    def clean_keywords(self):
+        keywords = self.cleaned_data.get('keywords')
+        keywords = ', '.join([kw.strip() for kw in keywords.split(',') if kw.strip()])
+        return keywords
 
 
 class FeedbackForm(forms.ModelForm):
     class Meta:
         model = Feedback
-        fields = ['project', 'comment', 'rating']  # Removido 'user'
+        fields = ['comment', 'rating']
         widgets = {
             'comment': forms.Textarea(attrs={'rows': 4}),
             'rating': forms.Select(choices=[(i, str(i)) for i in range(1, 6)]),
@@ -51,44 +80,36 @@ class FeedbackForm(forms.ModelForm):
         }
 
 
-class PartnershipRequestForm(forms.ModelForm):
-    class Meta:
-        model = PartnershipRequest
-        fields = ['project', 'partner_name', 'partner_email', 'message']
-        widgets = {
-            'message': forms.Textarea(attrs={'rows': 4}),
-        }
-        labels = {
-            'partner_name': 'Nome do Parceiro',
-            'partner_email': 'Email do Parceiro',
-            'message': 'Mensagem para o Parceiro',
-        }
-
-
-class MentorshipRequestForm(forms.ModelForm):
+class MentoriaForm(forms.ModelForm):
     class Meta:
         model = MentorshipRequest
-        fields = ['project', 'mentor', 'message']  # Ajustado para usar 'mentor'
+        fields = ['project', 'message']
+        labels = {
+            'project': 'Projeto',
+            'message': 'Mensagem para o Mentor',
+        }
         widgets = {
             'message': forms.Textarea(attrs={'rows': 4}),
         }
-        labels = {
-            'mentor': 'Mentor',
-            'message': 'Mensagem para o Mentor',
-        }
+
+    def __init__(self, *args, **kwargs):
+        user_profile = kwargs.pop('user_profile')  # Retire o user_profile da kwargs
+        super().__init__(*args, **kwargs)
+
+        # Filtrar os projetos do usuário logado
+        self.fields['project'].queryset = Project.objects.filter(owner=user_profile)
 
 
-class PatentForm(forms.ModelForm):
+class DemonstrarInteresseForm(forms.ModelForm):
     class Meta:
-        model = Patent
-        fields = ['project', 'patent_number', 'filing_date', 'abstract']  # Ajustado para incluir 'abstract'
-        widgets = {
-            'filing_date': forms.DateInput(attrs={'type': 'date'}),
-        }
+        model = MentorshipRequest
+        fields = ['project', 'message']
         labels = {
-            'patent_number': 'Número da Patente',
-            'abstract': 'Resumo da Patente',  # Ajustado para 'abstract'
-            'filing_date': 'Data de Registro',
+            'project': 'Projeto para Mentoria',
+            'message': 'Mensagem para o dono do Projeto',
+        }
+        widgets = {
+            'message': forms.Textarea(attrs={'rows': 4}),
         }
 
 
@@ -163,13 +184,42 @@ class InstitutionRegistrationForm(UserCreationForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['bio', 'institution_name', 'website', 'linkedin', 'avatar']
+        fields = ['nome', 'bio', 'institution_name', 'website', 'linkedin', 'avatar']
         labels = {
+            'nome': 'Nome Completo',
             'bio': 'Biografia',
             'institution_name': 'Nome da Instituição',
             'avatar': 'Avatar',
             'website': 'Website',
             'linkedin': 'Linkedin',
+        }
+
+
+class PatentForm(forms.ModelForm):
+    class Meta:
+        model = Patent
+        fields = ['project', 'patent_number', 'filing_date', 'abstract']  # Ajustado para incluir 'abstract'
+        widgets = {
+            'filing_date': forms.DateInput(attrs={'type': 'date'}),
+        }
+        labels = {
+            'patent_number': 'Número da Patente',
+            'abstract': 'Resumo da Patente',  # Ajustado para 'abstract'
+            'filing_date': 'Data de Registro',
+        }
+
+
+class PartnershipRequestForm(forms.ModelForm):
+    class Meta:
+        model = PartnershipRequest
+        fields = ['partner_name', 'partner_email', 'message']
+        widgets = {
+            'message': forms.Textarea(attrs={'rows': 4}),
+        }
+        labels = {
+            'partner_name': 'Nome do Parceiro',
+            'partner_email': 'Email do Parceiro',
+            'message': 'Mensagem para o Parceiro',
         }
 
 

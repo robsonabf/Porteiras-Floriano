@@ -6,7 +6,12 @@
     .testimonials-slides .owl-prev {
         left: -3%;
     }
-
+    .fancy-btn {
+        max-width: 300px;
+        word-wrap: break-word;
+        word-break: break-all;
+        overflow-wrap: anywhere;
+    }
     .testimonials-slides .owl-next {
         right: -3%;
     }
@@ -29,6 +34,12 @@
     }
     .navbar-toggler span {
         color: #fff;
+    }
+        .fancy-btn {
+        max-width: 300px;
+        word-wrap: break-word;
+        word-break: break-all;
+        overflow-wrap: anywhere;
     }
     #fancyNav {
         background: #7450fe;
@@ -131,7 +142,10 @@
         padding: 15px;
     }
     .fancy-btn {
-        width: 140px;
+        max-width: 300px;
+        word-wrap: break-word;
+        word-break: break-all;
+        overflow-wrap: anywhere;
     }
     .fancy-top-features-content {
         position: relative;

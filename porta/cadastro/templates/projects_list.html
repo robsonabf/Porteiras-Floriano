@@ -11,7 +11,7 @@
 <ul>
     {% for project in projects %}
         <li>
-            <a href="{% url 'project_detail' project.id %}">{{ project.title }}</a>
+            <a href="{% url 'project-detail' project.id %}">{{ project.title }}</a>
             ({{ project.status }})
         </li>
     {% empty %}

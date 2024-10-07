@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Requisitar mentoria{% endblock %}
+{% block content %}
+<div class="fancy-bg-dark section-padding-100">
+<div class="container fancy-bg-white">
+            <div class="row">
+                <div class="col-12 col-md-6">
+    <h2 class="mb-4">Solicitar Mentoria para o Projeto: {{ project.title }}</h2>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn fancy-btn fancy-dark bg-transparent">Enviar Solicitação</button>
+    </form>
+    </div>
+            </div>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Perfil{% endblock %}
+{% block content %}
+{% load static %}
+<div class="fancy-bg-dark section-padding-100">
+<div class="container fancy-bg-white">
+            <div class="row">
+                <div class="col-12 col-md-6">
+    <h2>Perfil de {{ profile.user.username }}</h2>
+
+    <div class="row">
+        <div class="col-md-4">
+            <!-- Exibir foto do perfil, se existir -->
+            {% if profile.avatar %}
+                <img src="{{ profile.avatar.url }}" alt="{{ profile.user.username }}" class="img-thumbnail">
+            {% else %}
+                <span class="bi bi-person-circle" style="font-size: 100px;"></span>
+                <img src="{% static 'img/avatar.png' %}" alt="Sem foto" class="img-thumbnail">
+            {% endif %}
+        </div>
+
+        <div class="col-md-8">
+            <h4>Informações do Perfil</h4>
+            <p><strong>Nome Completo:</strong> {{ profile.nome }}</p>
+            <p><strong>Email:</strong> {{ profile.user.email }}</p>
+            <p><strong>Bio:</strong> {{ profile.bio }}</p>
+            <p><strong>Tipo de Usuário:</strong> {{ profile.user_type }}</p>
+            <p><strong>Instituição:</strong> {{ profile.institution_name }}</p>
+            <p><strong>Linkedin:</strong> {{ profile.linkedin }}</p>
+            <p><strong>Website:</strong> {{ profile.website }}</p>
+        </div>
+    </div>
+
+    <hr>
+
+    <h4>Projetos de {{ profile.user.username }}</h4>
+    <ul>
+        {% for project in projects %}
+            <li>
+                <a href="{% url 'project-detail' project.id %}">{{ project.title }}</a>
+            </li>
+        {% empty %}
+            <p>Este usuário ainda não tem projetos cadastrados.</p>
+        {% endfor %}
+    </ul>
+</div>
+                </div>
+            </div>
+</div>
+{% endblock %}

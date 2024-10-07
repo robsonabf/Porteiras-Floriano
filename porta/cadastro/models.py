@@ -35,6 +35,7 @@ class UserProfile(models.Model):
         ('instituicao', 'Instituição'),
     )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    nome = models.CharField(max_length=300)
     user_type = models.CharField(max_length=50, choices=USER_TYPES)
     bio = models.TextField(null=True, blank=True)
     institution_name = models.CharField(max_length=255, null=True, blank=True)
@@ -67,6 +68,9 @@ class Project(models.Model):
         ('concluido', 'Concluído'),
     )
 
+    location_state = models.ForeignKey('Estado', on_delete=models.SET_NULL, null=True)
+    location_city = models.ForeignKey('Cidade', on_delete=models.SET_NULL, null=True)
+    needs = models.ManyToManyField('Need', related_name='projects', blank=True)
     owner = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='projects')
     title = models.CharField(max_length=255)
     description = models.TextField()
@@ -82,6 +86,7 @@ class Project(models.Model):
     collaborators = models.ManyToManyField(UserProfile, related_name='collaborations', blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
+    keywords = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -152,13 +157,33 @@ class ProjectProgress(models.Model):
 
 class MentorshipRequest(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='mentorship_requests')
-    mentor = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='mentorship_offers')
     message = models.TextField()
     is_accepted = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'Mentorship for {self.project.title} by {self.mentor.user.username}'
+        return f'Mentorship request for {self.project.title}'
+
+    def accept_mentor(self, mentor):
+        if not self.is_accepted:
+            # Marcar a mentoria como aceita
+            self.is_accepted = True
+            self.save()
+
+        # Verifica se o mentor já está interessado para evitar duplicidade
+        if not MentorInterested.objects.filter(mentorship_request=self, mentor=mentor).exists():
+            MentorInterested.objects.create(mentorship_request=self, mentor=mentor)
+
+    def has_interested_mentors(self):
+        return self.interested_mentors.exists()  # Verifica se há mentores interessados
+
+
+class MentorInterested(models.Model):
+    mentorship_request = models.ForeignKey(MentorshipRequest, on_delete=models.CASCADE, related_name='interested_mentors')
+    mentor = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='interested_requests')
+
+    def __str__(self):
+        return f'Mentor {self.mentor.user.username} interested in {self.mentorship_request.project.title}'
 
 
 class PartnershipContract(models.Model):
@@ -191,3 +216,36 @@ class Patent(models.Model):
 
     def __str__(self):
         return f'Patent {self.patent_number} for {self.project.title}'
+
+
+class Regiao(models.Model):
+    nome = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.nome
+
+
+class Estado(models.Model):
+    codigo_uf = models.IntegerField()
+    nome = models.CharField(max_length=100)
+    uf = models.CharField(max_length=2)
+    regiao = models.ForeignKey(Regiao, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.nome
+
+
+class Cidade(models.Model):
+    codigo = models.BigIntegerField()
+    nome = models.CharField(max_length=100)
+    estado = models.ForeignKey(Estado, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.nome
+
+
+class Need(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name

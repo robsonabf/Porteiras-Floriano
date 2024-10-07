@@ -17,4 +17,30 @@
             </div>
 </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#id_location_state').change(function() {
+            var state_id = $(this).val();
+            var url = "{% url 'get_cities' %}";
+
+            if (state_id) {
+                $.ajax({
+                    url: url,
+                    data: {'state_id': state_id},
+                    success: function(data) {
+                        $('#id_location_city').empty();
+                        $('#id_location_city').append('<option value="">Selecione uma cidade</option>');
+                        $.each(data, function(index, city) {
+                            $('#id_location_city').append('<option value="' + city.id + '">' + city.nome + '</option>');
+                        });
+                    }
+                });
+            } else {
+                $('#id_location_city').empty();
+                $('#id_location_city').append('<option value="">Selecione uma cidade</option>');
+            }
+        });
+    });
+</script>
 {% endblock %}

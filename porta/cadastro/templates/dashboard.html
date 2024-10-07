@@ -1,0 +1,209 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="fancy-bg-dark section-padding-100">
+    <div class="container fancy-bg-white">
+        <div class="row">
+            <div class="col-12">
+                <h2>Dashboard</h2>
+
+                {% if user.is_authenticated %}
+                <h3>Funcionalidades</h3>
+                <div class="d-flex flex-wrap justify-content-start">
+                    <a href="{% url 'buscar_parcerias' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">Buscar Parcerias</a>
+                    <a href="{% url 'ofertar_parcerias' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">Ofertar Parcerias</a>
+                    <a href="{% url 'participacoes_projetos' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">Participações em Projetos</a>
+                    <a href="{% url 'emitir_interesse' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">Emitir Interesse</a>
+                </div>
+                {% if user.userprofile.user_type == 'estudante' %}
+                    <h4>Estudante</h4>
+                    <div class="d-flex flex-wrap justify-content-start">
+                    <a href="{% url 'solicitar_mentoria' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
+                        Solicitar Mentoria</a>
+                    </div>
+                    <div class="d-flex flex-wrap justify-content-start">
+                    <a href="{% url 'ofertar_mentorias' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
+                        Ofertar Mentorias</a>
+                    </div>
+                {% elif user.userprofile.user_type == 'pesquisador' %}
+                    <h4>Pesquisador</h4>
+                    <div class="d-flex flex-wrap justify-content-start">
+                    <a href="{% url 'solicitar_mentoria' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
+                        Solicitar Mentoria</a>
+                    </div>
+                    <div class="d-flex flex-wrap justify-content-start">
+                    <a href="{% url 'ofertar_mentorias' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
+                        Ofertar Mentorias</a>
+                    </div>
+                {% elif user.userprofile.user_type == 'empresa' %}
+                    <h4>Empresa</h4>
+                    <div class="d-flex flex-wrap justify-content-start">
+                    <a href="{% url 'avaliar_potencial' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
+                        Avaliar Potencial</a>
+                    <a href="{% url 'oportunidades_parcerias' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
+                        Oportunidades de Parcerias</a>
+                    </div>
+                    <div class="d-flex flex-wrap justify-content-start">
+                    <a href="{% url 'solicitar_mentoria' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
+                        Solicitar Mentoria</a>
+                    </div>
+                    <div class="d-flex flex-wrap justify-content-start">
+                    <a href="{% url 'ofertar_mentorias' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
+                        Ofertar Mentorias</a>
+                    </div>
+                {% elif user.userprofile.user_type == 'instituicao' %}
+                    <h4>Instituição</h4>
+                    <div class="d-flex flex-wrap justify-content-start">
+                    <a href="{% url 'gestao_portfolio' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
+                        Gestão de Portfólio</a>
+                    </div>
+                    <div class="d-flex flex-wrap justify-content-start">
+                    <a href="{% url 'vitrine_local' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
+                        Vitrine Local</a>
+                    </div>
+                    <div class="d-flex flex-wrap justify-content-start">
+                    <a href="{% url 'solicitar_mentoria' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
+                        Solicitar Mentoria</a>
+                    </div>
+                    <div class="d-flex flex-wrap justify-content-start">
+                    <a href="{% url 'ofertar_mentorias' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
+                        Ofertar Mentorias</a>
+                    </div>
+                {% endif %}
+                <!-- Seção de Mentorias Solicitadas -->
+                <h4>Mentorias Solicitadas por Você</h4>
+                <ul>
+                    {% for mentorship in solicitadas %}
+                    <li>
+                        <strong>Projeto:</strong> {{ mentorship.project.title }} <br>
+                        <strong>Status:</strong> {% if mentorship.is_accepted %}Aceita{% else %}Pendente{% endif %} <br>
+                        <strong>Mensagem:</strong> {{ mentorship.message }} <br>
+                        {% if mentorship.has_interested_mentors %}
+                            <!-- Botão para abrir o modal de detalhes e firmar mentoria -->
+                            <h5>Intenções de Mentoria</h5>
+                            <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#firmarMentoriaModal_{{ mentorship.id }}">
+                                Ver Detalhes e Firmar Mentoria
+                            </button>
+                    <!-- Modal para exibir os detalhes do projeto e mentor -->
+                    <div class="modal fade" id="firmarMentoriaModal_{{ mentorship.id }}" tabindex="-1" aria-labelledby="modalLabel_{{ mentorship.id }}" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="modalLabel_{{ mentorship.id }}">Detalhes da Mentoria</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <h5>Projeto: {{ mentorship.project.title }}</h5>
+                                    <p>{{ mentorship.project.description }}</p>
+                                    <h6>Mentores Interessados</h6>
+                                    <form method="post" action="{% url 'firmar_mentoria' mentorship.id %}">
+                                        {% csrf_token %}
+                                        {% for mentor in mentorship.interested_mentors.all %}
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="mentores_firmar" value="{{ mentor.id }}" id="firmar_mentor_{{ mentor.id }}">
+                                                <label class="form-check-label" for="firmar_mentor_{{ mentor.id }}">
+                                                    Nome: {{ mentor.user.userprofile.nome }}<br>
+                                                    Bio: {{ mentor.mentor.userprofile.bio }}<br>
+                                                    <a href="{{ mentor.mentor.userprofile.linkedin }}" target="_blank">Perfil do LinkedIn</a>
+                                                </label>
+                                            </div>
+                                        {% empty %}
+                                            <p>Nenhum mentor interessado ainda.</p>
+                                        {% endfor %}
+
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-success">Firmar Mentoria</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                                </div>
+                                </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        {% endif %}
+                    </li>
+                    <br>
+                    {% empty %}
+                    <p>Você ainda não solicitou nenhuma mentoria.</p>
+                    {% endfor %}
+                </ul>
+                <div class="pagination">
+                    {% if solicitadas.has_previous %}
+                    <a href="?page={{ solicitadas.previous_page_number }}">Anterior</a>
+                    {% endif %}
+                    <span>Página {{ solicitadas.number }} de {{ solicitadas.paginator.num_pages }}</span>
+                    {% if solicitadas.has_next %}
+                    <a href="?page={{ solicitadas.next_page_number }}">Próxima</a>
+                    {% endif %}
+                </div>
+
+                <!-- Seção de Mentorias Recebidas -->
+                <h4>Mentorias Solicitadas por Outros</h4>
+                <ul>
+                        {% for mentorshipoutros in solicitacoes_outros %}
+                            <li>
+                                <strong>Projeto:</strong> {{ mentorshipoutros.project.title }} <br>
+                                <strong>Solicitante:</strong> {{ mentorshipoutros.project.owner.user.username }} <br>
+                                <strong>Mensagem:</strong> {{ mentorshipoutros.message }} <br>
+                                <button type="button" class="btn btn btn-secondary" data-bs-toggle="modal" data-bs-target="#InteresseModal_{{ mentorshipoutros.id }}">
+                                Ver Detalhes e Demonstrar Interesse
+                                </button>
+                            </li>
+                    <div class="modal fade" id="InteresseModal_{{ mentorshipoutros.id }}" tabindex="-1" aria-labelledby="modalLabel_{{ mentorshipoutros.id }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalLabel_{{ mentorshipoutros.id }}">Detalhes da Mentoria</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <h5>Projeto: {{ mentorshipoutros.project.title }}</h5>
+                                <p>{{ mentorshipoutros.project.description }}</p>
+                                <h6>Dono do Projeto: {{ mentorshipoutros.project.owner.user.userprofile.nome }}</h6>
+                                <p>Bio: {{ mentorshipoutros.project.owner.userprofile.bio }}</p> <!-- Adicione a bio do dono, se disponível -->
+                                <h6>Mentores Interessados</h6>
+                                <form method="post" action="{% url 'demonstrar_interesse' mentorshipoutros.id %}">
+                                    {% csrf_token %}
+                                    {% for mentor in mentorshipoutros.interested_mentors.all %}
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="mentores_interesse" value="{{ mentor.id }}" id="mentor_{{ mentor.id }}">
+                                            <label class="form-check-label" for="mentor_{{ mentor.id }}">
+                                                Nome: {{ mentor.mentor.user.userprofile.nome }}<br>
+                                                Bio: {{ mentor.mentor.bio }}<br>
+                                                <a href="{{ mentor.linkedin }}" target="_blank">Perfil do LinkedIn</a>
+                                            </label>
+                                        </div>
+                                    {% empty %}
+                                        <p>Nenhum mentor interessado ainda.</p>
+                                    {% endfor %}
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-success">Demonstrar Interesse</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                     {% empty %}
+                            <p>Não há mentorias solicitadas por outros.</p>
+                        {% endfor %}
+                    </ul>
+                <div class="pagination">
+                    {% if recebidas.has_previous %}
+                    <a href="?page={{ recebidas.previous_page_number }}">Anterior</a>
+                    {% endif %}
+                    <span>Página {{ recebidas.number }} de {{ recebidas.paginator.num_pages }}</span>
+                    {% if recebidas.has_next %}
+                    <a href="?page={{ recebidas.next_page_number }}">Próxima</a>
+                    {% endif %}
+                </div>
+
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

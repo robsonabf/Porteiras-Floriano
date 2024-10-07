@@ -22,9 +22,14 @@
     {% endfor %}
 </ul>
 
-<a href="{% url 'add_feedback' project.id %}" class="btn btn-primary">Adicionar Feedback</a>
-<a href="{% url 'request_partnership' project.id %}" class="btn btn-warning">Solicitar Parceria</a>
-<a href="{% url 'request_mentorship' project.id %}" class="btn btn-info">Solicitar Mentoria</a>
+<a href="{% url 'add-feedback' project.id %}" class="btn btn-primary">Adicionar Feedback</a>
+<a href="{% url 'request-partnership' project.id %}" class="btn btn-warning">Solicitar Parceria</a>
+<a href="{% url 'request-mentorship' project.id %}" class="btn btn-info">Solicitar Mentoria</a>
+{% if request.user.is_authenticated and project.owner.user == request.user %}
+<a href="{% url 'project-update' project.id %}" class="mt-2 btn btn-secondary">Editar </a>
+<a href="{% url 'project-delete' project.id %}" class="mt-2 btn btn-danger">Apagar</a>
+{% endif %}
+
                                   </div>
             </div>
 </div>
