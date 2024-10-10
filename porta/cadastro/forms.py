@@ -195,32 +195,20 @@ class UserProfileForm(forms.ModelForm):
         }
 
 
-class PatentForm(forms.ModelForm):
-    class Meta:
-        model = Patent
-        fields = ['project', 'patent_number', 'filing_date', 'abstract']  # Ajustado para incluir 'abstract'
-        widgets = {
-            'filing_date': forms.DateInput(attrs={'type': 'date'}),
-        }
-        labels = {
-            'patent_number': 'Número da Patente',
-            'abstract': 'Resumo da Patente',  # Ajustado para 'abstract'
-            'filing_date': 'Data de Registro',
-        }
-
-
 class PartnershipRequestForm(forms.ModelForm):
     class Meta:
         model = PartnershipRequest
-        fields = ['partner_name', 'partner_email', 'message']
+        fields = ['message']
         widgets = {
-            'message': forms.Textarea(attrs={'rows': 4}),
+            'message': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Escreva sua mensagem...'}),
         }
         labels = {
-            'partner_name': 'Nome do Parceiro',
-            'partner_email': 'Email do Parceiro',
             'message': 'Mensagem para o Parceiro',
         }
+
+    def __init__(self, *args, **kwargs):
+        user_profile = kwargs.pop('user_profile', None)  # Recebemos o user_profile se for necessário
+        super().__init__(*args, **kwargs)
 
 
 class NotificationForm(forms.ModelForm):
@@ -245,4 +233,18 @@ class ImpactReportForm(forms.ModelForm):
             'views': 'Visualizações',
             'contacts': 'Contatos',
             'partnerships': 'Parcerias',
+        }
+
+
+class PatentForm(forms.ModelForm):
+    class Meta:
+        model = Patent
+        fields = ['project', 'patent_number', 'filing_date', 'abstract']  # Ajustado para incluir 'abstract'
+        widgets = {
+            'filing_date': forms.DateInput(attrs={'type': 'date'}),
+        }
+        labels = {
+            'patent_number': 'Número da Patente',
+            'abstract': 'Resumo da Patente',  # Ajustado para 'abstract'
+            'filing_date': 'Data de Registro',
         }

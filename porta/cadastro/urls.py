@@ -17,23 +17,22 @@ urlpatterns = [
     #
     path('informatica/', views.informatica),
     path('galeria/', views.galeria),
-    #dashboard
+    #dashboard e parcerias
     path('dashboard/', DashboardView.as_view(), name='dashboard'),
     path('buscar-parcerias/', BuscarParceriasView.as_view(), name='buscar_parcerias'),
-    path('ofertar-parcerias/', OfertarParceriasView.as_view(), name='ofertar_parcerias'),
-    path('participacoes-projetos/', ParticipacoesProjetosView.as_view(), name='participacoes_projetos'),
-    path('emitir-interesse/', EmitirInteresseView.as_view(), name='emitir_interesse'),
+    path('ofertar-parcerias/', RequestPartnershipView.as_view(), name='ofertar_parcerias'),
+    path('demonstrar-interesse_parceria/<int:partnership_request_id>/', DemonstrarInteresseParceriaView.as_view(),
+         name='demonstrar_interesse_parceria'),
+    path('firmar-parceria/<int:partnership_request_id>/', FirmarParceriaView.as_view(), name='firmar_parceria'),
+    #mentorias
     path('solicitar-mentoria/', SolicitarMentoriaView.as_view(), name='solicitar_mentoria'),
-    path('ofertar-mentorias/', OfertarMentoriasView.as_view(), name='ofertar_mentorias'),
-    path('avaliar-potencial/', AvaliarPotencialView.as_view(), name='avaliar_potencial'),
-    path('oportunidades-parcerias/', OportunidadesParceriasView.as_view(), name='oportunidades_parcerias'),
-    path('gestao-portfolio/', GestaoPortfolioView.as_view(), name='gestao_portfolio'),
-    path('vitrine-local/', VitrineLocalView.as_view(), name='vitrine_local'),
     path('demonstrar-interesse/<int:mentorship_request_id>/', DemonstrarInteresseMentoriaView.as_view(),
          name='demonstrar_interesse'),
     path('firmar-mentoria/<int:mentorship_request_id>/', FirmarMentoriaView.as_view(), name='firmar_mentoria'),
-    path('mentoria/detalhes/<int:mentorship_request_id>/', MentoriaDetalhesView.as_view(), name='mentoria_detalhes'),
-    path('mentoria/confirmada/<int:mentorship_request_id>/', MentoriaConfirmadaView.as_view(), name='mentoria_confirmada'),
+    #
+    path('participacoes-projetos/', ParticipacoesProjetosView.as_view(), name='participacoes_projetos'),
+    path('oportunidades-parcerias/', OportunidadesParceriasView.as_view(), name='oportunidades_parcerias'),
+    path('vitrine-local/', VitrineLocalView.as_view(), name='vitrine_local'),
     #projetos e usuário
     path('user/<str:username>/', views.user_profile, name='user-profile'),
     path('projects/', views.ProjectListView.as_view(), name='project-list'),

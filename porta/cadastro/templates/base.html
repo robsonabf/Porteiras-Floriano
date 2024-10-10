@@ -111,10 +111,9 @@
                                         <a class="nav-link" href="{ url 'vitrine-tecnologica' %}">Vitrine Tecnológica</a>
                                     </li>
                                 {% endif %}
-
-                                <!-- Link de Logout para todos os usuários logados -->
+                                <!-- Link de Contato visível para todos -->
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                                    <a class="nav-link" href="{% url 'contact' %}">Contate-nos</a>
                                 </li>
 
                             {% else %}
@@ -135,11 +134,10 @@
                                     <a class="nav-link" href="{% url 'register_institution' %}">Registro de Instituição</a>
                                 </li>
                             {% endif %}
-
-                            <!-- Link de Contato visível para todos -->
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url 'contact' %}">Contate-nos</a>
-                            </li>
+                            <!-- Link de Logout para todos os usuários logados -->
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                                </li>
                         </ul>
                     </div>
                 </nav>

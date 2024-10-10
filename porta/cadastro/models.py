@@ -103,25 +103,6 @@ class Feedback(models.Model):
         return f"Feedback by {self.user} on {self.project}"
 
 
-class PartnershipRequest(models.Model):
-    STATUS_CHOICES = (
-        ('pending', 'Pending'),
-        ('accepted', 'Accepted'),
-        ('rejected', 'Rejected'),
-    )
-
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='partnership_requests')
-    requester = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='partnership_requests_made')
-    partner_name = models.CharField(max_length=255)  # Nome do parceiro
-    partner_email = models.EmailField()  # E-mail do parceiro
-    message = models.TextField(null=True, blank=True)  # Mensagem opcional do solicitante
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
-    date_created = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Partnership Request by {self.requester} for {self.project} with partner {self.partner_name}"
-
-
 class Institution(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
@@ -134,25 +115,32 @@ class Institution(models.Model):
         return self.name
 
 
-class ImpactReport(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='impact_reports')
-    views = models.IntegerField(default=0)
-    contacts = models.IntegerField(default=0)
-    partnerships = models.IntegerField(default=0)
-    date_generated = models.DateTimeField(auto_now_add=True)
+class PartnershipRequest(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='partnership_requests')
+    message = models.TextField()  # Mensagem enviada pelo solicitante
+    is_accepted = models.BooleanField(default=False)  # Indicador se a parceria foi aceita
+    created_at = models.DateTimeField(auto_now_add=True)  # Data de criação da solicitação
 
     def __str__(self):
-        return f'Impact Report for {self.project.title}'
+        return f'Parceria solicitada para {self.project.title}'
+
+    def accept_partner(self, partner):
+         # Verificar se o parceiro já demonstrou interesse para evitar duplicidades
+        if not PartnerInterested.objects.filter(partnership_request=self, partner=partner).exists():
+            PartnerInterested.objects.create(partnership_request=self, partner=partner)
+
+    def has_interested_partners(self):
+        return self.interested_partners.exists()  # Verificar se há parceiros interessados
 
 
-class ProjectProgress(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='progress_updates')
-    progress_report = models.TextField()
-    updated_at = models.DateTimeField(auto_now=True)
-    updated_by = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True)
+class PartnerInterested(models.Model):
+    partnership_request = models.ForeignKey(PartnershipRequest, on_delete=models.CASCADE, related_name='interested_partners')
+    partner = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='partnership_requests_made')
+    is_active = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'Progress for {self.project.title}'
+        return f'Parceiro {self.partner.user.username} interessado no projeto {self.partnership_request.project.title}'
 
 
 class MentorshipRequest(models.Model):
@@ -165,11 +153,6 @@ class MentorshipRequest(models.Model):
         return f'Mentorship request for {self.project.title}'
 
     def accept_mentor(self, mentor):
-        if not self.is_accepted:
-            # Marcar a mentoria como aceita
-            self.is_accepted = True
-            self.save()
-
         # Verifica se o mentor já está interessado para evitar duplicidade
         if not MentorInterested.objects.filter(mentorship_request=self, mentor=mentor).exists():
             MentorInterested.objects.create(mentorship_request=self, mentor=mentor)
@@ -181,6 +164,8 @@ class MentorshipRequest(models.Model):
 class MentorInterested(models.Model):
     mentorship_request = models.ForeignKey(MentorshipRequest, on_delete=models.CASCADE, related_name='interested_mentors')
     mentor = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='interested_requests')
+    is_active = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'Mentor {self.mentor.user.username} interested in {self.mentorship_request.project.title}'
@@ -194,28 +179,6 @@ class PartnershipContract(models.Model):
 
     def __str__(self):
         return f'Contract for {self.project.title} with {self.partner.user.username}'
-
-
-class Notification(models.Model):
-    recipient = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='notifications')
-    content = models.TextField()
-    is_read = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f'Notification for {self.recipient.user.username}'
-
-
-class Patent(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='patents')
-    patent_number = models.CharField(max_length=100)
-    title = models.CharField(max_length=255)
-    abstract = models.TextField()
-    filing_date = models.DateField()
-    status = models.CharField(max_length=100)
-
-    def __str__(self):
-        return f'Patent {self.patent_number} for {self.project.title}'
 
 
 class Regiao(models.Model):
@@ -249,3 +212,46 @@ class Need(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class ImpactReport(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='impact_reports')
+    views = models.IntegerField(default=0)
+    contacts = models.IntegerField(default=0)
+    partnerships = models.IntegerField(default=0)
+    date_generated = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Impact Report for {self.project.title}'
+
+
+class ProjectProgress(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='progress_updates')
+    progress_report = models.TextField()
+    updated_at = models.DateTimeField(auto_now=True)
+    updated_by = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return f'Progress for {self.project.title}'
+
+
+class Notification(models.Model):
+    recipient = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='notifications')
+    content = models.TextField()
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Notification for {self.recipient.user.username}'
+
+
+class Patent(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='patents')
+    patent_number = models.CharField(max_length=100)
+    title = models.CharField(max_length=255)
+    abstract = models.TextField()
+    filing_date = models.DateField()
+    status = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f'Patent {self.patent_number} for {self.project.title}'

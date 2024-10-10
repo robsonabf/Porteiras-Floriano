@@ -56,20 +56,32 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         # Mentorias solicitadas por outros usuários
         solicitacoes_outros = MentorshipRequest.objects.exclude(project__owner=self.request.user.userprofile).order_by(
             '-created_at')
-
+        parcerias_solicitadas = PartnershipRequest.objects.filter(
+            project__owner=self.request.user.userprofile).order_by('-created_at')
+        solicitacoes_parcerias_outros = PartnershipRequest.objects.exclude(
+            project__owner=self.request.user.userprofile).order_by('-created_at')
         # Paginação (opcional)
         solicitadas_paginator = Paginator(solicitadas, 5)  # 5 mentorias por página
         solicitacoes_outros_paginator = Paginator(solicitacoes_outros, 5)
+        parcerias_solicitadas_paginator = Paginator(parcerias_solicitadas, 5)
+        solicitacoes_parcerias_outros_paginator = Paginator(solicitacoes_parcerias_outros, 5)
 
         page_number_solicitadas = self.request.GET.get('page_solicitadas')
         page_number_outros = self.request.GET.get('page_outros')
+        page_number_parcerias_solicitadas = self.request.GET.get('page_parcerias_solicitadas')
+        page_number_parcerias_outros = self.request.GET.get('page_parcerias_outros')
 
         solicitadas_page_obj = solicitadas_paginator.get_page(page_number_solicitadas)
         solicitacoes_outros_page_obj = solicitacoes_outros_paginator.get_page(page_number_outros)
+        parcerias_solicitadas_page_obj = parcerias_solicitadas_paginator.get_page(page_number_parcerias_solicitadas)
+        solicitacoes_parcerias_outros_page_obj = solicitacoes_parcerias_outros_paginator.get_page(
+            page_number_parcerias_outros)
 
         # Adicionando os objetos de paginação ao contexto
         context['solicitadas'] = solicitadas_page_obj
         context['solicitacoes_outros'] = solicitacoes_outros_page_obj
+        context['parcerias_solicitadas'] = parcerias_solicitadas_page_obj
+        context['solicitacoes_parcerias_outros'] = solicitacoes_parcerias_outros_page_obj
 
         return context
 
@@ -92,19 +104,49 @@ class BuscarParceriasView(TemplateView):
     template_name = 'buscar_parcerias.html'
 
 
-class OfertarParceriasView(TemplateView):
-    template_name = 'ofertar_parcerias.html'
+@method_decorator(login_required, name='dispatch')
+class RequestPartnershipView(View):
+    template_name = 'request_partnership.html'
+
+    def get(self, request):
+        projects = Project.objects.filter(owner=request.user.userprofile)
+
+        form = PartnershipRequestForm()
+
+        context = {
+            'projects': projects,
+            'form': form,
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request):
+        form = PartnershipRequestForm(request.POST)
+        if form.is_valid():
+            partnership_request = form.save(commit=False)
+
+            project_id = request.POST.get('project_id')
+            project = get_object_or_404(Project, id=project_id)
+
+            partnership_request.project = project
+            partnership_request.requester = request.user.userprofile
+            partnership_request.save()
+
+            return redirect('dashboard')
+        else:
+            projects = Project.objects.filter(owner=request.user.userprofile)
+
+            context = {
+                'projects': projects,
+                'form': form,
+            }
+            return render(request, self.template_name, context)
 
 
 class ParticipacoesProjetosView(TemplateView):
     template_name = 'participacoes_projetos.html'
 
 
-class EmitirInteresseView(TemplateView):
-    template_name = 'emitir_interesse.html'
-
-
-# Funcionalidades específicas de Estudantes
+#mentorias
 @method_decorator(login_required, name='dispatch')
 class SolicitarMentoriaView(View):
     template_name = 'solicitar_mentoria.html'
@@ -163,7 +205,6 @@ class FirmarMentoriaView(LoginRequiredMixin, View):
     def get(self, request, mentorship_request_id):
         # Obtém o pedido de mentoria
         mentorship_request = get_object_or_404(MentorshipRequest, id=mentorship_request_id)
-
         # Busca o mentor interessado mais recente
         interested_mentor = MentorInterested.objects.filter(mentorship_request=mentorship_request).last()
 
@@ -177,60 +218,34 @@ class FirmarMentoriaView(LoginRequiredMixin, View):
         # Obtém o pedido de mentoria
         mentorship_request = get_object_or_404(MentorshipRequest, id=mentorship_request_id)
         mentor_ids = request.POST.getlist('mentores_firmar')
+        # Verifica se pelo menos um mentor foi selecionado
+        if not mentor_ids:
+            messages.error(request, 'Selecione pelo menos um mentor, caso exista interessados, '
+                                    'para firmar a mentoria.')
+            return redirect('dashboard')
         mentorship_request.is_accepted = True
         mentorship_request.save()
         for mentor_id in mentor_ids:
             mentor = get_object_or_404(UserProfile, id=mentor_id)  # Obtendo o mentor correspondente
-            # Adiciona o mentor à lista de mentores associados
-            MentorInterested.objects.create(mentorship_request=mentorship_request, mentor=mentor)
+            # Tenta buscar o registro do mentor interessado existente
+            mentor_interested = MentorInterested.objects.filter(mentorship_request=mentorship_request,
+                                                                mentor=mentor).first()
+            if mentor_interested:
+                # Se o registro existe, apenas atualiza o campo is_active para True
+                if not mentor_interested.is_active:
+                    mentor_interested.is_active = True
+                    mentor_interested.save()
+            else:
+                # Caso não exista um registro para este mentor, cria um novo
+                MentorInterested.objects.create(mentorship_request=mentorship_request, mentor=mentor, is_active=True)
+            # Verifica se o mentor já é ativo para esta mentoria
         messages.success(request, 'Mentoria firmada com sucesso!')
         return redirect('dashboard')
 
 
-class MentoriaDetalhesView(LoginRequiredMixin, View):
-    template_name = 'mentoria_detalhes.html'
-
-    def get(self, request, mentorship_request_id):
-        mentorship_request = get_object_or_404(MentorshipRequest, id=mentorship_request_id)
-
-        context = {
-            'mentorship_request': mentorship_request,
-        }
-        return render(request, self.template_name, context)
-
-
-class MentoriaConfirmadaView(LoginRequiredMixin, View):
-    template_name = 'mentoria_confirmada.html'
-
-    def get(self, request, mentorship_request_id):
-        mentorship_request = get_object_or_404(MentorshipRequest, id=mentorship_request_id)
-
-        mentores_confirmados = MentorInterested.objects.filter(mentorship_request=mentorship_request)
-
-        context = {
-            'mentorship_request': mentorship_request,
-            'mentores_confirmados': mentores_confirmados,
-        }
-        return render(request, self.template_name, context)
-
-
 # Funcionalidades específicas de Pesquisadores
-class OfertarMentoriasView(TemplateView):
-    template_name = 'ofertar_mentorias.html'
-
-
-# Funcionalidades específicas de Empresas
-class AvaliarPotencialView(TemplateView):
-    template_name = 'avaliar_potencial.html'
-
-
 class OportunidadesParceriasView(TemplateView):
     template_name = 'oportunidades_parcerias.html'
-
-
-# Funcionalidades específicas de Instituições
-class GestaoPortfolioView(TemplateView):
-    template_name = 'gestao_portfolio.html'
 
 
 class VitrineLocalView(TemplateView):
@@ -244,6 +259,7 @@ def user_profile(request, username):
     return render(request, 'user_profile.html', {'profile': profile, 'projects': projects})
 
 
+#projetos
 @method_decorator(login_required, name='dispatch')
 class ProjectListView(ListView):
     model = Project
@@ -311,7 +327,7 @@ def add_feedback(request, project_id):
         form = FeedbackForm()
     return render(request, 'add_feedback.html', {'form': form, 'project': project})
 
-####################
+#parcerias
 
 @login_required
 def request_partnership(request, project_id):
@@ -330,6 +346,87 @@ def request_partnership(request, project_id):
     return render(request, 'request_partnership.html', {'form': form, 'project': project})
 
 
+class DemonstrarInteresseParceriaView(LoginRequiredMixin, View):
+    template_name = 'demonstrar_interesse_parceria.html'
+
+    def get(self, request, partnership_request_id):
+        # Obtém o pedido de parceria
+        partnership_request = get_object_or_404(PartnershipRequest, id=partnership_request_id)
+
+        context = {
+            'partnership_request': partnership_request,
+            'project_owner': partnership_request.project.owner,  # Dono do projeto
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request, partnership_request_id):
+        # Obtém o pedido de parceria
+        partnership_request = get_object_or_404(PartnershipRequest, id=partnership_request_id)
+
+        if PartnerInterested.objects.filter(partnership_request=partnership_request,
+                                            partner=request.user.userprofile).exists():
+            messages.error(request, "Você já demonstrou interesse nesta parceria.")
+            return redirect('dashboard')
+        else:
+            messages.success(request, 'Seu interesse na parceria foi registrado com sucesso!')
+            PartnerInterested.objects.create(partnership_request=partnership_request, partner=request.user.userprofile)
+
+        # Redireciona para a página de confirmação ou detalhe
+        return redirect('demonstrar_interesse_parceria', partnership_request_id=partnership_request.id)
+
+
+class FirmarParceriaView(LoginRequiredMixin, View):
+    template_name = 'parceria_detalhes.html'
+
+    def get(self, request, partnership_request_id):
+        # Obtém o pedido de parceria
+        partnership_request = get_object_or_404(PartnershipRequest, id=partnership_request_id)
+        # Busca o parceiro interessado mais recente
+        interested_partner = PartnerInterested.objects.filter(partnership_request=partnership_request).last()
+
+        context = {
+            'partnership_request': partnership_request,
+            'partner': interested_partner.partner if interested_partner else None,
+            # Informações do parceiro, se existir
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request, partnership_request_id):
+        # Obtém o pedido de parceria
+        partnership_request = get_object_or_404(PartnershipRequest, id=partnership_request_id)
+        partner_ids = request.POST.getlist('parceiros_interesse')
+        # Verifica se pelo menos um parceiro foi selecionado
+        if not partner_ids:
+            messages.error(request,
+                           'Selecione pelo menos um parceiro, caso existam interessados, para firmar a parceria.')
+            return redirect('dashboard')
+
+        # Marca o pedido de parceria como aceito
+        partnership_request.is_accepted = True
+        partnership_request.save()
+
+        # Processa cada parceiro selecionado
+        for partner_id in partner_ids:
+            partner = get_object_or_404(UserProfile, id=partner_id)  # Obtendo o parceiro correspondente
+            # Tenta buscar o registro do parceiro interessado existente
+            partner_interested = PartnerInterested.objects.filter(partnership_request=partnership_request,
+                                                                  partner=partner).first()
+
+            if partner_interested:
+                # Se o registro existe, apenas atualiza o campo is_active para True
+                if not partner_interested.is_active:
+                    partner_interested.is_active = True
+                    partner_interested.save()
+            else:
+                # Caso não exista um registro para este parceiro, cria um novo
+                PartnerInterested.objects.create(partnership_request=partnership_request, partner=partner,
+                                                 is_active=True)
+
+        messages.success(request, 'Parceria firmada com sucesso!')
+        return redirect('dashboard')
+
+
+###############################
 @login_required
 def view_impact_report(request, project_id):
     project = get_object_or_404(Project, id=project_id)
@@ -337,6 +434,7 @@ def view_impact_report(request, project_id):
     return render(request, 'impact_report.html', {'project': project, 'impact_reports': impact_reports})
 
 
+##############################
 @login_required
 def project_progress(request, project_id):
     project = get_object_or_404(Project, id=project_id)
@@ -363,6 +461,7 @@ class InstitutionDetailView(DetailView):
         return context
 
 
+##############################
 @login_required
 def add_patent(request, project_id):
     project = get_object_or_404(Project, id=project_id)
@@ -379,6 +478,7 @@ def add_patent(request, project_id):
     return render(request, 'add_patent.html', {'form': form, 'project': project})
 
 
+###################################
 @login_required
 def notifications(request):
     notifications = request.user.userprofile.notifications.filter(is_read=False)
@@ -449,12 +549,12 @@ def user_login(request):
 
 @login_required
 def edit_profile(request):
-    profile = request.user.userprofile  # Acessa o UserProfile associado ao usuário logado
+    profile = request.user.userprofile
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
-            return redirect('user-profile')  # Redireciona para a página de perfil
+            return redirect('user-profile', username=request.user.username)
     else:
         form = UserProfileForm(instance=profile)
     return render(request, 'edit_profile.html', {'form': form})
