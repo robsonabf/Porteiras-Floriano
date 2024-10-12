@@ -23,6 +23,7 @@ class ProjectForm(forms.ModelForm):
         fields = [
             'title',
             'description',
+            'logo',
             'category',
             'status',
             'institution',
@@ -58,6 +59,7 @@ class ProjectForm(forms.ModelForm):
             'needs': 'Necessidades',
             'stage': 'Fase de Desenvolvimento',
             'keywords': 'Palavras-chave para Busca',
+            'logo': 'Logo ou Imagem do Projeto',
         }
 
     def clean_keywords(self):

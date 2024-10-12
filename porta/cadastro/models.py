@@ -70,6 +70,7 @@ class Project(models.Model):
 
     location_state = models.ForeignKey('Estado', on_delete=models.SET_NULL, null=True)
     location_city = models.ForeignKey('Cidade', on_delete=models.SET_NULL, null=True)
+    logo = models.ImageField(upload_to='projetos_logos/', null=True, blank=True)
     needs = models.ManyToManyField('Need', related_name='projects', blank=True)
     owner = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='projects')
     title = models.CharField(max_length=255)

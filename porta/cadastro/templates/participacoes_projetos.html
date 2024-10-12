@@ -8,8 +8,136 @@
             <div class="row">
                 <div class="col-12 col-md-6">
     <h2>Participações em Projetos</h2>
-    <a href="{% url 'dashboard' %}" class="btn fancy-btn fancy-dark m-2">Ir para Dashboard</a>
-    <p>Aqui você pode acompanhar as Participações em Projetos.</p>
+<a href="{% url 'dashboard' %}" class="btn fancy-btn fancy-dark m-2">Ir para Dashboard</a>
+
+<!-- Filtros -->
+<form method="GET" action="{% url 'participacoes_projetos' %}">
+    <div>
+        <label for="localidade">Localidade:</label>
+        <input type="text" id="localidade" name="localidade" value="{{ request.GET.localidade }}">
+    </div>
+    <div>
+        <label for="fase">Fase de Desenvolvimento:</label>
+        <select id="fase" name="fase">
+            <option value="">Selecione...</option>
+            <option value="ideia" {% if request.GET.fase == 'ideia' %}selected{% endif %}>Ideia</option>
+            <option value="em_progresso" {% if request.GET.fase == 'em_progresso' %}selected{% endif %}>Em Progresso</option>
+            <option value="completo" {% if request.GET.fase == 'completo' %}selected{% endif %}>Completo</option>
+        </select>
+    </div>
+    <div>
+        <label for="necessidade">Tipo de Necessidade:</label>
+        <input type="text" id="necessidade" name="necessidade" value="{{ request.GET.necessidade }}">
+    </div>
+    <button type="submit" class="btn btn-info">Filtrar</button>
+</form>
+
+<!-- Projetos do Usuário -->
+<h3>Meus Projetos</h3>
+{% if meus_projetos %}
+    <ul>
+        {% for projeto in meus_projetos %}
+            <li>
+                <h4>{{ projeto.title }}</h4>
+                <p>{{ projeto.description }}</p>
+                <p><strong>Localidade:</strong> {{ projeto.location_city.nome }}, {{ projeto.location_state.nome }}</p>
+                <p><strong>Fase:</strong> {{ projeto.get_stage_display }}</p>
+                <p><strong>Necessidades:</strong>
+                    {% for necessidade in projeto.needs.all %}
+                        {{ necessidade.name }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </p>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Nenhum projeto encontrado.</p>
+{% endif %}
+
+<!-- Participações como Mentor -->
+<h3>Minhas Mentorias</h3>
+{% if projetos_mentor %}
+    <ul>
+        {% for projeto in projetos_mentor %}
+            <li>
+                <h4>{{ projeto.project.title }}</h4>
+                <p>{{ projeto.project.description }}</p>
+                <p><strong>Localidade:</strong> {{ projeto.project.location_city.nome }},
+                    {{ projeto.project.location_state.nome }}</p>
+                <p><strong>Fase:</strong> {{ projeto.project.get_stage_display }}</p>
+                <p><strong>Necessidades:</strong>
+                    {% for necessidade in projeto.project.needs.all %}
+                        {{ necessidade.name }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </p>
+                <span class="badge bg-success">Mentor Ativo</span>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Nenhum projeto encontrado como mentor.</p>
+{% endif %}
+
+<!-- Participações como Parceiro -->
+<h3>Minhas Parcerias</h3>
+{% if projetos_parceiro %}
+    <ul>
+        {% for projeto in projetos_parceiro %}
+            <li>
+                <h4>{{ projeto.project.title }}</h4>
+                <p>{{ projeto.project.description }}</p>
+                <p><strong>Localidade:</strong> {{ projeto.project.location_city.nome }},
+                    {{ projeto.project.location_state.nome }}</p>
+                <p><strong>Fase:</strong> {{ projeto.project.get_stage_display }}</p>
+                <p><strong>Necessidades:</strong>
+                    {% for necessidade in projeto.project.needs.all %}
+                        {{ necessidade.name }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </p>
+                <span class="badge bg-primary">Parceiro Ativo</span>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Nenhum projeto encontrado como parceiro.</p>
+{% endif %}
+
+<!-- Interesses como Mentor -->
+<h3>Meus Interesses como Mentor</h3>
+{% if manifestacoes_interesse_mentor %}
+    <ul>
+        {% for projeto in manifestacoes_interesse_mentor %}
+            <li>
+                <h4>{{ projeto.project.title }}</h4>
+                <p>{{ projeto.project.description }}</p>
+                <p><strong>Localidade:</strong> {{ projeto.project.location_city.nome }},
+                    {{ projeto.project.location_state.nome }}</p>
+                <span class="badge bg-warning">Mentor Interessado</span>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Nenhuma manifestação de interesse como mentor encontrada.</p>
+{% endif %}
+
+<!-- Interesses como Parceiro -->
+<h3>Meus Interesses de Parcerias</h3>
+{% if manifestacoes_interesse_parceiro %}
+    <ul>
+        {% for projeto in manifestacoes_interesse_parceiro %}
+            <li>
+                <h4>{{ projeto.project.title }}</h4>
+                <p>{{ projeto.project.description }}</p>
+                <p><strong>Localidade:</strong> {{ projeto.project.location_city.nome }}, {{ projeto.location_state.nome }}</p>
+                <span class="badge bg-info">Parceiro Interessado</span>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Nenhuma manifestação de interesse como parceiro encontrada.</p>
+{% endif %}
+
+
 </div>
                     </div>
 </div>

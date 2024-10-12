@@ -19,7 +19,9 @@ urlpatterns = [
     path('galeria/', views.galeria),
     #dashboard e parcerias
     path('dashboard/', DashboardView.as_view(), name='dashboard'),
+    path('dashboardpub/', DashboardpublicoView.as_view(), name='dashboardpub'),
     path('buscar-parcerias/', BuscarParceriasView.as_view(), name='buscar_parcerias'),
+    path('detalhes-parceria/<int:pk>/', DetalhesParceriaView.as_view(), name='detalhes_parceria'),
     path('ofertar-parcerias/', RequestPartnershipView.as_view(), name='ofertar_parcerias'),
     path('demonstrar-interesse_parceria/<int:partnership_request_id>/', DemonstrarInteresseParceriaView.as_view(),
          name='demonstrar_interesse_parceria'),
@@ -29,12 +31,14 @@ urlpatterns = [
     path('demonstrar-interesse/<int:mentorship_request_id>/', DemonstrarInteresseMentoriaView.as_view(),
          name='demonstrar_interesse'),
     path('firmar-mentoria/<int:mentorship_request_id>/', FirmarMentoriaView.as_view(), name='firmar_mentoria'),
+    path('buscar-mentorias/', BuscarMentoriasView.as_view(), name='buscar_mentorias'),
     #
     path('participacoes-projetos/', ParticipacoesProjetosView.as_view(), name='participacoes_projetos'),
     path('oportunidades-parcerias/', OportunidadesParceriasView.as_view(), name='oportunidades_parcerias'),
     path('vitrine-local/', VitrineLocalView.as_view(), name='vitrine_local'),
     #projetos e usuário
     path('user/<str:username>/', views.user_profile, name='user-profile'),
+    path('portfolio/<str:username>/', PublicProfileView.as_view(), name='public_profile'),
     path('projects/', views.ProjectListView.as_view(), name='project-list'),
     path('projects/<int:pk>/', views.ProjectDetailView.as_view(), name='project-detail'),
     path('projects/new/', views.ProjectCreateView.as_view(), name='project-create'),
@@ -43,7 +47,8 @@ urlpatterns = [
     path('projects/<int:project_id>/feedback/', views.add_feedback, name='add-feedback'),
     path('projects/<int:project_id>/partnership/', views.request_partnership, name='request-partnership'),
     path('projects/<int:project_id>/mentorship/', views.request_mentorship, name='request-mentorship'),
-    #
+    path('participacoes-projetos/', ParticipacoesProjetosView.as_view(), name='participacoes_projetos'),
+    #sem implementação
     path('projects/<int:project_id>/impact/', views.view_impact_report, name='view-impact-report'),
     path('projects/<int:project_id>/progress/', views.project_progress, name='project-progress'),
     #

@@ -8,12 +8,39 @@
             <div class="row">
                 <div class="col-12 col-md-6">
                     <h2>Buscar Parcerias</h2>
-                    <a href="{% url 'dashboard' %}"
-                       class="btn fancy-btn fancy-dark m-2" style="word-wrap: break-word;">
-                        Ir para Dashboard</a>
-                    <p>Aqui você pode buscar por parcerias disponíveis.</p>
-                </div>
+                <form method="GET" action="{% url 'buscar_parcerias' %}">
+                    <div class="form-group">
+                        <label for="location_city">Cidade:</label>
+    <input type="text" id="location_city" name="location_city" placeholder="Digite a cidade">
+                <button type="submit" class="btn btn-primary">Buscar</button>
+                        </div>
+                </form>
+                    <form method="GET" action="{% url 'buscar_parcerias' %}">
+                    <div class="form-group">
+                        <label for="keywords">Palavras-chave:</label>
+    <input type="text" id="keywords" name="keywords" placeholder="Digite palavras-chave">
+                    <button type="submit" class="btn btn-primary">Buscar</button>
+                        </div>
+                    </form>
+                      <a href="{% url 'dashboard' %}" class="btn btn-secondary">Voltar para o Painel</a>
+                <h3>Resultados da Busca</h3>
+                <ul>
+                    {% for parceria in parcerias %}
+                        <li>
+                            <strong>Projeto:</strong> <a href="{% url 'project-detail' parceria.project.id %}">
+                            {{ parceria.project.title }}</a><br>
+                            <strong>Descrição:</strong> {{ parceria.project.description }}<br>
+                            <strong>Cidade:</strong> {{ parceria.project.location_city }}<br>
+                            <strong>Estado:</strong> {{ parceria.project.location_state }}<br>
+                            <strong>Palavras-chave:</strong> {{ parceria.project.keywords }}<br>
+                            <a href="{% url 'detalhes_parceria' parceria.id %}">Ver detalhes</a>
+                        </li>
+                    {% empty %}
+                        <li>Nenhuma parceria encontrada.</li>
+                    {% endfor %}
+                </ul>
             </div>
+</div>
 </div>
 </div>
 {% endblock %}

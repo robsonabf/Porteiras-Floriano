@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import permission_required, login_required
+from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
@@ -86,6 +87,48 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         return context
 
 
+# Dashboard principal
+class DashboardpublicoView(TemplateView):
+    template_name = 'dashboard.html'
+
+    # Método para adicionar dados ao contexto
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Obter todas as mentorias solicitadas (ordenadas por data de criação, mais recentes primeiro)
+        solicitadas = MentorshipRequest.objects.all().order_by('-created_at')
+        # Obter todas as solicitações de mentoria de outros usuários
+        solicitacoes_outros = MentorshipRequest.objects.exclude(project__owner=self.request.user.userprofile).order_by('-created_at') if self.request.user.is_authenticated else []
+        # Obter todas as parcerias solicitadas
+        parcerias_solicitadas = PartnershipRequest.objects.all().order_by('-created_at')
+        # Obter solicitações de parcerias de outros usuários
+        solicitacoes_parcerias_outros = PartnershipRequest.objects.exclude(project__owner=self.request.user.userprofile).order_by('-created_at') if self.request.user.is_authenticated else []
+
+        # Paginação (opcional)
+        solicitadas_paginator = Paginator(solicitadas, 5)  # 5 mentorias por página
+        solicitacoes_outros_paginator = Paginator(solicitacoes_outros, 5)
+        parcerias_solicitadas_paginator = Paginator(parcerias_solicitadas, 5)
+        solicitacoes_parcerias_outros_paginator = Paginator(solicitacoes_parcerias_outros, 5)
+
+        page_number_solicitadas = self.request.GET.get('page_solicitadas')
+        page_number_outros = self.request.GET.get('page_outros')
+        page_number_parcerias_solicitadas = self.request.GET.get('page_parcerias_solicitadas')
+        page_number_parcerias_outros = self.request.GET.get('page_parcerias_outros')
+
+        solicitadas_page_obj = solicitadas_paginator.get_page(page_number_solicitadas)
+        solicitacoes_outros_page_obj = solicitacoes_outros_paginator.get_page(page_number_outros)
+        parcerias_solicitadas_page_obj = parcerias_solicitadas_paginator.get_page(page_number_parcerias_solicitadas)
+        solicitacoes_parcerias_outros_page_obj = solicitacoes_parcerias_outros_paginator.get_page(page_number_parcerias_outros)
+
+        # Adicionando os objetos de paginação ao contexto
+        context['solicitadas'] = solicitadas_page_obj
+        context['solicitacoes_outros'] = solicitacoes_outros_page_obj
+        context['parcerias_solicitadas'] = parcerias_solicitadas_page_obj
+        context['solicitacoes_parcerias_outros'] = solicitacoes_parcerias_outros_page_obj
+
+        return context
+
+
 @login_required
 def request_mentorship(request, project_id):
     project = get_object_or_404(Project, id=project_id)
@@ -102,6 +145,31 @@ def request_mentorship(request, project_id):
 # Funções comuns a todos os perfis
 class BuscarParceriasView(TemplateView):
     template_name = 'buscar_parcerias.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Pegando os parâmetros de busca da query string
+        localidade = self.request.GET.get('location_city')
+        palavra_chave = self.request.GET.get('keywords')
+
+        # Filtro básico para todas as parcerias
+        parcerias = PartnershipRequest.objects.all()
+
+        # Aplicando filtro de localidade
+        if localidade:
+            parcerias = parcerias.filter(project__location_city__nome__icontains=localidade)
+
+        # Aplicando filtro de palavra-chave
+        if palavra_chave:
+            parcerias = parcerias.filter(
+                Q(project__keywords__icontains=palavra_chave) |
+                Q(project__title__icontains=palavra_chave) |
+                Q(project__description__icontains=palavra_chave)
+            )
+
+        context['parcerias'] = parcerias
+        return context
 
 
 @method_decorator(login_required, name='dispatch')
@@ -142,8 +210,22 @@ class RequestPartnershipView(View):
             return render(request, self.template_name, context)
 
 
-class ParticipacoesProjetosView(TemplateView):
-    template_name = 'participacoes_projetos.html'
+@method_decorator(login_required, name='dispatch')
+class DetalhesParceriaView(DetailView):
+    model = PartnershipRequest
+    template_name = 'detalhes_parceria.html'
+    context_object_name = 'parceria'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Obtendo os parceiros interessados que estão ativos
+        interessados_ativos = self.object.interested_partners.filter(is_active=True)
+
+        # Adicionando esses parceiros ao contexto
+        context['interessados_ativos'] = interessados_ativos
+
+        return context
 
 
 #mentorias
@@ -178,6 +260,7 @@ class SolicitarMentoriaView(View):
             return render(request, self.template_name, context)
 
 
+@method_decorator(login_required, name='dispatch')
 class DemonstrarInteresseMentoriaView(LoginRequiredMixin, View):
     template_name = 'demonstrar_interesse.html'
 
@@ -243,6 +326,40 @@ class FirmarMentoriaView(LoginRequiredMixin, View):
         return redirect('dashboard')
 
 
+class BuscarMentoriasView(TemplateView):
+    template_name = 'buscar_mentorias.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Pegando os parâmetros de busca da query string
+        localidade = self.request.GET.get('location_city')
+        palavra_chave = self.request.GET.get('keywords')
+        mentor_ativo = self.request.GET.get('mentor_ativo')  # Filtro para mentores ativos (opcional)
+
+        # Filtro básico para todas as mentorias
+        mentorias = MentorshipRequest.objects.all()
+
+        # Aplicando filtro de localidade (ajustando o campo 'nome' da cidade)
+        if localidade:
+            mentorias = mentorias.filter(project__location_city__nome__icontains=localidade)
+
+        # Aplicando filtro de palavra-chave
+        if palavra_chave:
+            mentorias = mentorias.filter(
+                Q(project__keywords__icontains=palavra_chave) |
+                Q(project__title__icontains=palavra_chave) |
+                Q(project__description__icontains=palavra_chave)
+            )
+
+        # Filtro para mostrar apenas mentorias com mentores interessados ativos
+        if mentor_ativo:
+            mentorias = mentorias.filter(interested_mentors__is_active=True).distinct()
+
+        context['mentorias'] = mentorias
+        return context
+
+
 # Funcionalidades específicas de Pesquisadores
 class OportunidadesParceriasView(TemplateView):
     template_name = 'oportunidades_parcerias.html'
@@ -257,6 +374,93 @@ def user_profile(request, username):
     profile = get_object_or_404(UserProfile, user__username=username)
     projects = profile.projects.all()
     return render(request, 'user_profile.html', {'profile': profile, 'projects': projects})
+
+
+@method_decorator(login_required, name='dispatch')
+class PublicProfileView(TemplateView):
+    template_name = 'public_profile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        username = self.kwargs.get('username')
+        user_profile = get_object_or_404(UserProfile, user__username=username)
+        profile = get_object_or_404(UserProfile, user__username=username)
+
+        # Projetos onde o usuário é dono
+        projetos_dono = Project.objects.filter(owner=user_profile)
+
+        # Projetos onde o usuário é mentor
+        mentorias = MentorshipRequest.objects.filter(interested_mentors__mentor=user_profile)
+
+        # Projetos onde o usuário é parceiro
+        parcerias = PartnershipRequest.objects.filter(interested_partners__partner=user_profile)
+
+        context['user_profile'] = user_profile
+        context['profile'] = profile
+        context['projetos_dono'] = projetos_dono
+        context['mentorias'] = mentorias
+        context['parcerias'] = parcerias
+        return context
+
+
+class ParticipacoesProjetosView(TemplateView):
+    template_name = 'participacoes_projetos.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Obtendo o usuário logado
+        user_profile = self.request.user.userprofile
+
+        # Meus Projetos
+        meus_projetos = Project.objects.filter(owner=user_profile)
+
+        # Participações como Mentor
+        projetos_mentor = MentorshipRequest.objects.filter(interested_mentors__mentor=user_profile)
+
+        # Participações como Parceiro
+        projetos_parceiro = PartnershipRequest.objects.filter(interested_partners__partner=user_profile)
+
+        # Manifestações de Interesse como Mentor
+        manifestacoes_interesse_mentor = MentorshipRequest.objects.filter(interested_mentors__mentor=user_profile)
+
+        # Manifestações de Interesse como Parceiro
+        manifestacoes_interesse_parceiro = PartnershipRequest.objects.filter(interested_partners__partner=user_profile)
+
+        # Combinar todas as participações em uma única queryset
+        participacoes_projetos = Project.objects.filter(
+            Q(id__in=projetos_mentor) |
+            Q(id__in=projetos_parceiro) |
+            Q(id__in=manifestacoes_interesse_mentor) |
+            Q(id__in=manifestacoes_interesse_parceiro)
+        ).distinct()
+        # Filtros de localidade, fase de desenvolvimento e tipo de necessidade
+        localidade = self.request.GET.get('localidade')
+        fase_desenvolvimento = self.request.GET.get('fase')
+        tipo_necessidade = self.request.GET.get('necessidade')
+
+        if localidade:
+            participacoes_projetos = participacoes_projetos.filter(
+                Q(location_city__nome__icontains=localidade) |
+                Q(location_state__nome__icontains=localidade)
+            )
+
+        if fase_desenvolvimento:
+            participacoes_projetos = participacoes_projetos.filter(stage=fase_desenvolvimento)
+
+        if tipo_necessidade:
+            participacoes_projetos = participacoes_projetos.filter(needs__name__icontains=tipo_necessidade)
+
+        # Adicionando os projetos ao contexto
+        context = {
+            'meus_projetos': meus_projetos,
+            'projetos_mentor': projetos_mentor,
+            'projetos_parceiro': projetos_parceiro,
+            'manifestacoes_interesse_mentor': manifestacoes_interesse_mentor,
+            'manifestacoes_interesse_parceiro': manifestacoes_interesse_parceiro,
+            'participacoes_projetos': participacoes_projetos
+        }
+        return context
 
 
 #projetos
@@ -281,6 +485,7 @@ class ProjectDetailView(DetailView):
         context['mentorship_requests'] = MentorshipRequest.objects.filter(project=self.object)
         context['partnership_requests'] = PartnershipRequest.objects.filter(project=self.object)
         context['partnership_contracts'] = PartnershipContract.objects.filter(project=self.object)
+        context['feedbacks'] = Feedback.objects.filter(project=self.object)
 
         return context
 
@@ -302,6 +507,9 @@ class ProjectUpdateView(UpdateView):
     model = Project
     form_class = ProjectForm
     template_name = 'project_form.html'
+
+    def get_success_url(self):
+        return reverse_lazy('project-detail', kwargs={'pk': self.object.pk})
 
 
 @method_decorator(login_required, name='dispatch')

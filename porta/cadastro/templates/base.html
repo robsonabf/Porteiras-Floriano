@@ -88,34 +88,6 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="{% url 'project-list' %}">Meus Projetos</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{% url 'edit_profile' %}">Editar Perfil</a>
-                                </li>
-                                <!-- Menu para Dashboard -->
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{% url 'dashboard' %}">Painel</a>
-                                    </li>
-                                {% if user.userprofile.user_type == 'pesquisador' %}
-
-                                {% elif user.userprofile.user_type == 'estudante' %}
-
-                                {% elif user.userprofile.user_type == 'empresa' %}
-                                    <!-- Menu para Dashboard -->
-
-                                {% elif user.userprofile.user_type == 'instituicao' %}
-                                    <!-- Menu para Instituições de Ensino e Pesquisa -->
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{ url 'institution-portfolio' %}">Gestão de Portfólios</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{ url 'vitrine-tecnologica' %}">Vitrine Tecnológica</a>
-                                    </li>
-                                {% endif %}
-                                <!-- Link de Contato visível para todos -->
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{% url 'contact' %}">Contate-nos</a>
-                                </li>
-
                             {% else %}
                                 <!-- Links visíveis para usuários não logados -->
                                 <li class="nav-item">
@@ -133,11 +105,25 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="{% url 'register_institution' %}">Registro de Instituição</a>
                                 </li>
+                                <!-- Menu para Dashboard -->
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'dashboardpub' %}">Painel</a>
+                                    </li>
                             {% endif %}
+                                <!-- Link de Contato visível para todos -->
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'contact' %}">Contate-nos</a>
+                                </li>
+                            {% if user.is_authenticated %}
                             <!-- Link de Logout para todos os usuários logados -->
+                                <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'dashboard' %}">Painel</a>
+                                    </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="{% url 'logout' %}">Logout</a>
                                 </li>
+                            {% endif %}
+
                         </ul>
                     </div>
                 </nav>

@@ -6,6 +6,11 @@
 <div class="container fancy-bg-white">
             <div class="row">
                 <div class="col-12 col-md-6">
+    <a href="{% url 'edit_profile' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
+                        Editar Perfil</a>
+    <a href="{% url 'public_profile' user.username %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
+                        Ver Portfólio</a>
+                    <hr>
     <h2>Perfil de {{ profile.user.username }}</h2>
 
     <div class="row">

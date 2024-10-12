@@ -18,56 +18,55 @@
                             {% endfor %}
                         </div>
                     {% endif %}
-                {% if user.is_authenticated %}
                 <h3>Funcionalidades</h3>
                 <div class="d-flex flex-wrap justify-content-start">
-                    <a href="{% url 'ofertar_parcerias' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">Solicitar Parcerias</a>
-                    <a href="{% url 'buscar_parcerias' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">Buscar Parcerias</a>
-                    <a href="{% url 'participacoes_projetos' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">Participações em Projetos</a>
+                    <a href="{% url 'buscar_parcerias' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
+                        Buscar Parcerias</a>
+                    <a href="{% url 'buscar_mentorias' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
+                            Buscar Mentorias</a>
                 </div>
+                {% if user.is_authenticated %}
                 {% if user.userprofile.user_type == 'estudante' %}
                     <h4>Estudante</h4>
                     <div class="d-flex flex-wrap justify-content-start">
                     <a href="{% url 'solicitar_mentoria' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
                         Solicitar Mentoria</a>
-                        <a href="{ url 'buscar_mentorias' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
-                            Buscar Mentorias</a>
-                    </div>
+                    <a href="{% url 'ofertar_parcerias' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
+                        Solicitar Parcerias</a>
+                    <a href="{% url 'participacoes_projetos' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
+                        Participações em Projetos</a>
+                        </div>
                 {% elif user.userprofile.user_type == 'pesquisador' %}
                     <h4>Pesquisador</h4>
                     <div class="d-flex flex-wrap justify-content-start">
-                    <a href="{% url 'solicitar_mentoria' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
+                                        <a href="{% url 'solicitar_mentoria' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
                         Solicitar Mentoria</a>
-                    <a href="{ url 'buscar_mentorias' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
-                            Buscar Mentorias</a>
+                    <a href="{% url 'ofertar_parcerias' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
+                        Solicitar Parcerias</a>
+                    <a href="{% url 'participacoes_projetos' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
+                        Participações em Projetos</a>
                     </div>
                 {% elif user.userprofile.user_type == 'empresa' %}
                     <h4>Empresa</h4>
                     <div class="d-flex flex-wrap justify-content-start">
-                    <a href="{% url 'oportunidades_parcerias' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
-                        Oportunidades de Parcerias</a>
-                    </div>
                     <div class="d-flex flex-wrap justify-content-start">
-                    <a href="{% url 'solicitar_mentoria' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
+                                        <a href="{% url 'solicitar_mentoria' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
                         Solicitar Mentoria</a>
-                    <a href="{% url 'ofertar_mentorias' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
-                        Ofertar Mentorias</a>
-                    <a href="{ url 'buscar_mentorias' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
-                            Buscar Mentorias</a>
+                    <a href="{% url 'ofertar_parcerias' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
+                        Solicitar Parcerias</a>
+                    <a href="{% url 'participacoes_projetos' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
+                        Participações em Projetos</a>
+                    </div>
                     </div>
                 {% elif user.userprofile.user_type == 'instituicao' %}
                     <h4>Instituição</h4>
                     <div class="d-flex flex-wrap justify-content-start">
-                    <a href="{% url 'vitrine_local' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
-                        Vitrine Local</a>
-                    <a href="{% url 'solicitar_mentoria' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
+                                        <a href="{% url 'solicitar_mentoria' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
                         Solicitar Mentoria</a>
-                    <a href="{% url 'ofertar_mentorias' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
-                        Ofertar Mentorias</a>
-                    <a href="{% url 'oportunidades_parcerias' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
-                        Oportunidades de Parcerias</a>
-                    <a href="{ url 'buscar_mentorias' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
-                            Buscar Mentorias</a>
+                    <a href="{% url 'ofertar_parcerias' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
+                        Solicitar Parcerias</a>
+                    <a href="{% url 'participacoes_projetos' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
+                        Participações em Projetos</a>
                     </div>
                 {% endif %}
                 <!-- Seção de Mentorias Solicitadas -->
