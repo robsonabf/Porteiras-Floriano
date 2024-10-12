@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalhes da Parcerias{% endblock %}
+
+{% block content %}
+<div class="fancy-bg-dark section-padding-100">
+<div class="container fancy-bg-white">
+            <div class="row">
+                <div class="col-12 col-md-6">
+<h2>Detalhes da Parceria</h2>
+<div>
+    <strong>Projeto:</strong> {{ parceria.project.title }}<br>
+    <strong>Descrição do Projeto:</strong> {{ parceria.project.description }}<br>
+    <strong>Cidade:</strong> {{ parceria.project.location_city }}<br>
+    <strong>Estado:</strong> {{ parceria.project.location_state }}<br>
+    <strong>Palavras-chave:</strong> {{ parceria.project.keywords }}<br>
+    <strong>Mensagem:</strong> {{ parceria.message }}<br>
+    <strong>Dono do Projeto:</strong> <a href="{% url 'public_profile' parceria.project.owner.user.username %}">
+                            {{ parceria.project.owner.user.userprofile.nome }}</a><br>
+
+    <strong>Bio do Dono:</strong> {{ parceria.project.owner.user.userprofile.bio }}<br>
+</div>
+<h2>Parceiros Interessados Ativos</h2>
+<ul>
+    {% for partner in interessados_ativos %}
+        <li>
+            <strong>Nome:</strong> {{ partner.partner.nome }}<br>
+            <strong>Bio:</strong> {{ partner.partner.bio }}<br>
+            <a href="{{ partner.partner.linkedin }}" target="_blank">Perfil do LinkedIn</a>
+        </li>
+    {% empty %}
+        <li>Nenhum parceiro ativo no momento.</li>
+    {% endfor %}
+</ul>
+<a href="{% url 'buscar_parcerias' %}" class="btn btn-secondary">Voltar à Busca</a>
+                             </div>
+</div>
+</div>
+</div>
+{% endblock %}

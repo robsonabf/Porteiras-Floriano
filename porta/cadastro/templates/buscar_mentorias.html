@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalhes de Mentoria{% endblock %}
+
+{% block content %}
+<div class="fancy-bg-dark section-padding-100">
+<div class="container fancy-bg-white">
+            <div class="row">
+                <div class="col-12 col-md-6">
+<form method="GET" action="{% url 'buscar_mentorias' %}">
+    <div>
+        <label for="location_city">Cidade:</label>
+        <input type="text" name="location_city" id="location_city" value="{{ request.GET.location_city }}">
+    </div>
+    <div>
+        <label for="keywords">Palavras-chave:</label>
+        <input type="text" name="keywords" id="keywords" value="{{ request.GET.keywords }}">
+    </div>
+    <div>
+        <label for="mentor_ativo">Mostrar apenas mentorias com mentores ativos:</label>
+        <input type="checkbox" name="mentor_ativo" id="mentor_ativo" {% if request.GET.mentor_ativo %}checked{% endif %}>
+    </div>
+    <button type="submit" class="btn btn-primary">Buscar</button>
+</form>
+
+<hr>
+  <a href="{% url 'dashboard' %}" class="btn btn-secondary">Voltar para o Painel</a>
+
+{% for mentorship in mentorias %}
+    <h2>Mentoria: <a href="{% url 'project-detail' mentorship.project.id %}">
+                            {{ mentorship.project.title }}</a> </h2>
+    <p>Mensagem: {{ mentorship.message }}</p>
+    <p>Cidade: {{ mentorship.project.location_city.nome }}</p>
+    <p>Palavras-chave: {{ mentorship.project.keywords }}</p>
+
+    <h3>Mentores Interessados</h3>
+    {% for mentor in mentorship.interested_mentors.all %}
+        <p>
+            Nome: {{ mentor.mentor.nome }}<br>
+            Bio: {{ mentor.mentor.bio }}<br>
+            <a href="{{ mentor.mentor.linkedin }}" target="_blank">Perfil do LinkedIn</a>
+            {% if mentor.is_active %}
+                <span class="badge bg-success">Mentor Ativo</span>
+            {% endif %}
+        </p>
+    {% endfor %}
+{% empty %}
+    <p>Nenhuma mentoria encontrada.</p>
+{% endfor %}
+    </div>
+</div>
+</div>
+</div>
+{% endblock %}
