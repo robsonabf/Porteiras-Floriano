@@ -35,11 +35,6 @@ def contate(request):
     return render(request, 'contate-nos.html', {'form': form})
 
 
-###########
-def informatica(request):
-    return render(request, 'p_informatica.html')
-
-
 def galeria(request):
     return render(request, 'galeria.html')
 
@@ -210,7 +205,6 @@ class RequestPartnershipView(View):
             return render(request, self.template_name, context)
 
 
-@method_decorator(login_required, name='dispatch')
 class DetalhesParceriaView(DetailView):
     model = PartnershipRequest
     template_name = 'detalhes_parceria.html'
@@ -376,7 +370,6 @@ def user_profile(request, username):
     return render(request, 'user_profile.html', {'profile': profile, 'projects': projects})
 
 
-@method_decorator(login_required, name='dispatch')
 class PublicProfileView(TemplateView):
     template_name = 'public_profile.html'
 
@@ -474,7 +467,6 @@ class ProjectListView(ListView):
         return Project.objects.filter(owner=self.request.user.userprofile).order_by('-date_created')
 
 
-@method_decorator(login_required, name='dispatch')
 class ProjectDetailView(DetailView):
     model = Project
     template_name = 'project_detail.html'

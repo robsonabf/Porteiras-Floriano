@@ -15,7 +15,6 @@ urlpatterns = [
     path('contate/', views.contate, name='contact'),
     path('get-cities/', get_cities, name='get_cities'),
     #
-    path('informatica/', views.informatica),
     path('galeria/', views.galeria),
     #dashboard e parcerias
     path('dashboard/', DashboardView.as_view(), name='dashboard'),

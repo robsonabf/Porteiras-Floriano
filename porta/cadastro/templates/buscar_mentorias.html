@@ -24,7 +24,7 @@
 </form>
 
 <hr>
-  <a href="{% url 'dashboard' %}" class="btn btn-secondary">Voltar para o Painel</a>
+  <a href="{% url 'dashboardpub' %}" class="btn btn-secondary">Voltar para o Painel</a>
 
 {% for mentorship in mentorias %}
     <h2>Mentoria: <a href="{% url 'project-detail' mentorship.project.id %}">
