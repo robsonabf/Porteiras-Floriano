@@ -5,8 +5,8 @@
 {% block content %}
 <div class="fancy-bg-dark section-padding-100">
 <div class="container fancy-bg-white">
-            <div class="row">
-                <div class="col-12 col-md-6">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-8">
                     <h2>Buscar Parcerias</h2>
                 <form method="GET" action="{% url 'buscar_parcerias' %}">
                     <div class="form-group">
@@ -23,22 +23,33 @@
                         </div>
                     </form>
                       <a href="{% url 'dashboardpub' %}" class="btn btn-secondary">Voltar para o Painel</a>
-                <h3>Resultados da Busca</h3>
-                <ul>
-                    {% for parceria in parcerias %}
-                        <li>
-                            <strong>Projeto:</strong> <a href="{% url 'project-detail' parceria.project.id %}">
-                            {{ parceria.project.title }}</a><br>
-                            <strong>Descrição:</strong> {{ parceria.project.description }}<br>
-                            <strong>Cidade:</strong> {{ parceria.project.location_city }}<br>
-                            <strong>Estado:</strong> {{ parceria.project.location_state }}<br>
-                            <strong>Palavras-chave:</strong> {{ parceria.project.keywords }}<br>
-                            <a href="{% url 'detalhes_parceria' parceria.id %}">Ver detalhes</a>
-                        </li>
-                    {% empty %}
-                        <li>Nenhuma parceria encontrada.</li>
-                    {% endfor %}
-                </ul>
+                <!-- Resultados da busca -->
+            <h3 class="mb-4">Resultados da Busca</h3>
+
+            <!-- Exibição dos resultados de parcerias -->
+            <ul class="list-group">
+                {% for parceria in parcerias %}
+                    <li class="list-group-item">
+                        <h5>
+                            <a href="{% url 'project-detail' parceria.project.id %}" class="text-decoration-none">
+                                {{ parceria.project.title }}
+                            </a>
+                        </h5>
+                        <p class="mb-1"><strong>Descrição:</strong> {{ parceria.project.description }}</p>
+                        <p class="mb-1">
+                            <strong>Cidade:</strong> {{ parceria.project.location_city }} |
+                            <strong>Estado:</strong> {{ parceria.project.location_state }}
+                        </p>
+                        <p class="mb-2"><strong>Palavras-chave:</strong> {{ parceria.project.keywords }}</p>
+                        <a href="{% url 'detalhes_parceria' parceria.id %}" class="btn btn-info btn-sm">
+                            Ver detalhes <i class="bi bi-eye"></i>
+                        </a>
+                        <hr>
+                    </li>
+                {% empty %}
+                    <li class="list-group-item text-center">Nenhuma parceria encontrada.</li>
+                {% endfor %}
+            </ul>
             </div>
 </div>
 </div>

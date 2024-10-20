@@ -37,11 +37,22 @@ class ProjectForm(forms.ModelForm):
             'keywords',
         ]
 
+        # Adicionando widgets com a classe form-control
         widgets = {
-            'start_date': forms.DateInput(attrs={'type': 'date'}),
-            'end_date': forms.DateInput(attrs={'type': 'date'}),
-            'needs': forms.CheckboxSelectMultiple(),
-            'keywords': forms.TextInput(attrs={'placeholder': 'Palavras-chave separadas por vírgulas'}),
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'logo': forms.FileInput(attrs={'class': 'form-control'}),
+            'category': forms.Select(attrs={'class': 'form-control'}),
+            'status': forms.Select(attrs={'class': 'form-control'}),
+            'institution': forms.TextInput(attrs={'class': 'form-control'}),
+            'start_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'end_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'funding_required': forms.CheckboxInput(),
+            'location_state': forms.Select(attrs={'class': 'form-control'}),
+            'location_city': forms.Select(attrs={'class': 'form-control'}),
+            'needs': forms.CheckboxSelectMultiple(),  # Não precisa de form-control
+            'stage': forms.Select(attrs={'class': 'form-control'}),
+            'keywords': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Palavras-chave separadas por vírgulas'}),
         }
 
         labels = {
@@ -53,7 +64,6 @@ class ProjectForm(forms.ModelForm):
             'start_date': 'Data de Início',
             'end_date': 'Data de Término',
             'funding_required': 'Financiamento Necessário',
-            'location_region': 'Região do Projeto',
             'location_state': 'Estado do Projeto',
             'location_city': 'Município do Projeto',
             'needs': 'Necessidades',
@@ -92,6 +102,8 @@ class MentoriaForm(forms.ModelForm):
         }
         widgets = {
             'message': forms.Textarea(attrs={'rows': 4}),
+            'message': forms.TextInput(attrs={'class': 'form-control'}),
+            'project': forms.Select(attrs={'class': 'form-control'}),
         }
 
     def __init__(self, *args, **kwargs):

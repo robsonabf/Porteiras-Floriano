@@ -5,8 +5,9 @@
 {% block content %}
 <div class="fancy-bg-dark section-padding-100">
 <div class="container fancy-bg-white">
-            <div class="row">
-                <div class="col-12 col-md-6">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-8">
+                    <h2>Buscar Mentorias</h2>
 <form method="GET" action="{% url 'buscar_mentorias' %}">
     <div>
         <label for="location_city">Cidade:</label>
@@ -26,27 +27,49 @@
 <hr>
   <a href="{% url 'dashboardpub' %}" class="btn btn-secondary">Voltar para o Painel</a>
 
-{% for mentorship in mentorias %}
-    <h2>Mentoria: <a href="{% url 'project-detail' mentorship.project.id %}">
-                            {{ mentorship.project.title }}</a> </h2>
-    <p>Mensagem: {{ mentorship.message }}</p>
-    <p>Cidade: {{ mentorship.project.location_city.nome }}</p>
-    <p>Palavras-chave: {{ mentorship.project.keywords }}</p>
+<h3 class="mb-4">Mentorias</h3>
 
-    <h3>Mentores Interessados</h3>
-    {% for mentor in mentorship.interested_mentors.all %}
-        <p>
-            Nome: {{ mentor.mentor.nome }}<br>
-            Bio: {{ mentor.mentor.bio }}<br>
-            <a href="{{ mentor.mentor.linkedin }}" target="_blank">Perfil do LinkedIn</a>
-            {% if mentor.is_active %}
-                <span class="badge bg-success">Mentor Ativo</span>
+<!-- Exibição das mentorias -->
+<ul class="list-group">
+    {% for mentorship in mentorias %}
+        <li class="list-group-item">
+            <h5>
+                Mentoria:
+                <a href="{% url 'project-detail' mentorship.project.id %}" class="text-decoration-none">
+                    {{ mentorship.project.title }}
+                </a>
+            </h5>
+            <p class="mb-1"><strong>Mensagem:</strong> {{ mentorship.message }}</p>
+            <p class="mb-1">
+                <strong>Cidade:</strong> {{ mentorship.project.location_city.nome }} |
+                <strong>Estado:</strong> {{ mentorship.project.location_state }}
+            </p>
+            <p class="mb-2"><strong>Palavras-chave:</strong> {{ mentorship.project.keywords }}</p>
+
+            <h6 class="mt-3">Mentores Interessados</h6>
+            {% if mentorship.interested_mentors.all %}
+                <ul class="list-unstyled">
+                    {% for mentor in mentorship.interested_mentors.all %}
+                        <li class="mb-2">
+                            <strong>Nome:</strong> {{ mentor.mentor.nome }}<br>
+                            <strong>Bio:</strong> {{ mentor.mentor.bio }}<br>
+                            <a href="{{ mentor.mentor.linkedin }}" target="_blank" class="btn btn-link">Perfil do LinkedIn</a>
+                            {% if mentor.is_active %}
+                                <span class="badge bg-success">Mentor Ativo</span>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Nenhum mentor interessado.</p>
             {% endif %}
-        </p>
+            <hr>
+        </li>
+    {% empty %}
+        <li class="list-group-item text-center">Nenhuma mentoria encontrada.</li>
     {% endfor %}
-{% empty %}
-    <p>Nenhuma mentoria encontrada.</p>
-{% endfor %}
+</ul>
+
     </div>
 </div>
 </div>
