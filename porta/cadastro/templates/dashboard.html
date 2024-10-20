@@ -64,73 +64,92 @@
                                         <a href="{% url 'solicitar_mentoria' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
                         Solicitar Mentoria</a>
                     <a href="{% url 'ofertar_parcerias' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
-                        Solicitar Parcerias</a>
-                    <a href="{% url 'participacoes_projetos' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
-                        Participações em Projetos</a>
-                    </div>
-                {% endif %}
-                <!-- Seção de Mentorias Solicitadas -->
-                <h4>Minhas Solicitações de Mentorias</h4>
-                <ul>
-                    {% for mentorship in solicitadas %}
-                    <li>
+                                Solicitar Parcerias</a>
+                            <a href="{% url 'participacoes_projetos' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
+                                Participações em Projetos</a>
+                            </div>
+                        {% endif %}
+                        <!-- Seção de Mentorias Solicitadas -->
+        <h4 class="mt-4 mb-3">Minhas Solicitações de Mentorias</h4>
+        <ul class="list-group">
+            {% for mentorship in solicitadas %}
+            <li class="list-group-item">
+                <div class="d-flex justify-content-between">
+                    <div>
                         <strong>Projeto:</strong> {{ mentorship.project.title }} <br>
-                        <strong>Status:</strong> {% if mentorship.is_accepted %}Aceita{% else %}Pendente{% endif %} <br>
-                        <strong>Mensagem:</strong> {{ mentorship.message }} <br>
-                        {% if mentorship.has_interested_mentors %}
-                            <!-- Botão para abrir o modal de detalhes e firmar mentoria -->
-                            <h5>Intenções de Mentoria</h5>
-                            <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#firmarMentoriaModal_{{ mentorship.id }}">
-                                Ver Detalhes e Firmar Mentoria
+                        <strong>Status:</strong>
+                        <span class="badge {% if mentorship.is_accepted %} bg-success {% else %} bg-warning {% endif %}">
+                            {% if mentorship.is_accepted %} Aceita {% else %} Pendente {% endif %}
+                        </span><br>
+                        <strong>Mensagem:</strong> {{ mentorship.message }}
+                    </div>
+                    {% if mentorship in solicitadas %}
+                    <!-- Verifica se existem mentores interessados -->
+                    {% if mentorship.interested_mentors.count > 0 %}
+                        <!-- Verifica se há algum mentor inativo -->
+                        {% if mentorship.has_inactive_mentors %}
+                            <!-- Botão com sininho quando há mentores inativos -->
+                            <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#firmarMentoriaModal_{{ mentorship.id }}">
+                                Ver Mentores <i class="bi bi-eye"></i><i class="bi bi-bell-fill text-warning"></i>
                             </button>
-                    <!-- Modal para exibir os detalhes do projeto e mentor -->
-                    <div class="modal fade" id="firmarMentoriaModal_{{ mentorship.id }}" tabindex="-1" aria-labelledby="modalLabel_{{ mentorship.id }}" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="modalLabel_{{ mentorship.id }}">Detalhes da Mentoria</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <h5>Projeto: {{ mentorship.project.title }}</h5>
-                                    <p>{{ mentorship.project.description }}</p>
-                                    <h6>Mentores Interessados</h6>
-                                    <form method="post" action="{% url 'firmar_mentoria' mentorship.id %}">
-                                        {% csrf_token %}
-                                        {% for mentor in mentorship.interested_mentors.all %}
-                                            {% if mentor.is_active %}
-                                                <p>Nome: {{ mentor.mentor.user.userprofile.nome }}<br>
-                                                Bio: {{ mentor.mentor.user.userprofile.bio }}<br>
-                                                <a href="{{ mentor.mentor.user.userprofile.linkedin }}" target="_blank">Perfil do LinkedIn</a><br>
-                                                <span class="badge bg-success">Mentoria Ativa</span></p>
-                                            {% else %}
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" name="mentores_firmar" value="{{ mentor.mentor.id }}" id="firmar_mentor_{{ mentor.id }}">
-                                                <label class="form-check-label" for="firmar_mentor_{{ mentor.id }}">
-                                                    Nome: {{ mentor.mentor.user.userprofile.nome }}<br>
-                                                    Bio: {{ mentor.mentor.user.userprofile.bio }}<br>
-                                                    <a href="{{ mentor.mentor.user.userprofile.linkedin }}" target="_blank">Perfil do LinkedIn</a>
-                                                </label>
+                        {% else %}
+                            <!-- Botão sem sininho quando todos os mentores são ativos -->
+                            <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#firmarMentoriaModal_{{ mentorship.id }}">
+                                Ver Mentores <i class="bi bi-eye"></i>
+                            </button>
+                        {% endif %}
+                    {% endif %}
+                    {% endif %}
+                </div>
+                        <!-- Modal para exibir os detalhes do projeto e mentor -->
+                        <div class="modal fade" id="firmarMentoriaModal_{{ mentorship.id }}" tabindex="-1" aria-labelledby="modalLabel_{{ mentorship.id }}" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modalLabel_{{ mentorship.id }}">Detalhes da Mentoria</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h5>Projeto: {{ mentorship.project.title }}</h5>
+                                        <p>{{ mentorship.project.description }}</p>
+                                        <h6>Mentores Interessados</h6>
+                                        <form method="post" action="{% url 'firmar_mentoria' mentorship.id %}">
+                                            {% csrf_token %}
+                                            {% for mentor in mentorship.interested_mentors.all %}
+                                            <div class="card mb-3">
+                                                <div class="card-body">
+                                                    <h6 class="card-title">{{ mentor.mentor.user.userprofile.nome }}</h6>
+                                                    <p class="card-text">{{ mentor.mentor.user.userprofile.bio }}</p>
+                                                    <a href="{{ mentor.mentor.user.userprofile.linkedin }}" target="_blank" class="btn btn-primary btn-sm">
+                                                        LinkedIn <i class="bi bi-linkedin"></i>
+                                                    </a>
+                                                    {% if not mentor.is_active %}
+                                                    <div class="form-check mt-3">
+                                                        <input class="form-check-input" type="checkbox" name="mentores_firmar" value="{{ mentor.mentor.id }}" id="firmar_mentor_{{ mentor.id }}">
+                                                        <label class="form-check-label" for="firmar_mentor_{{ mentor.id }}">
+                                                            Selecionar como Mentor
+                                                        </label>
+                                                    </div>
+                                                    {% else %}
+                                                    <span class="badge bg-success">Mentoria Ativa</span>
+                                                    {% endif %}
+                                                </div>
                                             </div>
-                                            {% endif %}
-                                        {% empty %}
+                                            {% empty %}
                                             <p>Nenhum mentor interessado ainda.</p>
-                                        {% endfor %}
-
-                                <div class="modal-footer">
-                                    <button type="submit" class="btn btn-success">Firmar Mentoria</button>
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                                </div>
-                                </form>
+                                            {% endfor %}
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-success">Firmar Mentoria</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                        {% endif %}
                     </li>
-                    <br>
                     {% empty %}
-                    <p>Você ainda não solicitou nenhuma mentoria.</p>
+                    <p class="text-muted">Você ainda não solicitou nenhuma mentoria.</p>
                     {% endfor %}
                 </ul>
                 <div class="pagination">
@@ -143,67 +162,76 @@
                     {% endif %}
                 </div>
                 <br>
-                <!-- Seção de Mentorias Recebidas -->
-                <h4>Outras Solicitações de Mentorias</h4>
-                <ul>
-                        {% for mentorshipoutros in solicitacoes_outros %}
-                            <li>
+                    <!-- Seção de Mentorias Recebidas -->
+                <h4 class="mt-5 mb-3">Outras Solicitações de Mentorias</h4>
+                <ul class="list-group">
+                    {% for mentorshipoutros in solicitacoes_outros %}
+                    <li class="list-group-item">
+                        <div class="d-flex justify-content-between">
+                            <div>
                                 <strong>Projeto:</strong> {{ mentorshipoutros.project.title }} <br>
                                 <strong>Solicitante:</strong> {{ mentorshipoutros.project.owner.user.username }} <br>
-                                <strong>Mensagem:</strong> {{ mentorshipoutros.message }} <br>
-                                <button type="button" class="btn btn btn-secondary" data-bs-toggle="modal" data-bs-target="#InteresseModal_{{ mentorshipoutros.id }}">
-                                Ver Detalhes e Demonstrar Interesse
-                                </button>
-                            </li>
-                    <div class="modal fade" id="InteresseModal_{{ mentorshipoutros.id }}" tabindex="-1" aria-labelledby="modalLabel_{{ mentorshipoutros.id }}" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="modalLabel_{{ mentorshipoutros.id }}">Detalhes da Mentoria</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <strong>Mensagem:</strong> {{ mentorshipoutros.message }}
                             </div>
-                            <div class="modal-body">
-                                <h5>Projeto: {{ mentorshipoutros.project.title }}</h5>
-                                <p>{{ mentorshipoutros.project.description }}</p>
-                                <h6>Dono do Projeto: {{ mentorshipoutros.project.owner.user.userprofile.nome }}</h6>
-                                <p>Bio: {{ mentorshipoutros.project.owner.bio }}</p> <!-- Adicione a bio do dono, se disponível -->
-                                <h6>Mentores Interessados</h6>
-                                <form method="post" action="{% url 'demonstrar_interesse' mentorshipoutros.id %}">
-                                    {% csrf_token %}
-                                    {% for mentor in mentorshipoutros.interested_mentors.all %}
-                                        {% if mentor.is_active %}
-                                            <p>
-                                                Nome: {{ mentor.mentor.user.userprofile.nome }}<br>
-                                                Bio: {{ mentor.mentor.bio }}<br>
-                                                <a href="{{ mentor.linkedin }}" target="_blank">Perfil do LinkedIn</a><br>
-                                                <span class="badge bg-success">Parceria Ativa</span>
-                                            </p>
-                                        {% else %}
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" name="mentores_interesse" value="{{ mentor.id }}" id="mentor_{{ mentor.id }}">
-                                                <label class="form-check-label" for="mentor_{{ mentor.id }}">
-                                                    Nome: {{ mentor.mentor.user.userprofile.nome }}<br>
-                                                    Bio: {{ mentor.mentor.bio }}<br>
-                                                    <a href="{{ mentor.linkedin }}" target="_blank">Perfil do LinkedIn</a>
-                                                </label>
-                                            </div>
-                                    {% endif %}
-                                    {% empty %}
-                                        <p>Nenhum mentor interessado ainda.</p>
-                                    {% endfor %}
-                                    <div class="modal-footer">
-                                        <button type="submit" class="btn btn-success">Demonstrar Interesse</button>
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                            <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#InteresseModal_{{ mentorshipoutros.id }}">
+                                Ver Detalhes <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+
+                        <!-- Modal para cada solicitação de mentoria -->
+                        <div class="modal fade" id="InteresseModal_{{ mentorshipoutros.id }}" tabindex="-1" aria-labelledby="modalLabel_{{ mentorshipoutros.id }}" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modalLabel_{{ mentorshipoutros.id }}">Detalhes da Mentoria</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
-                                </form>
+                                    <div class="modal-body">
+                                        <h5>Projeto: {{ mentorshipoutros.project.title }}</h5>
+                                        <p>{{ mentorshipoutros.project.description }}</p>
+                                        <h6>Dono do Projeto: {{ mentorshipoutros.project.owner.user.userprofile.nome }}</h6>
+                                        <p>Bio: {{ mentorshipoutros.project.owner.user.userprofile.bio }}</p>
+                                        <h6>Mentores Interessados</h6>
+                                        <form method="post" action="{% url 'demonstrar_interesse' mentorshipoutros.id %}">
+                                            {% csrf_token %}
+                                            {% for mentor in mentorshipoutros.interested_mentors.all %}
+                                            <div class="card mb-3">
+                                                <div class="card-body">
+                                        <h6 class="card-title">{{ mentor.mentor.user.userprofile.nome }}</h6>
+                                        <p class="card-text">{{ mentor.mentor.bio }}</p>
+                                        <a href="{{ mentor.linkedin }}" target="_blank" class="btn btn-primary btn-sm">
+                                            LinkedIn <i class="bi bi-linkedin"></i>
+                                        </a>
+
+                                        {% if mentor.is_active %}
+                                            <!-- Se o mentor já tiver uma parceria ativa, exibe um selo indicando isso -->
+                                            <span class="badge bg-success mt-3">Parceria Ativa</span>
+                                        {% else %}
+                                            <!-- Se o mentor ainda não estiver com parceria ativa, exibe o checkbox -->
+                                            <div class="form-check mt-3">
+                                                <input class="form-check-input" type="checkbox" name="mentores_interesse" value="{{ mentor.id }}" id="mentor_{{ mentor.id }}">
+                                                <label class="form-check-label" for="mentor_{{ mentor.id }}">Demonstrar Interesse</label>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                            </div>
+                                            {% empty %}
+                                            <p>Nenhum mentor interessado ainda.</p>
+                                            {% endfor %}
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-success">Demonstrar Interesse</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                     {% empty %}
-                            <p>Não há mentorias solicitadas por outros.</p>
-                        {% endfor %}
-                    </ul>
+                    </li>
+                    {% empty %}
+                    <p class="text-muted">Não há mentorias solicitadas por outros.</p>
+                    {% endfor %}
+                </ul>
                     <div class="pagination">
                     {% if solicitacoes_outros.has_previous %}
                     <a href="?page={{ solicitacoes_outros.previous_page_number }}">Anterior</a>
@@ -214,75 +242,93 @@
                     {% endif %}
                 </div>
                 <br>
-                <h4>Minhas Solicitações de Parcerias</h4>
-                <ul>
-                    {% for partnership_request in parcerias_solicitadas %}
-                        <li>
+                <h4 class="mt-4 mb-3">Minhas Solicitações de Parcerias</h4>
+            <ul class="list-group">
+                {% for partnership_request in parcerias_solicitadas %}
+                <li class="list-group-item">
+                    <div class="d-flex justify-content-between">
+                        <div>
                             <strong>Projeto:</strong> {{ partnership_request.project.title }} <br>
-                            <strong>Status:</strong> {% if partnership_request.is_accepted %}Aceita{% else %}Pendente{% endif %} <br>
-                            <strong>Mensagem:</strong> {{ partnership_request.message }} <br>
-                            {% if partnership_request.interested_partners.exists %}
-                                <!-- Botão para abrir o modal de detalhes e firmar parceria -->
-                                <h5>Intenções de Parceria</h5>
-                                <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#Parceria_{{ partnership_request.id }}">
-                                    Ver Detalhes e Firmar Parcerias
-                                </button>
+                            <strong>Status:</strong>
+                            <span class="badge {% if partnership_request.is_accepted %} bg-success {% else %} bg-warning {% endif %}">
+                                {% if partnership_request.is_accepted %} Aceita {% else %} Pendente {% endif %}
+                            </span><br>
+                            <strong>Mensagem:</strong> {{ partnership_request.message }}
+                        </div>
+                            {% if partnership_request %}
+                            <!-- Verifica se existem parceiros interessados -->
+                            {% if partnership_request.interested_partners.count > 0 %}
+                                <!-- Verifica se há algum parceiro inativo -->
+                                {% if partnership_request.has_inactive_partners %}
+                                    <!-- Botão com sininho quando há parceiros inativos -->
+                                    <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#parceriaModal_{{ partnership_request.id }}">
+                                        Ver Parceiros <i class="bi bi-eye"></i><i class="bi bi-bell-fill text-warning"></i>
+                                    </button>
+                                {% else %}
+                                    <!-- Botão sem sininho quando todos os parceiros são ativos -->
+                                    <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#parceriaModal_{{ partnership_request.id }}">
+                                        Ver Parceiros <i class="bi bi-eye"></i>
+                                    </button>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                    <!-- Modal para exibir os detalhes do projeto e parceiros interessados -->
+                    <div class="modal fade" id="parceriaModal_{{ partnership_request.id }}" tabindex="-1" aria-labelledby="parceriaModalLabel_{{ partnership_request.id }}" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="parceriaModalLabel_{{ partnership_request.id }}">Detalhes da Parceria</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <h5>Projeto: {{ partnership_request.project.title }}</h5>
+                                    <p>{{ partnership_request.project.description }}</p>
+                                    <h6>Dono do Projeto: {{ partnership_request.project.owner.nome }}</h6>
+                                    <p>Bio: {{ partnership_request.project.owner.bio }}</p>
+                                    <p>Mensagem: {{ partnership_request.message }}</p>
 
-                                <!-- Modal para exibir os detalhes do projeto e parceiros -->
-                                <div class="modal fade" id="Parceria_{{ partnership_request.id }}" tabindex="-1" aria-labelledby="modalLabel_{{ partnership_request.id }}" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="modalparceria_{{ partnership_request.id }}">Detalhes da Parceria</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <h5>Projeto: {{ partnership_request.project.title }}</h5>
-                                                <p>{{ partnership_request.project.description }}</p>
-                                                <h6>Dono do Projeto: {{ partnership_request.project.owner.nome }}</h6>
-                                                <p>Bio: {{ partnership_request.project.owner.bio }}</p>
-                                                <p>Mensagem: {{ partnership_request.message }}</p>
-
-                                                <h6>Parceiros Interessados</h6>
-                                                <form method="post" action="{% url 'firmar_parceria' partnership_request.id %}">
-                                                    {% csrf_token %}
-                                                    {% for partner in partnership_request.interested_partners.all %}
-                                                        {% if partner.is_active %}
-                                                            <p>
-                                                                Nome: {{ partner.partner.nome }}<br>
-                                                                Bio: {{ partner.partner.bio }}<br>
-                                                                <a href="{{ partner.partner.linkedin }}" target="_blank">Perfil do LinkedIn</a><br>
-                                                                <span class="badge bg-success">Parceria Ativa</span>
-                                                            </p>
-                                                        {% else %}
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" name="parceiros_interesse" value="{{ partner.id }}" id="partner_{{ partner.id }}">
-                                                                <label class="form-check-label" for="partner_{{ partner.id }}">
-                                                                    Nome: {{ partner.partner.nome }}<br>
-                                                                    Bio: {{ partner.partner.bio }}<br>
-                                                                    <a href="{{ partner.partner.linkedin }}" target="_blank">Perfil do LinkedIn</a>
-                                                                </label>
-                                                            </div>
-                                                        {% endif %}
-                                                    {% empty %}
-                                                        <p>Nenhum parceiro interessado ainda.</p>
-                                                    {% endfor %}
-                                                    <div class="modal-footer">
-                                                        <button type="submit" class="btn btn-success">Firmar Parceria</button>
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                                                    </div>
-                                                </form>
+                                    <h6>Parceiros Interessados</h6>
+                                    <form method="post" action="{% url 'firmar_parceria' partnership_request.id %}">
+                                        {% csrf_token %}
+                                        {% for partner in partnership_request.interested_partners.all %}
+                                        <div class="card mb-3">
+                                            <div class="card-body">
+                                                <h6 class="card-title">{{ partner.partner.nome }}</h6>
+                                                <p class="card-text">{{ partner.partner.bio }}</p>
+                                                <a href="{{ partner.partner.linkedin }}" target="_blank" class="btn btn-primary btn-sm">
+                                                    LinkedIn <i class="bi bi-linkedin"></i>
+                                                </a>
+                                                {% if partner.is_active %}
+                                                <span class="badge bg-success mt-2">Parceria Ativa</span>
+                                                {% else %}
+                                                <div class="form-check mt-3">
+                                                    <input class="form-check-input" type="checkbox" name="parceiros_interesse" value="{{ partner.id }}" id="partner_{{ partner.id }}">
+                                                    <label class="form-check-label" for="partner_{{ partner.id }}">
+                                                        Selecionar como Parceiro
+                                                    </label>
+                                                </div>
+                                                {% endif %}
                                             </div>
                                         </div>
-                                    </div>
+                                        {% empty %}
+                                        <p>Nenhum parceiro interessado ainda.</p>
+                                        {% endfor %}
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-success">Firmar Parceria</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                                        </div>
+                                    </form>
                                 </div>
-                            {% endif %}
-                        </li>
-                        <br>
-                    {% empty %}
-                        <p>Você ainda não solicitou nenhuma parceria.</p>
-                    {% endfor %}
-                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                {% empty %}
+                <p class="text-muted">Você ainda não solicitou nenhuma parceria.</p>
+                {% endfor %}
+            </ul>
+
                 <div class="pagination">
                     {% if parcerias_solicitadas.has_previous %}
                         <a href="?page_solicitadas={{ parcerias_solicitadas.previous_page_number }}">Anterior</a>
@@ -293,59 +339,66 @@
                     {% endif %}
                 </div>
                 <br>
-                <h4>Outras Solicitações de Parcerias</h4>
-                    <ul>
-                        {% for partnershipoutros in solicitacoes_parcerias_outros %}
-                            <li>
-                                <strong>Projeto:</strong> {{ partnershipoutros.project.title }} <br>
-                                <strong>Solicitante:</strong> {{ partnershipoutros.project.user.userprofile.nome }} <br>
-                                <strong>Mensagem:</strong> {{ partnershipoutros.message }} <br>
-                                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#InteresseModal2_{{ partnershipoutros.id }}">
-                                    Ver Detalhes e Demonstrar Interesse
-                                </button>
-                            </li>
+                <h4 class="mt-5 mb-3">Outras Solicitações de Parcerias</h4>
+<ul class="list-group">
+    {% for partnershipoutros in solicitacoes_parcerias_outros %}
+    <li class="list-group-item">
+        <div class="d-flex justify-content-between">
+            <div>
+                <strong>Projeto:</strong> {{ partnershipoutros.project.title }} <br>
+                <strong>Solicitante:</strong> {{ partnershipoutros.project.owner.user.userprofile.nome }} <br>
+                <strong>Mensagem:</strong> {{ partnershipoutros.message }}
+            </div>
+            <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#InteresseModal2_{{ partnershipoutros.id }}">
+                Ver Detalhes <i class="bi bi-eye"></i>
+            </button>
+        </div>
 
-                            <!-- Modal para cada solicitação de parceria -->
-                            <div class="modal fade" id="InteresseModal2_{{ partnershipoutros.id }}" tabindex="-1" aria-labelledby="modalLabel_{{ partnershipoutros.id }}" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="modalLabel_{{ partnershipoutros.id }}">Detalhes da Parceria</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <h5>Projeto: {{ partnershipoutros.project.title }}</h5>
-                                            <p>{{ partnershipoutros.project.description }}</p>
-                                            <h6>Dono do Projeto: {{ partnershipoutros.project.owner.user.userprofile.nome }}</h6>
-                                            <p>Bio: {{ partnershipoutros.project.owner.user.userprofile.bio }}</p>
+        <!-- Modal para cada solicitação de parceria -->
+                <div class="modal fade" id="InteresseModal2_{{ partnershipoutros.id }}" tabindex="-1" aria-labelledby="modalLabel_{{ partnershipoutros.id }}" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalLabel_{{ partnershipoutros.id }}">Detalhes da Parceria</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <h5>Projeto: {{ partnershipoutros.project.title }}</h5>
+                                <p>{{ partnershipoutros.project.description }}</p>
+                                <h6>Dono do Projeto: {{ partnershipoutros.project.owner.user.userprofile.nome }}</h6>
+                                <p>Bio: {{ partnershipoutros.project.owner.user.userprofile.bio }}</p>
 
-                                            <h6>Parceiros Interessados</h6>
-                                            <form method="post" action="{% url 'demonstrar_interesse_parceria' partnershipoutros.id %}">
-                                                {% csrf_token %}
-                                                {% for partner in partnershipoutros.interested_partners.all %}
-                                                    <div class="form-check">
-                                                        <p>
-                                                            Nome: {{ partner.partner.nome }}<br>
-                                                            Bio: {{ partner.partner.bio }}<br>
-                                                            <a href="{{ partner.partner.linkedin }}" target="_blank">Perfil do LinkedIn</a>
-                                                        </p>
-                                                    </div>
-                                                        {% empty %}
-                                                            <p>Nenhum parceiro interessado ainda.</p>
-                                                        {% endfor %}
-                                                        <div class="modal-footer">
-                                                            <button type="submit" class="btn btn-success">Demonstrar Interesse</button>
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
+                                <h6>Parceiros Interessados</h6>
+                                <form method="post" action="{% url 'demonstrar_interesse_parceria' partnershipoutros.id %}">
+                                    {% csrf_token %}
+                                    {% for partner in partnershipoutros.interested_partners.all %}
+                                    <div class="card mb-3">
+                                        <div class="card-body">
+                                            <h6 class="card-title">{{ partner.partner.nome }}</h6>
+                                            <p class="card-text">{{ partner.partner.bio }}</p>
+                                            <a href="{{ partner.partner.linkedin }}" target="_blank" class="btn btn-primary btn-sm">
+                                                LinkedIn <i class="bi bi-linkedin"></i>
+                                            </a>
                                         </div>
                                     </div>
-                                {% empty %}
-                                    <p>Não há solicitações de parceria por outros.</p>
-                                {% endfor %}
-                            </ul>
+                                    {% empty %}
+                                        <p>Nenhum parceiro interessado ainda.</p>
+                                    {% endfor %}
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-success">Demonstrar Interesse</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            {% empty %}
+                <p class="text-muted">Não há solicitações de parceria por outros.</p>
+            {% endfor %}
+        </ul>
+
                                 <div class="pagination">
                                     {% if solicitacoes_parcerias_outros.has_previous %}
                                         <a href="?page_solicitadas={{ solicitacoes_parcerias_outros.previous_page_number }}">Anterior</a>

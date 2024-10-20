@@ -49,11 +49,18 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         # Mentorias solicitadas pelo usuário (ordenadas por data de criação, mais recentes primeiro)
         solicitadas = MentorshipRequest.objects.filter(project__owner=self.request.user.userprofile).order_by(
             '-created_at')
+        # Preparar os dados para o template
+        for mentorship in solicitadas:
+            mentorship.has_inactive_mentors = mentorship.interested_mentors.filter(is_active=False).exists()
+
         # Mentorias solicitadas por outros usuários
         solicitacoes_outros = MentorshipRequest.objects.exclude(project__owner=self.request.user.userprofile).order_by(
             '-created_at')
         parcerias_solicitadas = PartnershipRequest.objects.filter(
             project__owner=self.request.user.userprofile).order_by('-created_at')
+        # Preparar os dados para o template
+        for partnership in parcerias_solicitadas:
+            partnership.has_inactive_partners = partnership.interested_partners.filter(is_active=False).exists()
         solicitacoes_parcerias_outros = PartnershipRequest.objects.exclude(
             project__owner=self.request.user.userprofile).order_by('-created_at')
         # Paginação (opcional)
@@ -269,8 +276,14 @@ class DemonstrarInteresseMentoriaView(LoginRequiredMixin, View):
     def post(self, request, mentorship_request_id):
         mentorship_request = get_object_or_404(MentorshipRequest, id=mentorship_request_id)
 
-        # Adiciona o mentor interessado
-        MentorInterested.objects.create(mentorship_request=mentorship_request, mentor=request.user.userprofile)
+        if MentorInterested.objects.filter(mentorship_request=mentorship_request,
+                                            mentor=request.user.userprofile).exists():
+            messages.error(request, "Você já demonstrou interesse nesta mentoria.")
+            return redirect('dashboard')
+        else:
+            # Adiciona o mentor interessado
+            messages.success(request, 'Seu interesse na mentoria foi registrado com sucesso!')
+            MentorInterested.objects.create(mentorship_request=mentorship_request, mentor=request.user.userprofile)
 
         # Redireciona para uma página de confirmação
         return redirect('demonstrar_interesse', mentorship_request_id=mentorship_request.id)

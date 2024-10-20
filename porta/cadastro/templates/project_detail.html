@@ -28,7 +28,14 @@
 <p><strong>Descrição:</strong> {{ project.description }}</p>
 <p><strong>Status:</strong> {{ project.get_status_display }}</p>
 <p><strong>Instituição:</strong> {{ project.institution }}</p>
-<p><strong>Financiamento Necessário:</strong> {{ project.funding_required }}</p>
+<p><strong>Financiamento Necessário:</strong>
+    {% if project.funding_required %}
+        Sim
+    {% else %}
+        Não
+    {% endif %}
+</p>
+
 
 <h3>Feedbacks</h3>
 <ul>
