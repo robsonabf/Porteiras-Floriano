@@ -11,8 +11,9 @@
 
         <form method="post">
             {% csrf_token %}
-            <button type="submit" class="btn btn-danger">Sim, excluir</button>
-            <a href="{% url 'project-detail' project.id %}" class="btn btn-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i> Sim, excluir</button>
+            <a href="{% url 'project-detail' project.id %}" class="btn btn-secondary"><i class="bi bi-x"></i>
+                Cancelar</a>
         </form>
     </div>
 </div>

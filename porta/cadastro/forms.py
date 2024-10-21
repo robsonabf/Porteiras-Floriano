@@ -15,6 +15,14 @@ class InscricaoForm(forms.ModelForm):
             'empresa_instituicao': 'Empresa/Instituição',
             'mensagem': 'Mensagem',
         }
+        # Adicionando widgets com a classe form-control
+        widgets = {
+            'nome': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'telefone': forms.TextInput(attrs={'class': 'form-control'}),
+            'empresa_instituicao': forms.TextInput(attrs={'class': 'form-control'}),
+            'mensagem': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+        }
 
 
 class ProjectForm(forms.ModelForm):
@@ -83,8 +91,8 @@ class FeedbackForm(forms.ModelForm):
         model = Feedback
         fields = ['comment', 'rating']
         widgets = {
-            'comment': forms.Textarea(attrs={'rows': 4}),
-            'rating': forms.Select(choices=[(i, str(i)) for i in range(1, 6)]),
+            'comment': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'rating': forms.Select(choices=[(i, str(i)) for i in range(1, 6)], attrs={'class': 'form-control'}),
         }
         labels = {
             'comment': 'Comentário',
@@ -102,7 +110,7 @@ class MentoriaForm(forms.ModelForm):
         }
         widgets = {
             'message': forms.Textarea(attrs={'rows': 4}),
-            'message': forms.TextInput(attrs={'class': 'form-control'}),
+            'message': forms.Textarea(attrs={'class': 'form-control'}),
             'project': forms.Select(attrs={'class': 'form-control'}),
         }
 
@@ -206,6 +214,14 @@ class UserProfileForm(forms.ModelForm):
             'avatar': 'Avatar',
             'website': 'Website',
             'linkedin': 'Linkedin',
+        }
+        widgets = {
+            'nome': forms.TextInput(attrs={'class': 'form-control'}),
+            'bio': forms.Textarea(attrs={'class': 'form-control'}),
+            'institution_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'website': forms.TextInput(attrs={'class': 'form-control'}),
+            'linkedin': forms.TextInput(attrs={'class': 'form-control'}),
+            'avatar': forms.FileInput(attrs={'class': 'form-control'}),
         }
 
 

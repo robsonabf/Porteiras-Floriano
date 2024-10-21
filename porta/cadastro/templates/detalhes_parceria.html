@@ -28,7 +28,8 @@
                         <li class="list-group-item">
                             <strong>Nome:</strong> {{ partner.partner.nome }}<br>
                             <strong>Bio:</strong> {{ partner.partner.bio }}<br>
-                            <a href="{{ partner.partner.linkedin }}" target="_blank" class="btn btn-link">Perfil do LinkedIn</a>
+                            <a href="{{ partner.partner.linkedin }}" target="_blank" class="btn btn-primary btn-sm">
+                                LinkedIn<i class="bi bi-linkedin"></i></a>
                         </li>
                     {% empty %}
                         <li class="list-group-item text-center">Nenhum parceiro ativo no momento.</li>

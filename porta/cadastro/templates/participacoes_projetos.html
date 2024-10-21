@@ -8,8 +8,8 @@
         <div class="row">
             <div class="col-12 col-md-8 mx-auto">
                 <h2 class="mb-4">Participações em Projetos</h2>
-                <a href="{% url 'dashboard' %}" class="btn fancy-btn fancy-dark m-2">Ir para Dashboard</a>
-
+                <a href="{% url 'dashboard' %}" class="btn btn-secondary"><i class="bi bi-grid"></i>
+                          Voltar para o Painel</a>
                 <!-- Filtros -->
                 <form method="GET" action="{% url 'participacoes_projetos' %}" class="mb-4">
                     <div class="form-group">
@@ -29,7 +29,7 @@
                         <label for="necessidade">Tipo de Necessidade:</label>
                         <input type="text" id="necessidade" name="necessidade" class="form-control" value="{{ request.GET.necessidade }}">
                     </div>
-                    <button type="submit" class="btn btn-info">Filtrar</button>
+                    <button type="submit" class="btn btn-info"><i class="bi bi-filter"></i>Filtrar</button>
                 </form>
 
                 <!-- Projetos do Usuário -->

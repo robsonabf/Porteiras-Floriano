@@ -11,21 +11,22 @@
                 <form method="GET" action="{% url 'buscar_parcerias' %}">
                     <div class="form-group">
                         <label for="location_city">Cidade:</label>
-    <input type="text" id="location_city" name="location_city" placeholder="Digite a cidade">
-                <button type="submit" class="btn btn-primary">Buscar</button>
+    <input type="text" id="location_city" class="form-group" name="location_city" placeholder="Digite a cidade">
+                <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i> Buscar</button>
                         </div>
                 </form>
                     <form method="GET" action="{% url 'buscar_parcerias' %}">
                     <div class="form-group">
                         <label for="keywords">Palavras-chave:</label>
-    <input type="text" id="keywords" name="keywords" placeholder="Digite palavras-chave">
-                    <button type="submit" class="btn btn-primary">Buscar</button>
+    <input type="text" class="form-group" id="keywords" name="keywords" placeholder="Digite palavras-chave">
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i> Buscar</button>
                         </div>
                     </form>
-                      <a href="{% url 'dashboardpub' %}" class="btn btn-secondary">Voltar para o Painel</a>
+                    <hr>
+                      <a href="{% url 'dashboardpub' %}" class="btn btn-secondary"><i class="bi bi-grid"></i>
+                          Voltar para o Painel</a>
                 <!-- Resultados da busca -->
-            <h3 class="mb-4">Resultados da Busca</h3>
-
+            <h3 class="mb-4">Parcerias</h3>
             <!-- Exibição dos resultados de parcerias -->
             <ul class="list-group">
                 {% for parceria in parcerias %}

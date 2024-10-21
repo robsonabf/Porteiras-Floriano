@@ -1,72 +1,125 @@
 {% extends 'base.html' %}
 
-{% block title %}Detalhes da Parcerias{% endblock %}
+{% block title %}Portfólio de {{ user_profile.nome }}{% endblock %}
 
 {% block content %}
 {% load static %}
 <div class="fancy-bg-dark section-padding-100">
-<div class="container fancy-bg-white">
-            <div class="row">
-                <div class="col-12 col-md-6">
-<a href="{% url 'dashboardpub' %}" class="btn btn-secondary">Ir para o Painel</a>
-                    <hr>
-<h2>Portfólio de {{ user_profile.nome }}</h2>
-<div class="col-md-4">
-            <!-- Exibir foto do perfil, se existir -->
-            {% if profile.avatar %}
-                <img src="{{ profile.avatar.url }}" alt="{{ profile.user.username }}" class="img-thumbnail">
-            {% else %}
-                <span class="bi bi-person-circle" style="font-size: 100px;"></span>
-                <img src="{% static 'img/avatar.png' %}" alt="Sem foto" class="img-thumbnail">
-            {% endif %}
-</div>
-                    <div class="col-md-8">
-            <h4>Informações do Perfil</h4>
-            <p><strong>Nome Completo:</strong> {{ profile.nome }}</p>
-            <p><strong>Email:</strong> {{ profile.user.email }}</p>
-            <p><strong>Bio:</strong> {{ profile.bio }}</p>
-            <p><strong>Tipo de Usuário:</strong> {{ profile.user_type }}</p>
-            <p><strong>Instituição:</strong> {{ profile.institution_name }}</p>
-            <p><strong>Linkedin:</strong> {{ profile.linkedin }}</p>
-            <p><strong>Website:</strong> {{ profile.website }}</p>
+    <div class="container fancy-bg-white p-5 rounded">
+        <div class="row">
+            <div class="col-md-3 text-center">
+                <!-- Exibir foto do perfil, se existir -->
+                {% if profile.avatar %}
+                    <img src="{{ profile.avatar.url }}" alt="{{ profile.user.username }}" class="img-thumbnail rounded-circle mb-3" width="150">
+                {% else %}
+                    <img src="{% static 'img/avatar.png' %}" alt="Sem foto" class="img-thumbnail rounded-circle mb-3" width="150">
+                {% endif %}
+
+                <a href="{% url 'dashboardpub' %}" class="btn fancy-btn fancy-dark bg-transparent mr-2
+                    mt-1">
+                    <i class="bi bi-grid"></i> Ir para o Painel
+                </a>
+            </div>
+
+            <div class="col-md-9">
+                <h2 class="mb-4">Portfólio de {{ profile.nome }}</h2>
+
+                <h4>Informações do Perfil</h4>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <p><strong>Nome Completo:</strong> {{ profile.nome }}</p>
+                        <p><strong>Email:</strong> {{ profile.user.email }}</p>
+                        <p><strong>Bio:</strong> {{ profile.bio }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Tipo de Usuário:</strong> {{ profile.user_type }}</p>
+                        <p><strong>Instituição:</strong> {{ profile.institution_name }}</p>
+                        <p><strong>LinkedIn:</strong>
+                            <a href="{{ profile.linkedin }}" target="_blank" class="text-decoration-none">
+                                {{ profile.linkedin }} <i class="bi bi-linkedin"></i>
+                            </a>
+                        </p>
+                        <p><strong>Website:</strong>
+                            <a href="{{ profile.website }}" target="_blank" class="text-decoration-none">
+                                {{ profile.website }} <i class="bi bi-link"></i>
+                            </a>
+                        </p>
+                    </div>
+                </div>
+
+                <hr>
+
+                <h3 class="mb-3">Projetos</h3>
+                <div class="accordion" id="projetosAccordion">
+                    {% for projeto in projetos_dono %}
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading{{ projeto.id }}">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ projeto.id }}" aria-expanded="true" aria-controls="collapse{{ projeto.id }}">
+                                {{ projeto.title }}
+                            </button>
+                        </h2>
+                        <div id="collapse{{ projeto.id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ projeto.id }}" data-bs-parent="#projetosAccordion">
+                            <div class="accordion-body">
+                                <p><strong>Descrição:</strong> {{ projeto.description }}</p>
+                                <p><strong>Fase:</strong> {{ projeto.get_stage_display }}</p>
+                                <p><strong>Necessidades:</strong> {{ projeto.needs.all|join:", " }}</p>
+                                <p><strong>Localidade:</strong> {{ projeto.location_city }} - {{ projeto.location_state }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                        <p>Este usuário ainda não tem projetos cadastrados.</p>
+                    {% endfor %}
+                </div>
+
+                <hr>
+
+                <h3 class="mb-3">Mentorias</h3>
+                <div class="accordion" id="mentoriasAccordion">
+                    {% for mentoria in mentorias %}
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingMentoria{{ mentoria.id }}">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMentoria{{ mentoria.id }}" aria-expanded="true" aria-controls="collapseMentoria{{ mentoria.id }}">
+                                {{ mentoria.project.title }}
+                            </button>
+                        </h2>
+                        <div id="collapseMentoria{{ mentoria.id }}" class="accordion-collapse collapse" aria-labelledby="headingMentoria{{ mentoria.id }}" data-bs-parent="#mentoriasAccordion">
+                            <div class="accordion-body">
+                                <p><strong>Mensagem:</strong> {{ mentoria.message }}</p>
+                                <p><strong>Status:</strong> {% if mentoria.is_accepted %}Aceito{% else %}Pendente{% endif %}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                        <p>Este usuário ainda não participou de mentorias.</p>
+                    {% endfor %}
+                </div>
+
+                <hr>
+
+                <h3 class="mb-3">Parcerias</h3>
+                <div class="accordion" id="parceriasAccordion">
+                    {% for parceria in parcerias %}
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingParceria{{ parceria.id }}">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseParceria{{ parceria.id }}" aria-expanded="true" aria-controls="collapseParceria{{ parceria.id }}">
+                                {{ parceria.project.title }}
+                            </button>
+                        </h2>
+                        <div id="collapseParceria{{ parceria.id }}" class="accordion-collapse collapse" aria-labelledby="headingParceria{{ parceria.id }}" data-bs-parent="#parceriasAccordion">
+                            <div class="accordion-body">
+                                <p><strong>Mensagem:</strong> {{ parceria.message }}</p>
+                                <p><strong>Status:</strong> {% if parceria.is_accepted %}Ativa{% else %}Pendente{% endif %}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                        <p>Este usuário ainda não tem parcerias.</p>
+                    {% endfor %}
+                </div>
+
+            </div>
         </div>
-                    <hr>
-<h3>Projetos:</h3>
-<ul>
-    {% for projeto in projetos_dono %}
-    <li>
-        <strong>Projeto:</strong> {{ projeto.title }} <br>
-        <strong>Descrição:</strong> {{ projeto.description }} <br>
-        <strong>Fase:</strong> {{ projeto.get_stage_display }} <br>
-        <strong>Necessidades:</strong> {{ projeto.needs.all|join:", " }} <br>
-        <strong>Localidade:</strong> {{ projeto.location_city }} - {{ projeto.location_state }} <br>
-    </li>
-    {% endfor %}
-</ul>
-
-<h3>Mentorias:</h3>
-<ul>
-    {% for mentoria in mentorias %}
-    <li>
-        <strong>Projeto:</strong> {{ mentoria.project.title }} <br>
-        <strong>Mensagem:</strong> {{ mentoria.message }} <br>
-        <strong>Status:</strong> {% if mentoria.is_accepted %}Aceito{% else %}Pendente{% endif %} <br>
-    </li>
-    {% endfor %}
-</ul>
-
-<h3>Parcerias:</h3>
-<ul>
-    {% for parceria in parcerias %}
-    <li>
-        <strong>Projeto:</strong> {{ parceria.project.title }} <br>
-        <strong>Mensagem:</strong> {{ parceria.message }} <br>
-        <strong>Status:</strong> {% if parceria.is_accepted %}Ativa{% else %}Pendente{% endif %} <br>
-    </li>
-    {% endfor %}
-</ul>
     </div>
-</div>
-</div>
 </div>
 {% endblock %}

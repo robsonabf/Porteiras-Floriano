@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ form.instance.pk|default:"Novo Projeto" }}{% endblock %}
+{% block title %}Editar Projeto{% endblock %}
 
 {% block content %}
 <div class="fancy-bg-dark section-padding-100">
     <div class="container fancy-bg-white">
-        <h2>{{ form.instance.pk|default:"Novo Projeto" }}</h2>
+        <h2>Editar Projeto</h2>
 
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
@@ -13,13 +13,13 @@
 
             <button type="submit" class="btn btn-success mt-2">
                 {% if form.instance.pk %}
-                    Atualizar Projeto
+                   <i class="bi bi-save"></i> Atualizar Projeto
                 {% else %}
-                    Criar Projeto
+                    <i class="bi bi-save"></i> Criar Projeto
                 {% endif %}
             </button>
 
-            <a href="{% url 'project-list' %}" class="btn btn-secondary mt-2">Cancelar</a>
+            <a href="{% url 'project-list' %}" class="btn btn-secondary mt-2"><i class="bi bi-x"></i> Cancelar</a>
         </form>
     </div>
 </div>

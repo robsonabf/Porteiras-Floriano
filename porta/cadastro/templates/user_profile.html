@@ -1,55 +1,70 @@
 {% extends 'base.html' %}
-{% block title %}Perfil{% endblock %}
+{% block title %}Perfil de {{ profile.nome }}{% endblock %}
+
 {% block content %}
 {% load static %}
 <div class="fancy-bg-dark section-padding-100">
-<div class="container fancy-bg-white">
-            <div class="row">
-                <div class="col-12 col-md-6">
-    <a href="{% url 'edit_profile' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
-                        Editar Perfil</a>
-    <a href="{% url 'public_profile' user.username %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
-                        Ver Portfólio</a>
-                    <hr>
-    <h2>Perfil de {{ profile.user.username }}</h2>
+    <div class="container fancy-bg-white p-4 rounded">
+        <div class="row">
+            <div class="col-md-3 text-center">
+                <!-- Exibir foto do perfil, se existir -->
+                {% if profile.avatar %}
+                    <img src="{{ profile.avatar.url }}" alt="{{ profile.user.username }}" class="img-thumbnail rounded-circle mb-3" width="150">
+                {% else %}
+                    <img src="{% static 'img/avatar.png' %}" alt="Sem foto" class="img-thumbnail rounded-circle mb-3" width="150">
+                {% endif %}
 
-    <div class="row">
-        <div class="col-md-4">
-            <!-- Exibir foto do perfil, se existir -->
-            {% if profile.avatar %}
-                <img src="{{ profile.avatar.url }}" alt="{{ profile.user.username }}" class="img-thumbnail">
-            {% else %}
-                <span class="bi bi-person-circle" style="font-size: 100px;"></span>
-                <img src="{% static 'img/avatar.png' %}" alt="Sem foto" class="img-thumbnail">
-            {% endif %}
-        </div>
+                <a href="{% url 'edit_profile' %}" class="btn fancy-btn fancy-dark bg-transparent mr-2 mt-1">
+                    <i class="bi bi-pencil"></i> Editar Perfil
+                </a>
+                <a href="{% url 'public_profile' user.username %}" class="btn fancy-btn fancy-dark bg-transparent mr-2
+                    mt-1">
+                    <i class="bi bi-eye"></i> Ver Portfólio
+                </a>
+            </div>
 
-        <div class="col-md-8">
-            <h4>Informações do Perfil</h4>
-            <p><strong>Nome Completo:</strong> {{ profile.nome }}</p>
-            <p><strong>Email:</strong> {{ profile.user.email }}</p>
-            <p><strong>Bio:</strong> {{ profile.bio }}</p>
-            <p><strong>Tipo de Usuário:</strong> {{ profile.user_type }}</p>
-            <p><strong>Instituição:</strong> {{ profile.institution_name }}</p>
-            <p><strong>Linkedin:</strong> {{ profile.linkedin }}</p>
-            <p><strong>Website:</strong> {{ profile.website }}</p>
+            <div class="col-md-9">
+                <h2>Perfil de {{ profile.nome }}</h2>
+                <hr>
+
+                <h4>Informações Pessoais</h4>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Nome Completo:</strong> {{ profile.nome }}</p>
+                        <p><strong>Email:</strong> {{ profile.user.email }}</p>
+                        <p><strong>Tipo de Usuário:</strong> {{ profile.user_type }}</p>
+                        <p><strong>Bio:</strong> {{ profile.bio }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Instituição:</strong> {{ profile.institution_name }}</p>
+                        <p><strong>LinkedIn:</strong>
+                            <a href="{{ profile.linkedin }}" target="_blank" class="text-decoration-none">
+                                {{ profile.linkedin }} <i class="bi bi-linkedin"></i>
+                            </a>
+                        </p>
+                        <p><strong>Website:</strong>
+                            <a href="{{ profile.website }}" target="_blank" class="text-decoration-none">
+                                {{ profile.website }} <i class="bi bi-link"></i>
+                            </a>
+                        </p>
+                    </div>
+                </div>
+                <hr>
+
+                <h4>Projetos de {{ profile.user.username }}</h4>
+                <ul class="list-group">
+                    {% for project in projects %}
+                        <li class="list-group-item">
+                            <a href="{% url 'project-detail' project.id %}" class="text-decoration-none">
+                                {{ project.title }} <i class="bi bi-arrow-right-circle"></i>
+                            </a>
+                        </li>
+                    {% empty %}
+                        <p>Este usuário ainda não tem projetos cadastrados.</p>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
     </div>
-
-    <hr>
-
-    <h4>Projetos de {{ profile.user.username }}</h4>
-    <ul>
-        {% for project in projects %}
-            <li>
-                <a href="{% url 'project-detail' project.id %}">{{ project.title }}</a>
-            </li>
-        {% empty %}
-            <p>Este usuário ainda não tem projetos cadastrados.</p>
-        {% endfor %}
-    </ul>
-</div>
-                </div>
-            </div>
 </div>
 {% endblock %}

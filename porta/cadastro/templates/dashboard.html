@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
 {% block title %}Dashboard{% endblock %}
-
 {% block content %}
 <div class="fancy-bg-dark section-padding-100">
     <div class="container fancy-bg-white">
@@ -21,52 +20,52 @@
                 <h3>Funcionalidades</h3>
                 <div class="d-flex flex-wrap justify-content-start">
                     <a href="{% url 'buscar_parcerias' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
-                        Buscar Parcerias</a>
+                        <i class="bi bi-search"></i> Buscar Parcerias</a>
                     <a href="{% url 'buscar_mentorias' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
-                            Buscar Mentorias</a>
+                            <i class="bi bi-search"></i> Buscar Mentorias</a>
                 </div>
                 {% if user.is_authenticated %}
                 {% if user.userprofile.user_type == 'estudante' %}
                     <h4>Estudante</h4>
                     <div class="d-flex flex-wrap justify-content-start">
                     <a href="{% url 'solicitar_mentoria' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
-                        Solicitar Mentoria</a>
+                        <i class="bi bi-envelope"></i> Solicitar Mentoria</a>
                     <a href="{% url 'ofertar_parcerias' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
-                        Solicitar Parcerias</a>
+                        <i class="bi bi-envelope"></i> Solicitar Parcerias</a>
                     <a href="{% url 'participacoes_projetos' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
-                        Participações em Projetos</a>
+                        <i class="bi bi-hand-thumbs-up"></i> Atuação em Projetos</a>
                         </div>
                 {% elif user.userprofile.user_type == 'pesquisador' %}
                     <h4>Pesquisador</h4>
                     <div class="d-flex flex-wrap justify-content-start">
                                         <a href="{% url 'solicitar_mentoria' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
-                        Solicitar Mentoria</a>
+                        <i class="bi bi-envelope"></i> Solicitar Mentoria</a>
                     <a href="{% url 'ofertar_parcerias' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
-                        Solicitar Parcerias</a>
+                        <i class="bi bi-envelope"></i> Solicitar Parcerias</a>
                     <a href="{% url 'participacoes_projetos' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
-                        Participações em Projetos</a>
+                        <i class="bi bi-hand-thumbs-up"></i> Participações em Projetos</a>
                     </div>
                 {% elif user.userprofile.user_type == 'empresa' %}
                     <h4>Empresa</h4>
                     <div class="d-flex flex-wrap justify-content-start">
                     <div class="d-flex flex-wrap justify-content-start">
                                         <a href="{% url 'solicitar_mentoria' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
-                        Solicitar Mentoria</a>
+                        <i class="bi bi-envelope"></i> Solicitar Mentoria</a>
                     <a href="{% url 'ofertar_parcerias' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
-                        Solicitar Parcerias</a>
+                        <i class="bi bi-envelope"></i> Solicitar Parcerias</a>
                     <a href="{% url 'participacoes_projetos' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
-                        Participações em Projetos</a>
+                        <i class="bi bi-hand-thumbs-up"></i> Participações em Projetos</a>
                     </div>
                     </div>
                 {% elif user.userprofile.user_type == 'instituicao' %}
                     <h4>Instituição</h4>
                     <div class="d-flex flex-wrap justify-content-start">
                                         <a href="{% url 'solicitar_mentoria' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
-                        Solicitar Mentoria</a>
+                        <i class="bi bi-envelope"></i> Solicitar Mentoria</a>
                     <a href="{% url 'ofertar_parcerias' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
-                                Solicitar Parcerias</a>
+                                <i class="bi bi-envelope"></i> Solicitar Parcerias</a>
                             <a href="{% url 'participacoes_projetos' %}" class="btn fancy-btn fancy-dark bg-transparent m-2">
-                                Participações em Projetos</a>
+                                <i class="bi bi-hand-thumbs-up"></i> Participações em Projetos</a>
                             </div>
                         {% endif %}
                         <!-- Seção de Mentorias Solicitadas -->
@@ -74,14 +73,15 @@
         <ul class="list-group">
             {% for mentorship in solicitadas %}
             <li class="list-group-item">
-                <div class="d-flex justify-content-between">
-                    <div>
-                        <strong>Projeto:</strong> {{ mentorship.project.title }} <br>
+                <div class="d-flex justify-content-between align-items-start flex-wrap">
+                    <div style="max-width: 70%;">
+                        <strong>Projeto:</strong><span>{{ mentorship.project.title }}</span> <br>
                         <strong>Status:</strong>
                         <span class="badge {% if mentorship.is_accepted %} bg-success {% else %} bg-warning {% endif %}">
                             {% if mentorship.is_accepted %} Aceita {% else %} Pendente {% endif %}
                         </span><br>
-                        <strong>Mensagem:</strong> {{ mentorship.message }}
+                        <strong>Mensagem:</strong><p style="word-break: break-word; white-space: normal">
+                        {{ mentorship.message }}</p>
                     </div>
                     {% if mentorship in solicitadas %}
                     <!-- Verifica se existem mentores interessados -->
@@ -139,8 +139,10 @@
                                             <p>Nenhum mentor interessado ainda.</p>
                                             {% endfor %}
                                             <div class="modal-footer">
-                                                <button type="submit" class="btn btn-success">Firmar Mentoria</button>
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                                                <button type="submit" class="btn btn-success">
+                                                    <i class="bi bi-hand-thumbs-up"></i> Firmar Mentoria</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                    <i class="bi bi-x"></i> Fechar</button>
                                             </div>
                                         </form>
                                     </div>
@@ -167,11 +169,13 @@
                 <ul class="list-group">
                     {% for mentorshipoutros in solicitacoes_outros %}
                     <li class="list-group-item">
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <strong>Projeto:</strong> {{ mentorshipoutros.project.title }} <br>
-                                <strong>Solicitante:</strong> {{ mentorshipoutros.project.owner.user.username }} <br>
-                                <strong>Mensagem:</strong> {{ mentorshipoutros.message }}
+                        <div class="d-flex justify-content-between align-items-start flex-wrap">
+                            <div style="max-width: 70%;">
+                                <strong>Projeto:</strong><span>{{ mentorshipoutros.project.title }}</span> <br>
+                                <strong>Solicitante:</strong><span>{{ mentorshipoutros.project.owner.user.username }}
+                                </span><br>
+                                <strong>Mensagem:</strong> <p style="word-break: break-word; white-space: normal">
+                                {{ mentorshipoutros.message }}</p>
                             </div>
                             <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#InteresseModal_{{ mentorshipoutros.id }}">
                                 Ver Detalhes <i class="bi bi-eye"></i>
@@ -210,7 +214,8 @@
                                             <!-- Se o mentor ainda não estiver com parceria ativa, exibe o checkbox -->
                                             <div class="form-check mt-3">
                                                 <input class="form-check-input" type="checkbox" name="mentores_interesse" value="{{ mentor.id }}" id="mentor_{{ mentor.id }}">
-                                                <label class="form-check-label" for="mentor_{{ mentor.id }}">Demonstrar Interesse</label>
+                                                <label class="form-check-label" for="mentor_{{ mentor.id }}">
+                                                    <i class="bi bi-hand-thumbs-up"></i> Demonstrar Interesse</label>
                                             </div>
                                         {% endif %}
                                     </div>
@@ -219,8 +224,10 @@
                                             <p>Nenhum mentor interessado ainda.</p>
                                             {% endfor %}
                                             <div class="modal-footer">
-                                                <button type="submit" class="btn btn-success">Demonstrar Interesse</button>
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                                                <button type="submit" class="btn btn-success">
+                                                    <i class="bi bi-hand-thumbs-up"></i> Demonstrar Interesse</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                    <i class="bi bi-x"></i> Fechar</button>
                                             </div>
                                         </form>
                                     </div>
@@ -246,14 +253,15 @@
             <ul class="list-group">
                 {% for partnership_request in parcerias_solicitadas %}
                 <li class="list-group-item">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <strong>Projeto:</strong> {{ partnership_request.project.title }} <br>
+                    <div class="d-flex justify-content-between align-items-start flex-wrap">
+                        <div style="max-width: 70%;">
+                            <strong>Projeto:</strong> <span>{{ partnership_request.project.title }}</span> <br>
                             <strong>Status:</strong>
                             <span class="badge {% if partnership_request.is_accepted %} bg-success {% else %} bg-warning {% endif %}">
                                 {% if partnership_request.is_accepted %} Aceita {% else %} Pendente {% endif %}
                             </span><br>
-                            <strong>Mensagem:</strong> {{ partnership_request.message }}
+                            <strong>Mensagem:</strong> <p style="word-break: break-word; white-space: normal">
+                            {{ partnership_request.message }}</p>
                         </div>
                             {% if partnership_request %}
                             <!-- Verifica se existem parceiros interessados -->
@@ -315,8 +323,10 @@
                                         <p>Nenhum parceiro interessado ainda.</p>
                                         {% endfor %}
                                         <div class="modal-footer">
-                                            <button type="submit" class="btn btn-success">Firmar Parceria</button>
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                                            <button type="submit" class="btn btn-success">
+                                                <i class="bi bi-hand-thumbs-up"></i> Firmar Parceria</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                <i class="bi bi-x"></i> Fechar</button>
                                         </div>
                                     </form>
                                 </div>
@@ -340,19 +350,20 @@
                 </div>
                 <br>
                 <h4 class="mt-5 mb-3">Outras Solicitações de Parcerias</h4>
-<ul class="list-group">
-    {% for partnershipoutros in solicitacoes_parcerias_outros %}
-    <li class="list-group-item">
-        <div class="d-flex justify-content-between">
-            <div>
-                <strong>Projeto:</strong> {{ partnershipoutros.project.title }} <br>
-                <strong>Solicitante:</strong> {{ partnershipoutros.project.owner.user.userprofile.nome }} <br>
-                <strong>Mensagem:</strong> {{ partnershipoutros.message }}
-            </div>
-            <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#InteresseModal2_{{ partnershipoutros.id }}">
-                Ver Detalhes <i class="bi bi-eye"></i>
-            </button>
-        </div>
+            <ul class="list-group">
+                {% for partnershipoutros in solicitacoes_parcerias_outros %}
+                <li class="list-group-item">
+                    <div class="d-flex justify-content-between align-items-start flex-wrap">
+                        <div style="max-width: 70%;">
+                            <strong>Projeto:</strong> <span>{{ partnershipoutros.project.title }}</span> <br>
+                            <strong>Solicitante:</strong> <span>{{ partnershipoutros.project.owner.user.userprofile.nome }}</span> <br>
+                            <strong>Mensagem:</strong> <p style="word-break: break-word; white-space: normal">
+                            {{ partnershipoutros.message }}</p>
+                        </div>
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#InteresseModal2_{{ partnershipoutros.id }}">
+                            Ver Detalhes <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
 
         <!-- Modal para cada solicitação de parceria -->
                 <div class="modal fade" id="InteresseModal2_{{ partnershipoutros.id }}" tabindex="-1" aria-labelledby="modalLabel_{{ partnershipoutros.id }}" aria-hidden="true">
@@ -385,8 +396,10 @@
                                         <p>Nenhum parceiro interessado ainda.</p>
                                     {% endfor %}
                                     <div class="modal-footer">
-                                        <button type="submit" class="btn btn-success">Demonstrar Interesse</button>
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                                        <button type="submit" class="btn btn-success">
+                                            <i class="bi bi-hand-thumbs-up"></i> Demonstrar Interesse</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                            <i class="bi bi-x"></i> Fechar</button>
                                     </div>
                                 </form>
                             </div>

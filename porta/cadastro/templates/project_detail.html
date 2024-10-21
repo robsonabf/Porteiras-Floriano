@@ -4,59 +4,96 @@
 {% load static %}
 {% block content %}
 <div class="fancy-bg-dark section-padding-100">
-<div class="container fancy-bg-white">
-            <div class="row">
-                <div class="col-12 col-md-6">
-                    <a href="{% url 'dashboardpub' %}" class="btn btn-secondary">Voltar para o Painel</a>
-<hr>
-<h2>{{ project.title }}</h2>
-<!-- Exibe mensagens de sucesso ou erro -->
-                    {% if messages %}
-                        <div>
-                            {% for message in messages %}
-                                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
-                                    {{ message }}
-                                </div>
-                            {% endfor %}
-                        </div>
+    <div class="container fancy-bg-white">
+        <div class="row">
+            <div class="col-12 col-md-10 offset-md-1">
+
+                <!-- Botão para voltar ao Painel -->
+                <a href="{% url 'dashboardpub' %}" class="btn btn-secondary mb-3">
+                    <i class="bi bi-grid"></i> Voltar para o Painel
+                </a>
+                <hr>
+
+                <!-- Título do Projeto -->
+                <h2 class="text-center">{{ project.title }}</h2>
+
+                <!-- Exibe mensagens de sucesso ou erro -->
+                {% if messages %}
+                    <div class="my-3">
+                        {% for message in messages %}
+                            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <!-- Exibição de imagem do projeto -->
+                <div class="text-center mb-4">
+                    {% if project.logo %}
+                        <img src="{{ project.logo.url }}" class="img-thumbnail rounded" style="max-width: 300px;">
+                    {% else %}
+                        <img src="{% static 'img/dalle.webp' %}" alt="Sem imagem" class="img-thumbnail rounded" style="max-width: 300px;">
                     {% endif %}
-    {% if project.logo %}
-    <img src="{{ project.logo.url }}" class="img-thumbnail">
-    {% else %}
-    <img src="{% static 'img/dalle.webp' %}" alt="Sem foto" class="img-thumbnail">
-    {% endif %}
-<p><strong>Descrição:</strong> {{ project.description }}</p>
-<p><strong>Status:</strong> {{ project.get_status_display }}</p>
-<p><strong>Instituição:</strong> {{ project.institution }}</p>
-<p><strong>Financiamento Necessário:</strong>
-    {% if project.funding_required %}
-        Sim
-    {% else %}
-        Não
-    {% endif %}
-</p>
+                </div>
 
+                <!-- Informações do Projeto -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <p><strong>Descrição:</strong> {{ project.description }}</p>
+                        <p><strong>Status:</strong> {{ project.get_status_display }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Instituição:</strong> {{ project.institution }}</p>
+                        <p><strong>Financiamento Necessário:</strong>
+                            {% if project.funding_required %}
+                                Sim
+                            {% else %}
+                                Não
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
 
-<h3>Feedbacks</h3>
-<ul>
-    {% for feedback in feedbacks %}
-        <li><strong>{{ feedback.user }}:</strong> {{ feedback.comment }} (Nota: {{ feedback.rating }})</li>
-    {% empty %}
-        <li>Este projeto ainda não possui feedbacks.</li>
-    {% endfor %}
-</ul>
+                <hr>
 
-{% if request.user.is_authenticated and project.owner.user == request.user %}
-<a href="{% url 'request-partnership' project.id %}" class="mt-2 btn btn-warning">Solicitar Parceria</a>
-<a href="{% url 'request-mentorship' project.id %}" class="mt-2 btn btn-info">Solicitar Mentoria</a>
-<a href="{% url 'project-update' project.id %}" class="mt-2 btn btn-secondary">Editar </a>
-<a href="{% url 'project-delete' project.id %}" class="mt-2 btn btn-danger">Apagar</a>
-{% else %}
-<a href="{% url 'add-feedback' project.id %}" class="btn btn-primary">Adicionar Feedback</a>
-{% endif %}
+                <!-- Seção de Feedbacks -->
+                <h3 class="mb-3">Feedbacks</h3>
+                <ul class="list-group mb-4">
+                    {% for feedback in feedbacks %}
+                        <li class="list-group-item">
+                            <strong>{{ feedback.user }}:</strong> {{ feedback.comment }} <br>
+                            <small>Nota: {{ feedback.rating }}/5</small>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item">Este projeto ainda não possui feedbacks.</li>
+                    {% endfor %}
+                </ul>
 
-                                  </div>
+                <!-- Ações baseadas na permissão do usuário -->
+                <div class="text-center">
+                    {% if request.user.is_authenticated and project.owner.user == request.user %}
+                        <a href="{% url 'request-partnership' project.id %}" class="btn btn-warning me-2">
+                            <i class="bi bi-envelope"></i> Solicitar Parceria
+                        </a>
+                        <a href="{% url 'request-mentorship' project.id %}" class="btn btn-info me-2">
+                            <i class="bi bi-envelope"></i> Solicitar Mentoria
+                        </a>
+                        <a href="{% url 'project-update' project.id %}" class="btn btn-secondary me-2">
+                            <i class="bi bi-pencil-fill"></i> Editar
+                        </a>
+                        <a href="{% url 'project-delete' project.id %}" class="btn btn-danger me-2">
+                            <i class="bi bi-trash"></i> Apagar
+                        </a>
+                    {% else %}
+                        <a href="{% url 'add-feedback' project.id %}" class="btn btn-primary">
+                            <i class="bi bi-star"></i> Adicionar Feedback
+                        </a>
+                    {% endif %}
+                </div>
+
             </div>
-</div>
+        </div>
+    </div>
 </div>
 {% endblock %}

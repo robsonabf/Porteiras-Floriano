@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Detalhes de Mentoria{% endblock %}
+{% block title %}Buscar Mentorias{% endblock %}
 
 {% block content %}
 <div class="fancy-bg-dark section-padding-100">
@@ -11,21 +11,23 @@
 <form method="GET" action="{% url 'buscar_mentorias' %}">
     <div>
         <label for="location_city">Cidade:</label>
-        <input type="text" name="location_city" id="location_city" value="{{ request.GET.location_city }}">
+        <input type="text" name="location_city" id="location_city" class="form-group"
+               value="{{ request.GET.location_city }}">
     </div>
     <div>
         <label for="keywords">Palavras-chave:</label>
-        <input type="text" name="keywords" id="keywords" value="{{ request.GET.keywords }}">
+        <input type="text" class="form-group" name="keywords" id="keywords" value="{{ request.GET.keywords }}">
     </div>
     <div>
         <label for="mentor_ativo">Mostrar apenas mentorias com mentores ativos:</label>
-        <input type="checkbox" name="mentor_ativo" id="mentor_ativo" {% if request.GET.mentor_ativo %}checked{% endif %}>
+        <input type="checkbox" class="form-group" name="mentor_ativo"
+               id="mentor_ativo" {% if request.GET.mentor_ativo %}checked{% endif %}>
     </div>
-    <button type="submit" class="btn btn-primary">Buscar</button>
+    <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i> Buscar</button>
 </form>
 
 <hr>
-  <a href="{% url 'dashboardpub' %}" class="btn btn-secondary">Voltar para o Painel</a>
+  <a href="{% url 'dashboardpub' %}" class="btn btn-secondary"><i class="bi bi-grid"></i>Voltar para o Painel</a>
 
 <h3 class="mb-4">Mentorias</h3>
 
@@ -53,7 +55,8 @@
                         <li class="mb-2">
                             <strong>Nome:</strong> {{ mentor.mentor.nome }}<br>
                             <strong>Bio:</strong> {{ mentor.mentor.bio }}<br>
-                            <a href="{{ mentor.mentor.linkedin }}" target="_blank" class="btn btn-link">Perfil do LinkedIn</a>
+                            <a href="{{ mentor.mentor.linkedin }}" target="_blank" class="btn btn-primary btn-sm">
+                                LinkedIn<i class="bi bi-linkedin"></i></a>
                             {% if mentor.is_active %}
                                 <span class="badge bg-success">Mentor Ativo</span>
                             {% endif %}
