@@ -1,13 +1,90 @@
 {% extends 'base.html' %}
 
 {% block title %}Portfólio de {{ user_profile.nome }}{% endblock %}
-
 {% block content %}
 {% load static %}
+<style>
+/* Estilos para impressão */
+.print-header {
+display: none;
+}
+@media print {
+    /* Ocultar elementos desnecessários na impressão */
+    #ajustebotao .btn, .accordion-button, footer, nav{
+        display: none !important;
+      }
+    /* Exibir e formatar o cabeçalho de impressão */
+    .print-header {
+        display: block;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .print-logo {
+        max-width: 150px;
+        height: auto;
+        margin-bottom: 10px;
+    }
+
+    .print-header h1 {
+        font-size: 18px;
+        margin: 0;
+    }
+
+    .print-header p {
+        margin: 5px 0;
+        font-size: 14px;
+    }
+
+    /* Ajustar tamanhos e margens */
+    body {
+        font-size: 12pt;
+        color: #000;
+        background: #fff;
+    }
+
+    /* Garantir que imagens e textos sejam centralizados corretamente */
+    img {
+        display: block;
+        margin: 0 auto;
+        margin-top: 0;
+        padding: 0;
+        min-width: 200px;
+    }
+    .row, .col-md-3, .col-md-9 {
+        margin: 0;
+        padding: 0;
+    }
+
+    h2, h3, h4, p {
+        text-align: left;
+    }
+
+    .container {
+        padding: 0;
+        margin: 0 auto;
+        max-width: 100%;
+    }
+
+    /* Quebra de página após cada projeto, mentoria ou parceria */
+    h3 {
+        page-break-before: always;
+    }
+
+    /* Impedir que a impressão seja cortada */
+    @page {
+        margin: 2cm;
+    }
+} </style>
+<div class="print-header">
+    <img src="{% static 'img/1.png' %}" alt="Logo Porteiras" class="print-logo">
+    <h1>Porteiras - Portfólio Tecnológico de Ideias e Parcerias</h1>
+    <h5>Relatório do Portfólio</h5>
+</div>
 <div class="fancy-bg-dark section-padding-100">
     <div class="container fancy-bg-white p-5 rounded">
         <div class="row">
-            <div class="col-md-3 text-center">
+            <div class="col-md-3 text-center" id="ajusteresponsivo">
                 <!-- Exibir foto do perfil, se existir -->
                 {% if profile.avatar %}
                     <img src="{{ profile.avatar.url }}" alt="{{ profile.user.username }}" class="img-thumbnail rounded-circle mb-3" width="150">
@@ -17,7 +94,10 @@
 
                 <a href="{% url 'dashboardpub' %}" class="btn fancy-btn fancy-dark bg-transparent mr-2
                     mt-1">
-                    <i class="bi bi-grid"></i> Ir para o Painel
+                    <i class="bi bi-grid"></i> Ir ao Painel
+                </a>
+                <a href="#" class="btn fancy-btn fancy-dark bg-transparent mr-2 mt-1" onclick="window.print();
+                return false;"> <i class="bi bi-printer"></i> Imprimir
                 </a>
             </div>
 
@@ -51,75 +131,86 @@
 
                 <h3 class="mb-3">Projetos</h3>
                 <div class="accordion" id="projetosAccordion">
-                    {% for projeto in projetos_dono %}
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="heading{{ projeto.id }}">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ projeto.id }}" aria-expanded="true" aria-controls="collapse{{ projeto.id }}">
-                                {{ projeto.title }}
-                            </button>
-                        </h2>
-                        <div id="collapse{{ projeto.id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ projeto.id }}" data-bs-parent="#projetosAccordion">
-                            <div class="accordion-body">
-                                <p><strong>Descrição:</strong> {{ projeto.description }}</p>
-                                <p><strong>Fase:</strong> {{ projeto.get_stage_display }}</p>
-                                <p><strong>Necessidades:</strong> {{ projeto.needs.all|join:", " }}</p>
-                                <p><strong>Localidade:</strong> {{ projeto.location_city }} - {{ projeto.location_state }}</p>
-                            </div>
+                {% for projeto in projetos_dono %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingProjeto{{ projeto.id }}-{{ forloop.counter }}">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseProjeto{{ projeto.id }}-{{ forloop.counter }}" aria-expanded="false" aria-controls="collapseProjeto{{ projeto.id }}-{{ forloop.counter }}">
+                            {{ projeto.title }}
+                        </button>
+                    </h2>
+                    <div id="collapseProjeto{{ projeto.id }}-{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="headingProjeto{{ projeto.id }}-{{ forloop.counter }}" data-bs-parent="#projetosAccordion">
+                        <div class="accordion-body">
+                            <p><strong>Descrição:</strong> {{ projeto.description }}</p>
+                            <p><strong>Fase:</strong> {{ projeto.get_stage_display }}</p>
+                            <p><strong>Necessidades:</strong> {{ projeto.needs.all|join:", " }}</p>
+                            <p><strong>Localidade:</strong> {{ projeto.location_city }} - {{ projeto.location_state }}</p>
                         </div>
                     </div>
-                    {% empty %}
-                        <p>Este usuário ainda não tem projetos cadastrados.</p>
-                    {% endfor %}
                 </div>
-
+                {% empty %}
+                    <p>Este usuário ainda não tem projetos cadastrados.</p>
+                {% endfor %}
+            </div>
                 <hr>
-
                 <h3 class="mb-3">Mentorias</h3>
                 <div class="accordion" id="mentoriasAccordion">
-                    {% for mentoria in mentorias %}
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingMentoria{{ mentoria.id }}">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMentoria{{ mentoria.id }}" aria-expanded="true" aria-controls="collapseMentoria{{ mentoria.id }}">
-                                {{ mentoria.project.title }}
-                            </button>
-                        </h2>
-                        <div id="collapseMentoria{{ mentoria.id }}" class="accordion-collapse collapse" aria-labelledby="headingMentoria{{ mentoria.id }}" data-bs-parent="#mentoriasAccordion">
-                            <div class="accordion-body">
-                                <p><strong>Mensagem:</strong> {{ mentoria.message }}</p>
-                                <p><strong>Status:</strong> {% if mentoria.is_accepted %}Aceito{% else %}Pendente{% endif %}</p>
-                            </div>
+                {% for mentoria in mentorias %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingMentoria{{ mentoria.id }}-{{ forloop.counter }}">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMentoria{{ mentoria.id }}-{{ forloop.counter }}" aria-expanded="false" aria-controls="collapseMentoria{{ mentoria.id }}-{{ forloop.counter }}">
+                            {{ mentoria.project.title }}
+                        </button>
+                    </h2>
+                    <div id="collapseMentoria{{ mentoria.id }}-{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="headingMentoria{{ mentoria.id }}-{{ forloop.counter }}" data-bs-parent="#mentoriasAccordion">
+                        <div class="accordion-body">
+                            <p><strong>Mensagem:</strong> {{ mentoria.message }}</p>
+                            <p><strong>Status:</strong> {% if mentoria.is_accepted %}Aceito{% else %}Pendente{% endif %}</p>
                         </div>
                     </div>
-                    {% empty %}
-                        <p>Este usuário ainda não participou de mentorias.</p>
-                    {% endfor %}
                 </div>
-
+                {% empty %}
+                    <p>Este usuário ainda não participou de mentorias.</p>
+                {% endfor %}
+            </div>
                 <hr>
 
                 <h3 class="mb-3">Parcerias</h3>
                 <div class="accordion" id="parceriasAccordion">
-                    {% for parceria in parcerias %}
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingParceria{{ parceria.id }}">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseParceria{{ parceria.id }}" aria-expanded="true" aria-controls="collapseParceria{{ parceria.id }}">
-                                {{ parceria.project.title }}
-                            </button>
-                        </h2>
-                        <div id="collapseParceria{{ parceria.id }}" class="accordion-collapse collapse" aria-labelledby="headingParceria{{ parceria.id }}" data-bs-parent="#parceriasAccordion">
-                            <div class="accordion-body">
-                                <p><strong>Mensagem:</strong> {{ parceria.message }}</p>
-                                <p><strong>Status:</strong> {% if parceria.is_accepted %}Ativa{% else %}Pendente{% endif %}</p>
-                            </div>
+                {% for parceria in parcerias %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingParceria{{ parceria.id }}-{{ forloop.counter }}">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseParceria{{ parceria.id }}-{{ forloop.counter }}" aria-expanded="false" aria-controls="collapseParceria{{ parceria.id }}-{{ forloop.counter }}">
+                            {{ parceria.project.title }}
+                        </button>
+                    </h2>
+                    <div id="collapseParceria{{ parceria.id }}-{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="headingParceria{{ parceria.id }}-{{ forloop.counter }}" data-bs-parent="#parceriasAccordion">
+                        <div class="accordion-body">
+                            <p><strong>Mensagem:</strong> {{ parceria.message }}</p>
+                            <p><strong>Status:</strong> {% if parceria.is_accepted %}Ativa{% else %}Pendente{% endif %}</p>
                         </div>
                     </div>
-                    {% empty %}
-                        <p>Este usuário ainda não tem parcerias.</p>
-                    {% endfor %}
                 </div>
-
+                {% empty %}
+                    <p>Este usuário ainda não tem parcerias.</p>
+                {% endfor %}
+            </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+    window.onbeforeprint = function() {
+    var accordions = document.querySelectorAll('.accordion-collapse');
+    accordions.forEach(function(accordion) {
+        accordion.classList.add('show');
+    });
+    };
+
+    window.onafterprint = function() {
+        var accordions = document.querySelectorAll('.accordion-collapse');
+        accordions.forEach(function(accordion) {
+            accordion.classList.remove('show');
+        });
+    };
+</script>
 {% endblock %}

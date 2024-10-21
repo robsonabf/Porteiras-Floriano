@@ -12,11 +12,12 @@
     <div>
         <label for="location_city">Cidade:</label>
         <input type="text" name="location_city" id="location_city" class="form-group"
-               value="{{ request.GET.location_city }}">
+               value="{{ request.GET.location_city }}" placeholder="Digite a cidade">
     </div>
     <div>
         <label for="keywords">Palavras-chave:</label>
-        <input type="text" class="form-group" name="keywords" id="keywords" value="{{ request.GET.keywords }}">
+        <input type="text" class="form-group" name="keywords" id="keywords" value="{{ request.GET.keywords }}"
+        placeholder="Digite palavras-chave">
     </div>
     <div>
         <label for="mentor_ativo">Mostrar apenas mentorias com mentores ativos:</label>
@@ -28,6 +29,16 @@
 
 <hr>
   <a href="{% url 'dashboardpub' %}" class="btn btn-secondary"><i class="bi bi-grid"></i>Voltar para o Painel</a>
+   <!-- Exibe mensagens de sucesso ou erro -->
+                    {% if messages %}
+                        <div>
+                            {% for message in messages %}
+                                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
 
 <h3 class="mb-4">Mentorias</h3>
 
@@ -66,6 +77,9 @@
             {% else %}
                 <p>Nenhum mentor interessado.</p>
             {% endif %}
+            <a href="{% url 'detalhes_mentoria' mentorship.id %}" class="btn btn-info btn-sm">
+                            Ver detalhes <i class="bi bi-eye"></i>
+            </a>
             <hr>
         </li>
     {% empty %}

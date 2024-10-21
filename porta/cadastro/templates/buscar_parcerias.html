@@ -25,6 +25,16 @@
                     <hr>
                       <a href="{% url 'dashboardpub' %}" class="btn btn-secondary"><i class="bi bi-grid"></i>
                           Voltar para o Painel</a>
+                    <!-- Exibe mensagens de sucesso ou erro -->
+                    {% if messages %}
+                        <div>
+                            {% for message in messages %}
+                                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                 <!-- Resultados da busca -->
             <h3 class="mb-4">Parcerias</h3>
             <!-- Exibição dos resultados de parcerias -->

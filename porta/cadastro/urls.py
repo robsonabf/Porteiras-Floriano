@@ -31,6 +31,7 @@ urlpatterns = [
          name='demonstrar_interesse'),
     path('firmar-mentoria/<int:mentorship_request_id>/', FirmarMentoriaView.as_view(), name='firmar_mentoria'),
     path('buscar-mentorias/', BuscarMentoriasView.as_view(), name='buscar_mentorias'),
+    path('detalhes-mentoria/<int:pk>/', DetalhesMentoriaView.as_view(), name='detalhes_mentoria'),
     #
     path('participacoes-projetos/', ParticipacoesProjetosView.as_view(), name='participacoes_projetos'),
     path('oportunidades-parcerias/', OportunidadesParceriasView.as_view(), name='oportunidades_parcerias'),

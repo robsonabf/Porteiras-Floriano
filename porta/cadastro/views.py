@@ -290,7 +290,7 @@ class DemonstrarInteresseMentoriaView(LoginRequiredMixin, View):
 
 
 class FirmarMentoriaView(LoginRequiredMixin, View):
-    template_name = 'mentoria_detalhes.html'
+    template_name = 'detalhes_mentoria.html'
 
     def get(self, request, mentorship_request_id):
         # Obtém o pedido de mentoria
@@ -364,6 +364,23 @@ class BuscarMentoriasView(TemplateView):
             mentorias = mentorias.filter(interested_mentors__is_active=True).distinct()
 
         context['mentorias'] = mentorias
+        return context
+
+
+class DetalhesMentoriaView(DetailView):
+    model = MentorshipRequest
+    template_name = 'detalhes_mentoria.html'
+    context_object_name = 'mentoria'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Obtendo os parceiros interessados que estão ativos
+        interessados_ativos = self.object.interested_mentors.filter(is_active=True)
+
+        # Adicionando esses parceiros ao contexto
+        context['interessados_ativos'] = interessados_ativos
+
         return context
 
 
@@ -589,7 +606,7 @@ class DemonstrarInteresseParceriaView(LoginRequiredMixin, View):
 
 
 class FirmarParceriaView(LoginRequiredMixin, View):
-    template_name = 'parceria_detalhes.html'
+    template_name = 'detalhes_parceria.html'
 
     def get(self, request, partnership_request_id):
         # Obtém o pedido de parceria

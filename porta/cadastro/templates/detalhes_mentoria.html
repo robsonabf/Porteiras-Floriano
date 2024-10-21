@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalhes da Mentoria{% endblock %}
+
+{% block content %}
+<div class="fancy-bg-dark section-padding-100">
+    <div class="container fancy-bg-white">
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <h2 class="mb-4">Detalhes da Mentoria</h2>
+                <div class="mb-3">
+                    <strong>Projeto:</strong> {{ mentoria.project.title }}<br>
+                    <strong>Descrição do Projeto:</strong> {{ mentoria.project.description }}<br>
+                    <strong>Cidade:</strong> {{ mentoria.project.location_city }}<br>
+                    <strong>Estado:</strong> {{ mentoria.project.location_state }}<br>
+                    <strong>Palavras-chave:</strong> {{ mentoria.project.keywords }}<br>
+                    <strong>Mensagem:</strong> {{ mentoria.message }}<br>
+                    <strong>Dono do Projeto:</strong>
+                    <a href="{% url 'public_profile' mentoria.project.owner.user.username %}">
+                        {{ mentoria.project.owner.user.userprofile.nome }}
+                    </a><br>
+                    <strong>Bio do Dono:</strong> {{ mentoria.project.owner.user.userprofile.bio }}<br>
+                </div>
+
+                <h3 class="mt-4">Mentores Ativos</h3>
+                <ul class="list-group mb-4">
+                    {% for mentor in interessados_ativos %}
+                        <li class="list-group-item">
+                            <strong>Nome:</strong> {{ mentor.mentor.nome }}<br>
+                            <strong>Bio:</strong> {{ mentor.mentor.bio }}<br>
+                            <a href="{{ partner.partner.linkedin }}" target="_blank" class="btn btn-primary btn-sm">
+                                LinkedIn<i class="bi bi-linkedin"></i></a>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item text-center">Nenhum parceiro ativo no momento.</li>
+                    {% endfor %}
+                </ul>
+
+                <a href="{% url 'buscar_parcerias' %}" class="btn btn-secondary mb-1"><i class="bi bi-arrow-return-left"></i>
+                     Voltar à Busca</a>
+                {% if request.user != mentoria.project.owner.user %}
+                    <form method="post" action="{% url 'demonstrar_interesse' mentoria.id %}">
+                        {% csrf_token %}
+                    <button type="submit" class="btn btn-success mb-1">
+                        <i class="bi bi-hand-thumbs-up"></i> Demonstrar Interesse</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

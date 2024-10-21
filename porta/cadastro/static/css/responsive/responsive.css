@@ -36,10 +36,13 @@
         color: #fff;
     }
         .fancy-btn {
-        max-width: 300px;
+        max-width: 150px;
         word-wrap: break-word;
         word-break: break-all;
         overflow-wrap: anywhere;
+    }
+    .ajustedash a {
+        max-width: 300px;
     }
     #fancyNav {
         background: #7450fe;
@@ -146,6 +149,10 @@
         word-wrap: break-word;
         word-break: break-all;
         overflow-wrap: anywhere;
+    }
+    #ajusteresponsivo {
+        display: grid;
+        place-items: center;
     }
     .fancy-top-features-content {
         position: relative;
