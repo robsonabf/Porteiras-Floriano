@@ -11,12 +11,12 @@
 <form method="GET" action="{% url 'buscar_mentorias' %}">
     <div>
         <label for="location_city">Cidade:</label>
-        <input type="text" name="location_city" id="location_city" class="form-group"
+        <input type="text" name="location_city" id="location_city" class="form-control"
                value="{{ request.GET.location_city }}" placeholder="Digite a cidade">
     </div>
     <div>
         <label for="keywords">Palavras-chave:</label>
-        <input type="text" class="form-group" name="keywords" id="keywords" value="{{ request.GET.keywords }}"
+        <input type="text" class="form-control" name="keywords" id="keywords" value="{{ request.GET.keywords }}"
         placeholder="Digite palavras-chave">
     </div>
     <div>

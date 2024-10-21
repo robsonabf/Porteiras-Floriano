@@ -4,29 +4,26 @@
 
 {% block content %}
 <div class="fancy-bg-dark section-padding-100">
-<div class="container fancy-bg-white">
-            <div class="row justify-content-center">
-                <div class="col-12 col-lg-8">
-                    <h2>Buscar Parcerias</h2>
+    <div class="container fancy-bg-white">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-8">
+                <h2>Buscar Parcerias</h2>
                 <form method="GET" action="{% url 'buscar_parcerias' %}">
                     <div class="form-group">
                         <label for="location_city">Cidade:</label>
-    <input type="text" id="location_city" class="form-group" name="location_city" placeholder="Digite a cidade">
-                <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i> Buscar</button>
-                        </div>
-                </form>
-                    <form method="GET" action="{% url 'buscar_parcerias' %}">
+                        <input type="text" id="location_city" class="form-control" name="location_city" placeholder="Digite a cidade">
+                    </div>
                     <div class="form-group">
                         <label for="keywords">Palavras-chave:</label>
-    <input type="text" class="form-group" id="keywords" name="keywords" placeholder="Digite palavras-chave">
+                        <input type="text" class="form-control" id="keywords" name="keywords" placeholder="Digite palavras-chave">
+                    </div>
                     <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i> Buscar</button>
-                        </div>
-                    </form>
-                    <hr>
-                      <a href="{% url 'dashboardpub' %}" class="btn btn-secondary"><i class="bi bi-grid"></i>
-                          Voltar para o Painel</a>
-                    <!-- Exibe mensagens de sucesso ou erro -->
-                    {% if messages %}
+                </form>
+                <hr>
+                <a href="{% url 'dashboardpub' %}" class="btn btn-secondary"><i class="bi bi-grid"></i> Voltar para o Painel</a>
+
+                <!-- Exibe mensagens de sucesso ou erro -->
+                {% if messages %}
                         <div>
                             {% for message in messages %}
                                 <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
@@ -35,34 +32,35 @@
                             {% endfor %}
                         </div>
                     {% endif %}
+
                 <!-- Resultados da busca -->
-            <h3 class="mb-4">Parcerias</h3>
-            <!-- Exibição dos resultados de parcerias -->
-            <ul class="list-group">
-                {% for parceria in parcerias %}
-                    <li class="list-group-item">
-                        <h5>
-                            <a href="{% url 'project-detail' parceria.project.id %}" class="text-decoration-none">
-                                {{ parceria.project.title }}
+                <h3 class="mb-4">Parcerias</h3>
+                <!-- Exibição dos resultados de parcerias -->
+                <ul class="list-group">
+                    {% for parceria in parcerias %}
+                        <li class="list-group-item">
+                            <h5>
+                                <a href="{% url 'project-detail' parceria.project.id %}" class="text-decoration-none">
+                                    {{ parceria.project.title }}
+                                </a>
+                            </h5>
+                            <p class="mb-1"><strong>Descrição:</strong> {{ parceria.project.description }}</p>
+                            <p class="mb-1">
+                                <strong>Cidade:</strong> {{ parceria.project.location_city }} |
+                                <strong>Estado:</strong> {{ parceria.project.location_state }}
+                            </p>
+                            <p class="mb-2"><strong>Palavras-chave:</strong> {{ parceria.project.keywords }}</p>
+                            <a href="{% url 'detalhes_parceria' parceria.id %}" class="btn btn-info btn-sm">
+                                Ver detalhes <i class="bi bi-eye"></i>
                             </a>
-                        </h5>
-                        <p class="mb-1"><strong>Descrição:</strong> {{ parceria.project.description }}</p>
-                        <p class="mb-1">
-                            <strong>Cidade:</strong> {{ parceria.project.location_city }} |
-                            <strong>Estado:</strong> {{ parceria.project.location_state }}
-                        </p>
-                        <p class="mb-2"><strong>Palavras-chave:</strong> {{ parceria.project.keywords }}</p>
-                        <a href="{% url 'detalhes_parceria' parceria.id %}" class="btn btn-info btn-sm">
-                            Ver detalhes <i class="bi bi-eye"></i>
-                        </a>
-                        <hr>
-                    </li>
-                {% empty %}
-                    <li class="list-group-item text-center">Nenhuma parceria encontrada.</li>
-                {% endfor %}
-            </ul>
+                            <hr>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item text-center">Nenhuma parceria encontrada.</li>
+                    {% endfor %}
+                </ul>
             </div>
-</div>
-</div>
+        </div>
+    </div>
 </div>
 {% endblock %}
