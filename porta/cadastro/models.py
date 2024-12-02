@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from .utils import compress_image
 
 
 """UserProfile: Garante que o sistema tenha diferentes perfis de usuários (pesquisadores, estudantes, empresas, instituições) com informações específicas para cada tipo.
@@ -45,6 +46,11 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f'{self.user.username} - {self.get_user_type_display()}'
+
+    def save(self, *args, **kwargs):
+        if self.avatar and not self._state.adding:
+            self.avatar = compress_image(self.avatar)
+        super().save(*args, **kwargs)
 
 
 class TechnologyCategory(models.Model):
@@ -92,6 +98,11 @@ class Project(models.Model):
     def __str__(self):
         return self.title
 
+    def save(self, *args, **kwargs):
+        if self.logo and not self._state.adding:
+            self.logo = compress_image(self.logo)
+        super().save(*args, **kwargs)
+
 
 class Feedback(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='feedbacks')
@@ -114,6 +125,11 @@ class Institution(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        if self.logo and not self._state.adding:
+            self.logo = compress_image(self.logo)
+        super().save(*args, **kwargs)
 
 
 class PartnershipRequest(models.Model):
