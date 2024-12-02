@@ -48,7 +48,7 @@ class UserProfile(models.Model):
         return f'{self.user.username} - {self.get_user_type_display()}'
 
     def save(self, *args, **kwargs):
-        if self.avatar and not self._state.adding:
+        if self.avatar:
             self.avatar = compress_image(self.avatar)
         super().save(*args, **kwargs)
 
@@ -99,7 +99,7 @@ class Project(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
-        if self.logo and not self._state.adding:
+        if self.logo:
             self.logo = compress_image(self.logo)
         super().save(*args, **kwargs)
 
@@ -127,7 +127,7 @@ class Institution(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        if self.logo and not self._state.adding:
+        if self.logo:
             self.logo = compress_image(self.logo)
         super().save(*args, **kwargs)
 
