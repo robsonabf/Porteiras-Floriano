@@ -8,7 +8,7 @@
             <div class="row">
                 <div class="col-12 col-md-6">
 <h2>Criar Novo Projeto</h2>
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit" class="btn fancy-btn fancy-dark bg-transparent"><i class="bi bi-save"></i>
